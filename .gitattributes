@@ -1,0 +1,27 @@
+# Кінці рядків нормалізуються в LF при коміті.
+# Це має існувати ДО першого коміту: інакше CRLF заповзає у скрипти, і збірка
+# у WSL падає повідомленням, яке ніяк не вказує на справжню причину.
+* text=auto eol=lf
+
+# Ці типи ламаються від CRLF беззастережно — фіксуємо явно.
+*.sh   text eol=lf
+*.rs   text eol=lf
+*.toml text eol=lf
+*.ts   text eol=lf
+*.tsx  text eol=lf
+*.mjs  text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml  text eol=lf
+*.sql  text eol=lf
+
+# Бінарні — не чіпати
+*.png  binary
+*.jpg  binary
+*.ico  binary
+*.so   binary
+*.wasm binary
+
+# Локи не роздувають дифф у рев'ю
+pnpm-lock.yaml -diff
+Cargo.lock     -diff

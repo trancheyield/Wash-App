@@ -1,0 +1,26 @@
+[toolchain]
+anchor_version = "1.2.0"
+solana_version = "3.1.10"
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+washapp = "2Yq39tVgTH5e8be8YdssyhvM6339f2WG6QweNmxGpBbf"
+
+[programs.devnet]
+washapp = "2Yq39tVgTH5e8be8YdssyhvM6339f2WG6QweNmxGpBbf"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "devnet"
+wallet = "~/.config/solana/id.json"
+
+# `anchor test` не використовується: тести програми — mollusk у `cargo test`.
+# Артефакт для мережі збирає `scripts/wsl-build.sh build-sbf`, не `anchor build`
+# (той дає SBPFv3, який Agave 3.1.10 не виконує).
+[scripts]
+test = "cargo test --workspace"

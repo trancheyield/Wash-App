@@ -1,0 +1,141 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rust:
+    name: Rust — fmt, clippy, build-sbf, тести
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Версія береться з rust-toolchain.toml, не дублюється тут: два місця
+      # правди розходяться мовчки, і розбіжність вилазить уже на збірці.
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - uses: Swatinem/rust-cache@v2
+
+      # Тести програми виконують СПРАВЖНІЙ .so під mollusk, а не хостову збірку
+      # крейта: overflow-checks, розмір кадру і поведінка `msg!` під BPF свої.
+      #
+      # `cargo-build-sbf`, а не `anchor build`: IDL тут не потрібен (клієнт
+      # генерується Codama на машині з WSL і лежить у packages/chain), а anchor-cli
+      # компілюється з джерел через avm — десяток хвилин на кожен PR.
+      #
+      # Без `--arch`: артефакт у мережу — SBPFv0, бо Agave 3.1.10 на devnet
+      # байткод v3 не виконує. Той самий v0 дає жорсткий кадр 4 КіБ у
+      # `try_accounts` — і саме тому тести мають ганяти v0, а не v3: інакше CI
+      # був би зелений на бінарнику, який у мережу не заходить.
+      - name: Тулчейн Solana
+        run: |
+          sh -c "$(curl -sSfL https://release.anza.xyz/v3.1.10/install)"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> "$GITHUB_PATH"
+
+      # Ключа програми в CI немає — cargo-build-sbf згенерує випадковий. На
+      # байткод це не впливає (declare_id! зашитий у код), а деплою звідси нема.
+      - name: BPF-артефакт (SBPFv0)
+        run: cargo-build-sbf --manifest-path programs/washapp/Cargo.toml 2>&1 | tee .build.log
+
+      # Ті самі дві перевірки, що й у scripts/wsl-build.sh: заголовок ELF і
+      # рядок про переповнення кадру, який збірка пише попередженням, не помилкою.
+      - name: Артефакт — v0 і кадр у межах 4 КіБ
+        run: |
+          so=target/deploy/washapp.so
+          flags="$(readelf -h "$so" | awk '/Flags:/ {print $2}')"
+          if [ "$flags" != "0x0" ]; then
+            echo "::error::$so має e_flags=$flags, очікувалось 0x0 (SBPFv0)"
+            exit 1
+          fi
+          echo "$so: $(stat -c %s "$so") байтів, SBPFv0"
+          if grep -qE 'overwrites values in the frame|exceeded max offset' .build.log; then
+            echo "::error::переповнення кадру стека у збірці"
+            grep -E 'overwrites values in the frame|exceeded max offset' .build.log | head -5
+            exit 1
+          fi
+
+      - name: Формат
+        run: cargo fmt --all -- --check
+
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: Тести
+        run: cargo test --workspace
+
+      # Cargo.lock — це пін: на ньому anchor-lang 1.2 і mollusk 0.15.1 реекспортують
+      # один `solana-address 2.6.1`, тож `Pubkey` — один тип (2.7.0 ламає wincode).
+      # Якщо збірка лок змінює, значить залежності поїхали самі, і про це треба
+      # знати тут, а не на девнеті. `cargo-build-sbf` іде власним rustc і власним
+      # резолвером, тож цей крок заодно ловить випадок, коли BPF-збірка тягне лок
+      # убік від хостової.
+      - name: Лок не змінився
+        run: git diff --exit-code Cargo.lock
+
+  node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Gate
+        run: pnpm gate
+
+  secrets:
+    name: Секрети і сліди
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Репозиторій публічний. Обидві перевірки дешеві й ловлять те, що після
+      # push виправляється лише переписуванням історії.
+      - name: Приватні ключі не потрапили в індекс
+        run: |
+          if git grep -nE 'BEGIN (RSA|OPENSSH|EC|PGP) PRIVATE KEY' -- . ; then
+            echo "::error::у репозиторії знайдено приватний ключ"
+            exit 1
+          fi
+          echo "ключів не знайдено"
+
+      # Ключ програми дає право задеплоїти під той самий адрес.
+      # Ключ оператора — фіксувати збиток. Обидва живуть
+      # поза репозиторієм; ключ програми з'являється в `target/deploy` лише на
+      # час збірки.
+      - name: Keypair-файли не відстежуються
+        run: |
+          tracked="$(git ls-files -- '*-keypair.json' '*.keypair.json' 'id.json' '.env' '.env.*' | grep -v '^\.env\.example$' || true)"
+          if [ -n "$tracked" ]; then
+            echo "::error::у git потрапили секрети:"
+            echo "$tracked"
+            exit 1
+          fi
+          echo "keypair і .env поза індексом"
+
+      # Прохід іде по ВСІЙ історії — тому вище й стоїть fetch-depth: 0. Режим
+      # `ci` відрізняється від локального одним: списку особистих даних тут
+      # немає і бути не може (він живе поза репозиторієм навмисно), тож його
+      # відсутність не вважається провалом. Структурні патерни ганяються всі,
+      # разом із самоперевіркою: патерн, що мовчки перестав ловити, і чистий
+      # репозиторій ззовні виглядають однаково.
+      - name: Слідів машини складання немає в історії
+        run: bash scripts/trace-sweep.sh ci

@@ -1,0 +1,16 @@
+{
+  "comment": "Демо-параметри пулу 0 — одне джерело для tools/demo init, брифу M0 і тестів. Ставки — bps річних, time_scale — модельних секунд на секунду ланцюга.",
+  "pool_id": 0,
+  "yield_rate_bps": 800,
+  "senior_rate_bps": 500,
+  "min_junior_bps": 2000,
+  "perf_fee_bps": 1000,
+  "time_scale": 43200,
+  "protection": {
+    "premium_rate_bps": 200,
+    "trigger_bps": 100,
+    "premium_fee_bps": 1000
+  },
+  "faucet_cap": 10000000000,
+  "demo_loss_bps": 1500
+}

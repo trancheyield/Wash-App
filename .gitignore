@@ -1,0 +1,38 @@
+# Робочі документи проекту в репозиторій не потрапляють.
+# Свіжий клон приходить без docs/ і без CLAUDE.md — бекап поза git.
+*.md
+!README.md
+
+# Експорт генератора інтерфейсів: несе власний package.json і .env із ключем.
+# Переноситься в apps/web руками (M0), сама тека в репо не потрапляє ніколи.
+design-export/
+
+# Node
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+.vite/
+
+# Rust / Anchor
+target/
+.anchor/
+test-ledger/
+.build.log
+
+# Секрети. Програмний keypair теж: він дає право задеплоїти під той самий адрес.
+# Ключ оператора пулу — теж keypair-файл, живе поза репо.
+.env
+.env.*
+!.env.example
+*.pem
+id.json
+*-keypair.json
+*.keypair.json
+
+# Оточення розробника
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log

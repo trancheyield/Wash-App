@@ -1,0 +1,46 @@
+[workspace]
+resolver = "2"
+members = ["programs/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "UNLICENSED"
+repository = "https://github.com/trancheyield/Wash-App"
+
+# Версії тут — єдине місце правди для воркспейсу. Cargo.lock комітиться і є
+# піном; підняття будь-якого solana-крейта — свідома дія з перезапуском тестів,
+# не побічний ефект `cargo update`.
+[workspace.dependencies]
+anchor-lang = "1.2.0"
+anchor-spl = "1.2.0"
+
+# Оснастка тестів. litesvm тут не збирається з Anchor (E0027 `touched_flags`).
+# mollusk живе на solana-крейтах четвертого покоління, anchor-lang — третього;
+# на цьому локу обидва реекспортують один `solana-address 2.6.1`, тож `Pubkey`
+# один тип — тест `pubkey_types_are_one` тримає це під компілятором.
+mollusk-svm = "0.15.1"
+mollusk-svm-bencher = "0.15.1"
+solana-account = "4.3"
+solana-instruction = "3.4"
+solana-pubkey = "4.2"
+solana-svm-log-collector = "4.2"
+# Інваріанти waterfall (SC-002/SC-003) — властивості на випадкових послідовностях,
+# не приклади.
+proptest = "1.11"
+serde_json = "1"
+
+[profile.release]
+# `assets == senior + junior == vault` — тихе переповнення в u64 зробило б
+# waterfall беззмістовним, тому перевірки лишаються і в релізі.
+overflow-checks = true
+lto = "fat"
+codegen-units = 1
+
+[profile.release.build-override]
+opt-level = 3
+incremental = false
+codegen-units = 1
+
+[profile.test]
+overflow-checks = true

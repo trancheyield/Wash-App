@@ -1,0 +1,9 @@
+# Пін ХОСТОВОГО тулчейну: тести, clippy, rustfmt.
+#
+# BPF-збірку це не описує: cargo-build-sbf 3.1.10 несе власний rustc 1.89
+# усередині platform-tools і перемикає RUSTUP_TOOLCHAIN сам. Якщо колись
+# `anchor build` почне падати на несумісності каналів — причина тут, а не в коді.
+[toolchain]
+channel = "1.97.1"
+components = ["rustfmt", "clippy"]
+profile = "minimal"

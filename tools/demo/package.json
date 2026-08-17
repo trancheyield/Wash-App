@@ -1,0 +1,18 @@
+{
+  "name": "@washapp/demo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@solana-program/compute-budget": "0.18.1",
+    "@solana-program/system": "0.14.1",
+    "@solana-program/token": "0.16.1",
+    "@solana/kit": "8.3.0",
+    "@washapp/chain": "workspace:*",
+    "@washapp/shared": "workspace:*",
+    "zod": "4.6.5"
+  }
+}

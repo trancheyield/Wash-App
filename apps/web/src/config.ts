@@ -1,3 +1,4 @@
+import { WASHAPP_PROGRAM_ADDRESS } from '@washapp/chain'
 import { addressSchema } from '@washapp/shared'
 import { z } from 'zod'
 
@@ -7,7 +8,8 @@ const envSchema = z.object({
     .trim()
     .prefault('')
     .transform((url) => (url === '' ? 'https://api.devnet.solana.com' : url)),
-  VITE_WASH_PROGRAM_ID: addressSchema,
+  // Порожньо → адреса з `declare_id!` (та сама константа, що в клієнті ланцюга).
+  VITE_WASH_PROGRAM_ID: z.string().trim().prefault(WASHAPP_PROGRAM_ADDRESS).pipe(addressSchema),
   VITE_WASH_DEFAULT_POOL: z.coerce.number().int().min(0).max(65_535).prefault(0),
 })
 

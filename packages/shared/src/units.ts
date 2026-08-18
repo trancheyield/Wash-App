@@ -19,9 +19,13 @@ export function parseAmount(text: string): Micro | null {
   return value > U64_MAX ? null : value
 }
 
+// Показ округлює до найближчого (75,308.219178 → 75,308.22); облік ніколи не округлює.
 export function formatAmount(value: Micro, fractionDigits = 2): string {
-  const whole = value / ONE
-  const fraction = (value % ONE).toString().padStart(DECIMALS, '0').slice(0, fractionDigits)
+  const drop = 10n ** BigInt(DECIMALS - fractionDigits)
+  const scale = 10n ** BigInt(fractionDigits)
+  const rounded = (value + drop / 2n) / drop
+  const whole = rounded / scale
+  const fraction = (rounded % scale).toString().padStart(fractionDigits, '0')
   const grouped = whole.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   return fractionDigits > 0 ? `${grouped}.${fraction}` : grouped
 }

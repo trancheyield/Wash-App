@@ -20,10 +20,13 @@ describe('parseAmount', () => {
 })
 
 describe('formatAmount', () => {
-  it('prints two decimals with thousands separators by default', () => {
-    expect(formatAmount(1_234_567_891n)).toBe('1,234.56')
+  it('prints two decimals, rounded, with thousands separators by default', () => {
+    expect(formatAmount(1_234_567_891n)).toBe('1,234.57')
+    expect(formatAmount(1_234_564_999n)).toBe('1,234.56')
     expect(formatAmount(0n)).toBe('0.00')
-    expect(formatAmount(999_999n)).toBe('0.99')
+    expect(formatAmount(999_999n)).toBe('1.00')
+    expect(formatAmount(75_308_219_178n)).toBe('75,308.22')
+    expect(formatAmount(2_489_768_076n, 0)).toBe('2,490')
   })
 
   it('round-trips through parseAmount at full precision', () => {

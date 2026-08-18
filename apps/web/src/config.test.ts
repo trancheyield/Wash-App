@@ -21,7 +21,8 @@ describe('readConfig', () => {
     expect(config.defaultPool).toBe(3)
   })
 
-  it('refuses a malformed program id', () => {
+  it('refuses a malformed program id and defaults to declare_id when absent', () => {
     expect(() => readConfig({ VITE_WASH_PROGRAM_ID: 'nope' })).toThrow()
+    expect(readConfig({}).programId).toBe(PROGRAM)
   })
 })

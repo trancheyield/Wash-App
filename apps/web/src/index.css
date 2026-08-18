@@ -1,3 +1,67 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-ground text-ink font-mono text-[14px] leading-[1.55];
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  a {
+    @apply text-ink;
+  }
+  a:hover {
+    @apply text-sec;
+  }
+}
+
+@layer components {
+  /* Міліметрівка під калькою: сітка 24 px на 6 % — фон кожного аркуша. */
+  .sheet {
+    background-color: #5c6b7a;
+    background-image:
+      linear-gradient(rgba(242, 244, 241, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(242, 244, 241, 0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .lbl {
+    @apply text-lbl uppercase text-sec;
+  }
+  .btn {
+    @apply inline-flex min-h-[44px] items-center justify-center border border-ink bg-transparent px-4 font-mono text-lbl uppercase text-ink;
+  }
+  .btn:hover {
+    background: rgba(242, 244, 241, 0.1);
+  }
+  .btn-primary {
+    @apply border-2;
+  }
+  .btn:disabled {
+    @apply cursor-default opacity-40;
+  }
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 1px;
+    background: #f2f4f1;
+    outline: none;
+    margin: 14px 0;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #f2f4f1;
+    background: #5c6b7a;
+    cursor: pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #f2f4f1;
+    background: #5c6b7a;
+    border-radius: 0;
+    cursor: pointer;
+  }
+}

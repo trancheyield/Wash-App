@@ -4,6 +4,9 @@ use anchor_lang::prelude::*;
 #[derive(InitSpace)]
 pub struct Config {
     pub authority: Pubkey,
+    // Демо-мінт; mint authority — сам `Config`.
+    pub mint: Pubkey,
+    pub treasury: Pubkey,
     pub faucet_cap: u64,
     pub bump: u8,
 }

@@ -6,4 +6,6 @@ pub enum WashError {
     ParameterOutOfRange,
     #[msg("arithmetic overflow")]
     Overflow,
+    #[msg("tranche has shares but no assets")]
+    TrancheWipedOut,
 }

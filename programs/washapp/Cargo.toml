@@ -38,6 +38,10 @@ anchor-spl = { workspace = true }
 [dev-dependencies]
 mollusk-svm.workspace = true
 mollusk-svm-bencher.workspace = true
+mollusk-svm-programs-token.workspace = true
+spl-token-interface.workspace = true
+solana-program-pack.workspace = true
+solana-program-option.workspace = true
 solana-account.workspace = true
 solana-instruction.workspace = true
 solana-pubkey.workspace = true

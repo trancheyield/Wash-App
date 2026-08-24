@@ -2,6 +2,8 @@
 // інакше падає під `-D warnings` як dead_code.
 #![allow(dead_code)]
 
+pub mod pda;
+
 use std::collections::HashMap;
 
 use anchor_lang::{AccountDeserialize, InstructionData, ToAccountMetas};

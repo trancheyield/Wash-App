@@ -116,6 +116,16 @@ case "$CMD" in
     run cargo test --workspace
     echo "OK — тести пройшли"
     ;;
+  fixtures)
+    # Генератори фікстур — тести під `#[ignore]` (pda.json, accounts/*.json,
+    # waterfall.json): результат комітиться і звіряється з TS-боку.
+    if [[ ! -f "$SO" ]]; then
+      echo "немає $SO — спершу: $0 build-sbf" >&2
+      exit 1
+    fi
+    run cargo test --workspace -- --ignored
+    echo "OK — фікстури перегенеровано (git status покаже, що змінилось)"
+    ;;
   gate)
     "$0" fmt-check
     "$0" clippy
@@ -123,7 +133,7 @@ case "$CMD" in
     "$0" test
     ;;
   *)
-    echo "невідома команда: $CMD (build-sbf | idl | build | fmt | fmt-check | clippy | test | gate)" >&2
+    echo "невідома команда: $CMD (build-sbf | idl | build | fmt | fmt-check | clippy | test | fixtures | gate)" >&2
     exit 2
     ;;
 esac

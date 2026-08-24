@@ -1,0 +1,180 @@
+{
+  "comment": "Згенеровано `cargo test --workspace -- --ignored gen_pda_fixture` (wsl-build.sh fixtures). Не правити руками: pda.test.ts звіряє кожну адресу з pda.ts.",
+  "config": {
+    "address": "5t7NMBVLgeRyLmSyynkUZHcygdogVSGCUZAP8NXcqqrq",
+    "bump": 254
+  },
+  "contracts": [
+    {
+      "buyer": "swqrv48gsrwpBFbftEwnP2vB4jckpvfGJfXkwaniLCC",
+      "nonce": "0",
+      "pda": {
+        "address": "Fxu2Y8tYXHgvsYtA6YjRk1W6onRf4iqDLPSSrmZtudi9",
+        "bump": 255
+      },
+      "poolId": 0
+    },
+    {
+      "buyer": "swqrv48gsrwpBFbftEwnP2vB4jckpvfGJfXkwaniLCC",
+      "nonce": "1",
+      "pda": {
+        "address": "ESToZG3gz1Ff8FMzopSvGXhA6fS2WeKFunRjTNjk2tfE",
+        "bump": 255
+      },
+      "poolId": 0
+    },
+    {
+      "buyer": "swqrv48gsrwpBFbftEwnP2vB4jckpvfGJfXkwaniLCC",
+      "nonce": "18446744073709551615",
+      "pda": {
+        "address": "9X92FcW7VZbktwS6czB7woL9sPQP1h8NNruskU3V6sK4",
+        "bump": 255
+      },
+      "poolId": 1
+    }
+  ],
+  "lossEvents": [
+    {
+      "index": 0,
+      "pda": {
+        "address": "CVWAH4gnwLjQszFmxhzHzPera3vGZ196PkV1ZmJwfLpP",
+        "bump": 252
+      },
+      "poolId": 0
+    },
+    {
+      "index": 7,
+      "pda": {
+        "address": "2suitQRGZZgvQ89oMpNmTPcoW3WxURuqJpJBMjAjstrd",
+        "bump": 250
+      },
+      "poolId": 0
+    },
+    {
+      "index": 4294967295,
+      "pda": {
+        "address": "B2r3iiktUyku5HmwDBMwVhYKLEgex3bhrijXovHS9iRF",
+        "bump": 253
+      },
+      "poolId": 65535
+    }
+  ],
+  "mint": {
+    "address": "CUUL7yH9rHZc16ncEnQNPYeYPxAwNoYPsq3dgQW4VoGe",
+    "bump": 254
+  },
+  "pools": [
+    {
+      "id": 0,
+      "juniorMint": {
+        "address": "44dJviVeucSEUjoGmYCVM2YGNDHTPtYhunGW7qrqH3FY",
+        "bump": 255
+      },
+      "pool": {
+        "address": "B8LXeRxjgZ14wStLKDc1GEQCBpUkHNQgTBgojKBk4fdX",
+        "bump": 251
+      },
+      "protection": {
+        "address": "GZohH36CxiVicyHXZSH8VzaxtwuQKdmGpkoB5ZM89jVm",
+        "bump": 254
+      },
+      "pvault": {
+        "address": "EquRALsJ9PP3juVJUsUt5UVvm3G6dpXPHoG4R6EaqUj3",
+        "bump": 255
+      },
+      "seniorMint": {
+        "address": "CLBrdvpjgaZZENrLBmtNwds7WaEhZL2jVbDykMt2xY29",
+        "bump": 255
+      },
+      "vault": {
+        "address": "43JCm24L3pL9fHzmNe5mMBaiiLeGMrAefYU7oLZjqwcF",
+        "bump": 255
+      }
+    },
+    {
+      "id": 1,
+      "juniorMint": {
+        "address": "A3enX8GTcoEJWRUJXCEZbwJyg9LHuixFsFEdS5ryiXnx",
+        "bump": 251
+      },
+      "pool": {
+        "address": "B5jgND8QgMbRjotwUDyPHypvg3W6QnXFVom8UW8LU9jJ",
+        "bump": 255
+      },
+      "protection": {
+        "address": "8KLSD48wXDP63cRJFStfEbWzNy2YxYu2MCdMsPcWrjJF",
+        "bump": 254
+      },
+      "pvault": {
+        "address": "4iidJE6zAMDtDtFvdgvwcy3ry9XYMTRfA7o7Ah4Zv9Ae",
+        "bump": 254
+      },
+      "seniorMint": {
+        "address": "AFtDf3HnSCvDLDT1tLc3ayxXFpzWfxrNUw9uBXm1NcvL",
+        "bump": 254
+      },
+      "vault": {
+        "address": "Cs5XoLXKcM1oTqpE8FnficZKoCCXaBAoAVvstRxq6pY",
+        "bump": 255
+      }
+    },
+    {
+      "id": 65535,
+      "juniorMint": {
+        "address": "93muMqSLiCAxeEqrJefh4dTLEWFHLL5zXhySj6Vhbu8V",
+        "bump": 252
+      },
+      "pool": {
+        "address": "6av7uDh3WKALYkktQA9TRo7jZ8nfRJ7U5akN5a7D4537",
+        "bump": 254
+      },
+      "protection": {
+        "address": "DaAPuJaouGwkxtFgZxtpm8mB2CR4DzasMS5KeN8U6Gcf",
+        "bump": 253
+      },
+      "pvault": {
+        "address": "J6gQ93eytJvPVJ9pkky88JRr3gBpvxjiyoaZ6ALUroxU",
+        "bump": 254
+      },
+      "seniorMint": {
+        "address": "Crkosmt4ZYKX1F2Q6J2iuZDhYRAJzp8VHjpX8ASbW3DK",
+        "bump": 254
+      },
+      "vault": {
+        "address": "4meQ2UgdRZ5RxDH5Qp76LKN2wWnFk4sTwr94K5HNF9LJ",
+        "bump": 255
+      }
+    }
+  ],
+  "program": "2Yq39tVgTH5e8be8YdssyhvM6339f2WG6QweNmxGpBbf",
+  "sellers": [
+    {
+      "owner": "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn",
+      "pda": {
+        "address": "5NZu7krjn8RhewHXRz8Cs2XeiJjmhppzA1UP6EYdC9nY",
+        "bump": 255
+      },
+      "poolId": 0
+    },
+    {
+      "owner": "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn",
+      "pda": {
+        "address": "8jo5Np998df7Wmc6U55oi7gxb521v51e2QUX3fe3W6em",
+        "bump": 253
+      },
+      "poolId": 1
+    },
+    {
+      "owner": "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn",
+      "pda": {
+        "address": "FJGWwuUaykKmhgmLkH7xBtUVwqE6gSKawXYQmXPmf9oo",
+        "bump": 255
+      },
+      "poolId": 65535
+    }
+  ],
+  "treasury": {
+    "address": "E5wDsVyG1A5sd5YLHtJK83xxr3RiycBpUJ3tf6nSZdTN",
+    "bump": 255
+  }
+}

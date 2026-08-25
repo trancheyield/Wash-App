@@ -1,11 +1,11 @@
 import { formatAmount, parseAmount } from '@washapp/shared'
 import { useState } from 'react'
+import { Nav } from '../../chrome/Chrome.tsx'
 import { Cascade } from '../../components/Cascade.tsx'
 import {
   Btn,
   Columns,
   Field,
-  Nav,
   Pairs,
   Refused,
   Sheet,
@@ -14,7 +14,6 @@ import {
 } from '../../components/chrome.tsx'
 import { OPERATOR, poolAfterAccrual, poolParams, TOKEN } from '../../mock/data.ts'
 import { applyLoss, formatBps, poolAfterLoss, totalAssets } from '../../mock/forecast.ts'
-import { useMockWallet } from '../../mock/wallet.tsx'
 
 type LossEvent = {
   index: number
@@ -34,7 +33,9 @@ function toBps(text: string): bigint | null {
 
 export function LossScreen() {
   const compact = useCompact()
-  const wallet = useMockWallet()
+  // Аркуш M0 на мок-даних: «оператор» — локальний перемикач до T026, де його
+  // замінить порівняння гаманця з `Config.authority` з ланцюга.
+  const [asOperator, setAsOperator] = useState(false)
   const [text, setText] = useState('15.00')
   const [events, setEvents] = useState<LossEvent[]>([])
 
@@ -128,7 +129,7 @@ export function LossScreen() {
             </div>
           ))}
         </div>
-        {wallet.isOperator ? (
+        {asOperator ? (
           <div className="flex flex-col gap-2">
             <div className="lbl">Operator · {OPERATOR}</div>
             <Field label="Loss %" unit="%" value={text} onChange={setText} />
@@ -148,7 +149,7 @@ export function LossScreen() {
             <button
               type="button"
               className="lbl self-start hover:text-ink"
-              onClick={() => wallet.asOperator(false)}
+              onClick={() => setAsOperator(false)}
             >
               view as a supporter wallet
             </button>
@@ -159,18 +160,16 @@ export function LossScreen() {
             <button
               type="button"
               className="lbl self-start hover:text-ink"
-              onClick={() => wallet.asOperator(true)}
+              onClick={() => setAsOperator(true)}
             >
-              switch to the operator wallet (mock)
+              preview as operator (mock until T026)
             </button>
           </div>
         )}
       </Columns>
       <TitleBlock
         title={
-          last
-            ? `Loss event ${last.index} — ${wallet.isOperator ? 'operator' : 'viewer'}`
-            : 'Loss events'
+          last ? `Loss event ${last.index} — ${asOperator ? 'operator' : 'viewer'}` : 'Loss events'
         }
         sheet={3}
         modelDay={poolParams.modelDay}

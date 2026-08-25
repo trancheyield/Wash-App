@@ -1,6 +1,8 @@
 import { formatAmount } from '@washapp/shared'
 import { useState } from 'react'
-import { Nav, Sheet, TitleBlock } from '../../components/chrome.tsx'
+import { Nav } from '../../chrome/Chrome.tsx'
+import { useWallet } from '../../chrome/Wallet.tsx'
+import { Sheet, TitleBlock } from '../../components/chrome.tsx'
 import {
   contract0,
   JUNIOR_TOKEN,
@@ -13,7 +15,6 @@ import {
   walletPosition,
 } from '../../mock/data.ts'
 import { amountForShares, formatBps, payout, poolAfterLoss } from '../../mock/forecast.ts'
-import { useMockWallet } from '../../mock/wallet.tsx'
 
 type Row = { position: string; now: bigint; after: bigint; signed?: boolean }
 
@@ -48,7 +49,7 @@ export function forecastRows(lossBps: bigint): Row[] {
 }
 
 export function PositionScreen() {
-  const wallet = useMockWallet()
+  const wallet = useWallet()
   const [pct, setPct] = useState(15)
   const lossBps = BigInt(pct * 100)
   const rows = forecastRows(lossBps)

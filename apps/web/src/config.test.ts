@@ -9,6 +9,12 @@ describe('readConfig', () => {
     expect(config.rpcUrl).toBe('https://api.devnet.solana.com')
     expect(config.defaultPool).toBe(0)
     expect(config.programId).toBe(PROGRAM)
+    expect(config.chain).toBe('solana:devnet')
+  })
+
+  it('takes a known chain id and refuses an unknown one', () => {
+    expect(readConfig({ VITE_SOLANA_CHAIN: 'solana:localnet' }).chain).toBe('solana:localnet')
+    expect(() => readConfig({ VITE_SOLANA_CHAIN: 'devnet' })).toThrow()
   })
 
   it('takes an explicit RPC and pool id', () => {

@@ -1,11 +1,11 @@
 import { formatAmount, parseAmount } from '@washapp/shared'
 import { useState } from 'react'
+import { Nav } from '../../chrome/Chrome.tsx'
 import { Cascade } from '../../components/Cascade.tsx'
 import {
   Btn,
   Columns,
   Field,
-  Nav,
   Pairs,
   Refused,
   Sheet,

@@ -11,7 +11,6 @@ export const TOKEN = 'WUSD'
 export const SENIOR_TOKEN = 'sWUSD'
 export const JUNIOR_TOKEN = 'jWUSD'
 
-export const WALLET = '7xKp…mN4e'
 export const OPERATOR = 'Op3r…tR7a'
 export const BUYER = 'Buy1…9kQd'
 

@@ -1,44 +1,4 @@
 import { type ReactNode, useSyncExternalStore } from 'react'
-import { NavLink } from 'react-router'
-import { useMockWallet } from '../mock/wallet.tsx'
-
-const LINKS: Array<[string, string]> = [
-  ['/pool/0', 'POOL 0'],
-  ['/pool/0/deposit', 'DEPOSIT'],
-  ['/pool/0/loss', 'LOSS EVENTS'],
-  ['/pool/0/protection', 'PROTECTION'],
-  ['/me', 'POSITION'],
-]
-
-export function Nav() {
-  const { address, toggle } = useMockWallet()
-  return (
-    <div className="mb-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
-      <nav className="flex flex-wrap text-lbl uppercase text-sec">
-        {LINKS.map(([to, label], i) => (
-          <span key={to} className="flex">
-            <NavLink
-              to={to}
-              end
-              className={({ isActive }) =>
-                `px-1.5 ${isActive ? 'text-ink underline underline-offset-4' : 'text-sec hover:text-ink'}`
-              }
-            >
-              {label}
-            </NavLink>
-            {i < LINKS.length - 1 ? <span className="px-1.5">·</span> : null}
-          </span>
-        ))}
-      </nav>
-      <div className="text-[12px]">
-        {address ?? <span className="text-sec">no wallet</span>}{' '}
-        <button type="button" className="lbl hover:text-ink" onClick={toggle}>
-          {address ? 'disconnect' : 'connect'}
-        </button>
-      </div>
-    </div>
-  )
-}
 
 export type TitleBlockProps = { title: string; sheet: number; modelDay: number }
 

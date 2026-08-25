@@ -1,15 +1,8 @@
 import { formatAmount } from '@washapp/shared'
 import { useNavigate } from 'react-router'
+import { Nav } from '../../chrome/Chrome.tsx'
 import { Cascade } from '../../components/Cascade.tsx'
-import {
-  Btn,
-  Columns,
-  Nav,
-  Pairs,
-  Sheet,
-  TitleBlock,
-  useCompact,
-} from '../../components/chrome.tsx'
+import { Btn, Columns, Pairs, Sheet, TitleBlock, useCompact } from '../../components/chrome.tsx'
 import {
   faucetPerRequest,
   poolAfterAccrual,

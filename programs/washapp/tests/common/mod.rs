@@ -227,15 +227,19 @@ impl Session {
 pub struct ConfigSetup {
     pub config: Pubkey,
     pub bump: u8,
+    pub mint: Pubkey,
+    pub treasury: Pubkey,
     pub authority: Pubkey,
     pub faucet_cap: u64,
 }
 
 pub fn config_setup() -> ConfigSetup {
-    let (config, bump) = Pubkey::find_program_address(&[Config::SEED], &washapp::ID);
+    let (config, bump) = pda::config();
     ConfigSetup {
         config,
         bump,
+        mint: pda::mint().0,
+        treasury: pda::treasury().0,
         authority: OPERATOR,
         faucet_cap: 1_000_000_000,
     }
@@ -246,7 +250,10 @@ pub fn init_config(s: &ConfigSetup) -> Instruction {
         program_id: washapp::ID,
         accounts: washapp::accounts::InitConfig {
             config: s.config,
+            mint: s.mint,
+            treasury: s.treasury,
             authority: s.authority,
+            token_program: TOKEN_PROGRAM,
             system_program: anchor_lang::system_program::ID,
         }
         .to_account_metas(None),
@@ -258,9 +265,37 @@ pub fn init_config(s: &ConfigSetup) -> Instruction {
 }
 
 pub fn init_config_accounts(s: &ConfigSetup) -> Vec<(Pubkey, Account)> {
-    vec![
+    let mut accounts = vec![
         (s.config, Account::default()),
+        (s.mint, Account::default()),
+        (s.treasury, Account::default()),
         (s.authority, signer_account()),
-        mollusk_svm::program::keyed_account_for_system_program(),
-    ]
+    ];
+    accounts.extend(program_accounts());
+    accounts
+}
+
+pub fn faucet(s: &ConfigSetup, owner: Pubkey, amount: u64) -> Instruction {
+    Instruction {
+        program_id: washapp::ID,
+        accounts: washapp::accounts::Faucet {
+            config: s.config,
+            mint: s.mint,
+            owner_ata: ata(&owner, &s.mint),
+            owner,
+            token_program: TOKEN_PROGRAM,
+            associated_token_program: ATA_PROGRAM,
+            system_program: anchor_lang::system_program::ID,
+        }
+        .to_account_metas(None),
+        data: washapp::instruction::Faucet { amount }.data(),
+    }
+}
+
+// Сесія з готовим `Config`, мінтом і treasury — стартова точка тестів US1+.
+pub fn configured_session() -> (Session, ConfigSetup) {
+    let s = config_setup();
+    let mut session = Session::new(init_config_accounts(&s));
+    session.run(&init_config(&s), &[Check::success()]);
+    (session, s)
 }

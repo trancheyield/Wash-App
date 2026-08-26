@@ -18,4 +18,8 @@ pub mod washapp {
     pub fn init_config(ctx: Context<InitConfig>, faucet_cap: u64) -> Result<()> {
         instructions::init_config_handler(ctx, faucet_cap)
     }
+
+    pub fn faucet(ctx: Context<Faucet>, amount: u64) -> Result<()> {
+        instructions::faucet_handler(ctx, amount)
+    }
 }

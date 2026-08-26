@@ -89,7 +89,7 @@ fn session_creates_associated_token_account() {
 #[test]
 fn session_refuses_second_init_config() {
     let c = config_setup();
-    let mut s = Session::new(vec![(c.authority, signer_account())]);
+    let mut s = Session::new(init_config_accounts(&c));
     s.run(&init_config(&c), &[Check::success()]);
     assert_eq!(
         config_state(&s.snapshot(), &c.config).faucet_cap,

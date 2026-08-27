@@ -22,4 +22,8 @@ pub mod washapp {
     pub fn faucet(ctx: Context<Faucet>, amount: u64) -> Result<()> {
         instructions::faucet_handler(ctx, amount)
     }
+
+    pub fn create_pool(ctx: Context<CreatePool>, id: u16, params: PoolParams) -> Result<()> {
+        instructions::create_pool_handler(ctx, id, params)
+    }
 }

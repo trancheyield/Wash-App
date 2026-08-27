@@ -19,6 +19,7 @@ use solana_pubkey::Pubkey;
 use solana_svm_log_collector::LogCollector;
 use spl_token_interface::state::{Account as TokenAccount, AccountState, Mint};
 use washapp::constants::DEMO_MINT_DECIMALS;
+use washapp::instructions::PoolParams;
 use washapp::state::{Config, Pool};
 
 pub const TOKEN_PROGRAM: Pubkey = token::ID;
@@ -298,4 +299,87 @@ pub fn configured_session() -> (Session, ConfigSetup) {
     let mut session = Session::new(init_config_accounts(&s));
     session.run(&init_config(&s), &[Check::success()]);
     (session, s)
+}
+
+pub struct PoolSetup {
+    pub id: u16,
+    pub pool: Pubkey,
+    pub bump: u8,
+    pub vault: Pubkey,
+    pub senior_mint: Pubkey,
+    pub junior_mint: Pubkey,
+    pub params: PoolParams,
+}
+
+pub fn pool_setup(id: u16, params: PoolParams) -> PoolSetup {
+    let (pool, bump) = pda::pool(id);
+    PoolSetup {
+        id,
+        pool,
+        bump,
+        vault: pda::vault(&pool).0,
+        senior_mint: pda::senior_mint(&pool).0,
+        junior_mint: pda::junior_mint(&pool).0,
+        params,
+    }
+}
+
+// Параметри демо-пулу — з `fixtures/params.json`, того самого, що читають бриф M0
+// і `tools/demo`: тести звіряються з тими ж числами, що показує екран.
+pub fn demo_params() -> (u16, PoolParams) {
+    let raw = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../fixtures/params.json"
+    ))
+    .expect("fixtures/params.json");
+    let v: serde_json::Value = serde_json::from_str(&raw).expect("params.json — не JSON");
+    let field = |name: &str| -> u64 {
+        v[name]
+            .as_u64()
+            .unwrap_or_else(|| panic!("params.json: немає числа `{name}`"))
+    };
+    let params = PoolParams {
+        yield_rate_bps: field("yield_rate_bps") as u16,
+        senior_rate_bps: field("senior_rate_bps") as u16,
+        min_junior_bps: field("min_junior_bps") as u16,
+        perf_fee_bps: field("perf_fee_bps") as u16,
+        time_scale: field("time_scale") as u32,
+    };
+    (field("pool_id") as u16, params)
+}
+
+pub fn create_pool(s: &ConfigSetup, p: &PoolSetup, operator: Pubkey) -> Instruction {
+    Instruction {
+        program_id: washapp::ID,
+        accounts: washapp::accounts::CreatePool {
+            config: s.config,
+            mint: s.mint,
+            pool: p.pool,
+            vault: p.vault,
+            senior_mint: p.senior_mint,
+            junior_mint: p.junior_mint,
+            operator,
+            token_program: TOKEN_PROGRAM,
+            system_program: anchor_lang::system_program::ID,
+        }
+        .to_account_metas(None),
+        data: washapp::instruction::CreatePool {
+            id: p.id,
+            params: p.params,
+        }
+        .data(),
+    }
+}
+
+// Сесія з `Config` і демо-пулом із `fixtures/params.json` — старт для
+// deposit/accrue/redeem. Годинник — ненульовий, щоб `created_at` не був 0.
+pub const GENESIS_TS: i64 = 1_700_000_000;
+
+pub fn pool_session() -> (Session, ConfigSetup, PoolSetup) {
+    let (mut session, s) = configured_session();
+    let (id, params) = demo_params();
+    let p = pool_setup(id, params);
+    session.harness.warp(1, GENESIS_TS);
+    session.run(&create_pool(&s, &p, s.authority), &[Check::success()]);
+    (session, s, p)
 }

@@ -26,4 +26,8 @@ pub mod washapp {
     pub fn create_pool(ctx: Context<CreatePool>, id: u16, params: PoolParams) -> Result<()> {
         instructions::create_pool_handler(ctx, id, params)
     }
+
+    pub fn accrue(ctx: Context<Accrue>) -> Result<()> {
+        instructions::accrue_handler(ctx)
+    }
 }

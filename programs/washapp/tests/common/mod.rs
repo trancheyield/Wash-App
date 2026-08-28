@@ -6,7 +6,7 @@ pub mod pda;
 
 use std::collections::HashMap;
 
-use anchor_lang::{AccountDeserialize, InstructionData, ToAccountMetas};
+use anchor_lang::{AccountDeserialize, AccountSerialize, InstructionData, ToAccountMetas};
 use mollusk_svm::program::loader_keys::LOADER_V3;
 use mollusk_svm::result::{Check, InstructionResult};
 use mollusk_svm::Mollusk;
@@ -382,4 +382,47 @@ pub fn pool_session() -> (Session, ConfigSetup, PoolSetup) {
     session.harness.warp(1, GENESIS_TS);
     session.run(&create_pool(&s, &p, s.authority), &[Check::success()]);
     (session, s, p)
+}
+
+pub fn accrue(s: &ConfigSetup, p: &PoolSetup) -> Instruction {
+    Instruction {
+        program_id: washapp::ID,
+        accounts: washapp::accounts::Accrue {
+            config: s.config,
+            mint: s.mint,
+            treasury: s.treasury,
+            pool: p.pool,
+            vault: p.vault,
+            senior_mint: p.senior_mint,
+            junior_mint: p.junior_mint,
+            token_program: TOKEN_PROGRAM,
+        }
+        .to_account_metas(None),
+        data: washapp::instruction::Accrue {}.data(),
+    }
+}
+
+// Пул із готовими балансами без `deposit` (T014): облік пулу, supply мінтів
+// траншів і vault виставляються узгоджено — так, ніби кожен транш заповнив
+// один вкладник 1:1. Демо-мінт отримує той самий supply, щоб `mint_to` далі
+// не карбував «з повітря» понад облік.
+pub fn seed_pool_balances(session: &mut Session, p: &PoolSetup, senior: u64, junior: u64) {
+    let assets = senior + junior;
+    let mut pool_account = session.get(&p.pool);
+    let mut pool = pool_state(&[(p.pool, pool_account.clone())], &p.pool);
+    pool.assets = assets;
+    pool.senior_assets = senior;
+    pool.junior_assets = junior;
+    let mut data = Vec::new();
+    pool.try_serialize(&mut data).unwrap();
+    pool_account.data = data;
+    session.set(p.pool, pool_account);
+
+    let (config, _) = pda::config();
+    let mint = pda::mint().0;
+    let demo_supply = mint_supply(&session.snapshot(), &mint);
+    session.set(mint, mint_account(config, demo_supply + assets));
+    session.set(p.vault, token_account(mint, p.pool, assets));
+    session.set(p.senior_mint, mint_account(p.pool, senior));
+    session.set(p.junior_mint, mint_account(p.pool, junior));
 }

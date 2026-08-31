@@ -20,6 +20,7 @@ use solana_svm_log_collector::LogCollector;
 use spl_token_interface::state::{Account as TokenAccount, AccountState, Mint};
 use washapp::constants::DEMO_MINT_DECIMALS;
 use washapp::instructions::PoolParams;
+use washapp::math::{PoolBalances, Tranche};
 use washapp::state::{Config, Pool};
 
 pub const TOKEN_PROGRAM: Pubkey = token::ID;
@@ -242,7 +243,8 @@ pub fn config_setup() -> ConfigSetup {
         mint: pda::mint().0,
         treasury: pda::treasury().0,
         authority: OPERATOR,
-        faucet_cap: 1_000_000_000,
+        // 1 000 000 токенів: сценарії US1 кладуть 75 000 + 25 000 одним faucet.
+        faucet_cap: 1_000_000_000_000,
     }
 }
 
@@ -407,12 +409,28 @@ pub fn accrue(s: &ConfigSetup, p: &PoolSetup) -> Instruction {
 // один вкладник 1:1. Демо-мінт отримує той самий supply, щоб `mint_to` далі
 // не карбував «з повітря» понад облік.
 pub fn seed_pool_balances(session: &mut Session, p: &PoolSetup, senior: u64, junior: u64) {
-    let assets = senior + junior;
+    seed_pool_state(
+        session,
+        p,
+        &PoolBalances {
+            assets: senior + junior,
+            senior_assets: senior,
+            junior_assets: junior,
+            senior_supply: senior,
+            junior_supply: junior,
+        },
+    );
+}
+
+// Повний контроль над обліком і supply — для станів після збитку (транш із
+// частками без активів), які `deposit`/`accrue` самі не створять.
+pub fn seed_pool_state(session: &mut Session, p: &PoolSetup, b: &PoolBalances) {
+    let assets = b.assets;
     let mut pool_account = session.get(&p.pool);
     let mut pool = pool_state(&[(p.pool, pool_account.clone())], &p.pool);
-    pool.assets = assets;
-    pool.senior_assets = senior;
-    pool.junior_assets = junior;
+    pool.assets = b.assets;
+    pool.senior_assets = b.senior_assets;
+    pool.junior_assets = b.junior_assets;
     let mut data = Vec::new();
     pool.try_serialize(&mut data).unwrap();
     pool_account.data = data;
@@ -423,6 +441,54 @@ pub fn seed_pool_balances(session: &mut Session, p: &PoolSetup, senior: u64, jun
     let demo_supply = mint_supply(&session.snapshot(), &mint);
     session.set(mint, mint_account(config, demo_supply + assets));
     session.set(p.vault, token_account(mint, p.pool, assets));
-    session.set(p.senior_mint, mint_account(p.pool, senior));
-    session.set(p.junior_mint, mint_account(p.pool, junior));
+    session.set(p.senior_mint, mint_account(p.pool, b.senior_supply));
+    session.set(p.junior_mint, mint_account(p.pool, b.junior_supply));
+}
+
+pub fn deposit(
+    s: &ConfigSetup,
+    p: &PoolSetup,
+    owner: Pubkey,
+    tranche: Tranche,
+    amount: u64,
+) -> Instruction {
+    let tranche_mint = match tranche {
+        Tranche::Senior => p.senior_mint,
+        Tranche::Junior => p.junior_mint,
+    };
+    Instruction {
+        program_id: washapp::ID,
+        accounts: washapp::accounts::Deposit {
+            config: s.config,
+            mint: s.mint,
+            treasury: s.treasury,
+            pool: p.pool,
+            vault: p.vault,
+            senior_mint: p.senior_mint,
+            junior_mint: p.junior_mint,
+            owner_ata: ata(&owner, &s.mint),
+            owner_tranche_ata: ata(&owner, &tranche_mint),
+            owner,
+            token_program: TOKEN_PROGRAM,
+        }
+        .to_account_metas(None),
+        data: washapp::instruction::Deposit { tranche, amount }.data(),
+    }
+}
+
+// Вкладник із SOL і базовим токеном з faucet — один рядок у тесті замість трьох.
+// ATA траншів відкриваються тут же — програма їх не створює (кадр), у мережі
+// це робить клієнт перед депозитом.
+pub fn fund_user(session: &mut Session, s: &ConfigSetup, user: Pubkey, amount: u64) {
+    session.set(user, signer_account());
+    session.run(&faucet(s, user, amount), &[Check::success()]);
+}
+
+pub fn open_tranche_atas(session: &mut Session, p: &PoolSetup, user: Pubkey) {
+    for mint in [p.senior_mint, p.junior_mint] {
+        let (key, account) = ata_account(user, mint, 0);
+        if session.get(&key).data.is_empty() {
+            session.set(key, account);
+        }
+    }
 }

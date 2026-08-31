@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-use crate::math::{PoolBalances, Rates};
+use crate::math::{PoolBalances, Rates, Tranche};
 
 // Supply траншів тут не дублюється — читається з мінтів `senior_mint`/`junior_mint`.
 #[account]
@@ -30,6 +30,13 @@ pub struct Pool {
 
 impl Pool {
     pub const SEED: &'static [u8] = crate::constants::POOL_SEED;
+
+    pub fn tranche_mint(&self, tranche: Tranche) -> Pubkey {
+        match tranche {
+            Tranche::Senior => self.senior_mint,
+            Tranche::Junior => self.junior_mint,
+        }
+    }
 
     pub fn rates(&self) -> Rates {
         Rates {

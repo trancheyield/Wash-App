@@ -8,6 +8,7 @@ pub mod math;
 pub mod state;
 
 use instructions::*;
+use math::Tranche;
 
 declare_id!("2Yq39tVgTH5e8be8YdssyhvM6339f2WG6QweNmxGpBbf");
 
@@ -29,5 +30,9 @@ pub mod washapp {
 
     pub fn accrue(ctx: Context<Accrue>) -> Result<()> {
         instructions::accrue_handler(ctx)
+    }
+
+    pub fn deposit(ctx: Context<Deposit>, tranche: Tranche, amount: u64) -> Result<()> {
+        instructions::deposit_handler(ctx, tranche, amount)
     }
 }

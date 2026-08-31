@@ -3,7 +3,7 @@ use anchor_spl::token::{self, Mint, MintTo, Token, TokenAccount};
 
 use crate::errors::WashError;
 use crate::events::Accrued;
-use crate::math::{self, Accrual};
+use crate::math::{self, PoolBalances};
 use crate::state::{Config, Pool};
 
 #[derive(Accounts)]
@@ -42,35 +42,48 @@ pub fn accrue_handler(ctx: Context<Accrue>) -> Result<()> {
         junior_mint,
         token_program,
     } = &mut *ctx.accounts;
-    accrue_pool(AccruePool {
+    let ap = AccruePool {
         config,
-        pool,
-        mint,
-        vault,
-        treasury,
-        senior_mint,
-        junior_mint,
-        token_program,
-    })
-    .map(|_| ())
+        mint: mint.to_account_info(),
+        vault: vault.to_account_info(),
+        treasury: treasury.to_account_info(),
+        senior_mint: senior_mint.to_account_info(),
+        junior_mint: junior_mint.to_account_info(),
+        token_program: token_program.to_account_info(),
+    };
+    accrue_pool(&ap, pool).map(|_| ())
 }
 
 // Спільний крок «довести пул до зараз»: `accrue` — лише crank, а deposit,
 // redeem і record_loss кличуть це першим, тому порядок у блоці не змінює
-// результату. Розкладка акаунтів у їхніх контекстах повторює `Accrue`.
+// результату. Токен-акаунти й мінти — `AccountInfo`, не `Account<T>`: їхні
+// адреси вже прив'язані до `Config`/`Pool`, а типізоване розпакування в
+// `try_accounts` коштує ~500 Б кадру на акаунт і не вміщає deposit у 4 КіБ.
 pub struct AccruePool<'a, 'info> {
     pub config: &'a Account<'info, Config>,
-    pub pool: &'a mut Account<'info, Pool>,
-    pub mint: &'a Account<'info, Mint>,
-    pub vault: &'a Account<'info, TokenAccount>,
-    pub treasury: &'a Account<'info, TokenAccount>,
-    pub senior_mint: &'a Account<'info, Mint>,
-    pub junior_mint: &'a Account<'info, Mint>,
-    pub token_program: &'a Program<'info, Token>,
+    pub mint: AccountInfo<'info>,
+    pub vault: AccountInfo<'info>,
+    pub treasury: AccountInfo<'info>,
+    pub senior_mint: AccountInfo<'info>,
+    pub junior_mint: AccountInfo<'info>,
+    pub token_program: AccountInfo<'info>,
 }
 
-pub fn accrue_pool(a: AccruePool) -> Result<Accrual> {
-    let pool = a.pool;
+pub fn mint_supply(info: &AccountInfo) -> Result<u64> {
+    let data = info.try_borrow_data()?;
+    Ok(Mint::try_deserialize(&mut &data[..])?.supply)
+}
+
+pub fn token_amount(info: &AccountInfo) -> Result<u64> {
+    let data = info.try_borrow_data()?;
+    Ok(TokenAccount::try_deserialize(&mut &data[..])?.amount)
+}
+
+// Повертає баланси після нарахування — з supply траншів, прочитаними з мінтів.
+pub fn accrue_pool<'info>(
+    a: &AccruePool<'_, 'info>,
+    pool: &mut Account<'info, Pool>,
+) -> Result<PoolBalances> {
     // Годинник ланцюга не йде назад; якби пішов — рахуємо нуль і не зсуваємо
     // позначку назад, а не відмовляємо: crank не має ламати депозит.
     let now = Clock::get()?.unix_timestamp.max(pool.last_accrued_ts);
@@ -79,7 +92,7 @@ pub fn accrue_pool(a: AccruePool) -> Result<Accrual> {
         .checked_mul(pool.time_scale as u64)
         .ok_or(WashError::Overflow)?;
 
-    let balances = pool.balances(a.senior_mint.supply, a.junior_mint.supply);
+    let balances = pool.balances(mint_supply(&a.senior_mint)?, mint_supply(&a.junior_mint)?);
     let accrual = math::accrue(&balances, &pool.rates(), dt_model)?;
     let next = balances.after_accrual(&accrual)?;
 
@@ -89,7 +102,7 @@ pub fn accrue_pool(a: AccruePool) -> Result<Accrual> {
         .ok_or(WashError::Overflow)?;
     let bump = [a.config.bump];
     let signer: &[&[&[u8]]] = &[&[Config::SEED, &bump]];
-    for (to, amount) in [(a.vault, net), (a.treasury, accrual.fee)] {
+    for (to, amount) in [(&a.vault, net), (&a.treasury, accrual.fee)] {
         if amount == 0 {
             continue;
         }
@@ -97,8 +110,8 @@ pub fn accrue_pool(a: AccruePool) -> Result<Accrual> {
             CpiContext::new_with_signer(
                 a.token_program.key(),
                 MintTo {
-                    mint: a.mint.to_account_info(),
-                    to: to.to_account_info(),
+                    mint: a.mint.clone(),
+                    to: to.clone(),
                     authority: a.config.to_account_info(),
                 },
                 signer,
@@ -123,5 +136,5 @@ pub fn accrue_pool(a: AccruePool) -> Result<Accrual> {
         senior_gain: accrual.senior_gain,
         junior_gain: accrual.junior_gain,
     });
-    Ok(accrual)
+    Ok(next)
 }

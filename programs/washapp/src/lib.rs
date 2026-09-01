@@ -35,4 +35,8 @@ pub mod washapp {
     pub fn deposit(ctx: Context<Deposit>, tranche: Tranche, amount: u64) -> Result<()> {
         instructions::deposit_handler(ctx, tranche, amount)
     }
+
+    pub fn redeem(ctx: Context<Redeem>, tranche: Tranche, shares: u64) -> Result<()> {
+        instructions::redeem_handler(ctx, tranche, shares)
+    }
 }

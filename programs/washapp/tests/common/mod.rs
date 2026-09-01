@@ -476,6 +476,37 @@ pub fn deposit(
     }
 }
 
+pub fn redeem(
+    s: &ConfigSetup,
+    p: &PoolSetup,
+    owner: Pubkey,
+    tranche: Tranche,
+    shares: u64,
+) -> Instruction {
+    let tranche_mint = match tranche {
+        Tranche::Senior => p.senior_mint,
+        Tranche::Junior => p.junior_mint,
+    };
+    Instruction {
+        program_id: washapp::ID,
+        accounts: washapp::accounts::Redeem {
+            config: s.config,
+            mint: s.mint,
+            treasury: s.treasury,
+            pool: p.pool,
+            vault: p.vault,
+            senior_mint: p.senior_mint,
+            junior_mint: p.junior_mint,
+            owner_ata: ata(&owner, &s.mint),
+            owner_tranche_ata: ata(&owner, &tranche_mint),
+            owner,
+            token_program: TOKEN_PROGRAM,
+        }
+        .to_account_metas(None),
+        data: washapp::instruction::Redeem { tranche, shares }.data(),
+    }
+}
+
 // Вкладник із SOL і базовим токеном з faucet — один рядок у тесті замість трьох.
 // ATA траншів відкриваються тут же — програма їх не створює (кадр), у мережі
 // це робить клієнт перед депозитом.

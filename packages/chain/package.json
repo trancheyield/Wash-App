@@ -16,6 +16,7 @@
     "@solana-program/system": "0.14.1",
     "@solana-program/token": "0.16.1",
     "@solana/kit": "8.3.0",
+    "@solana/program-client-core": "8.3.0",
     "@washapp/shared": "workspace:*",
     "zod": "4.6.5"
   },

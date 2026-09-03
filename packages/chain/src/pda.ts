@@ -6,7 +6,7 @@ import {
   getU32Encoder,
   getU64Encoder,
 } from '@solana/kit'
-import { WASHAPP_PROGRAM_ADDRESS } from './program.ts'
+import { WASHAPP_PROGRAM_ADDRESS } from './generated/index.ts'
 
 // Дзеркало `programs/washapp/src/constants.rs`; кожна адреса звірена з Rust
 // через `fixtures/pda.json` (`pda.test.ts`). Числові seeds — little-endian,

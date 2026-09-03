@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { addressSchema } from '@washapp/shared'
 import { describe, expect, it } from 'vitest'
 import { z } from 'zod'
+import { WASHAPP_PROGRAM_ADDRESS } from './generated/index.ts'
 import {
   configAddress,
   contractAddress,
@@ -16,7 +17,6 @@ import {
   treasuryAddress,
   vaultAddress,
 } from './pda.ts'
-import { WASHAPP_PROGRAM_ADDRESS } from './program.ts'
 
 // Фікстуру пише Rust (`wsl-build.sh fixtures`); тут — лише читання і звірка.
 const entrySchema = z.object({ address: addressSchema, bump: z.number().int().min(0).max(255) })

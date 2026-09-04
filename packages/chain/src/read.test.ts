@@ -1,32 +1,11 @@
-import { readFileSync } from 'node:fs'
 import { type Address, address } from '@solana/kit'
-import { addressSchema } from '@washapp/shared'
 import { describe, expect, it } from 'vitest'
-import { z } from 'zod'
 import { ataAddress, type ReadRpc, readPool, readWallet } from './read.ts'
+import { m0Fixture as fixture } from './testing/m0-fixture.ts'
 import { modelDays, nav } from './view.ts'
 
 // Байти акаунтів пише Rust із SVM (`wsl-build.sh fixtures`); тут RPC підмінено
 // на ті самі байти, тож декодери перевіряються проти програми, а не проти себе.
-const accountSchema = z.object({
-  address: addressSchema,
-  owner: addressSchema,
-  lamports: z.number().int().nonnegative(),
-  data: z.string().regex(/^([0-9a-f]{2})*$/),
-})
-
-const fixtureSchema = z.object({
-  genesisTs: z.number().int(),
-  poolId: z.number().int().min(0).max(65_535),
-  operator: addressSchema,
-  owner: addressSchema,
-  accounts: z.record(z.string(), accountSchema),
-})
-
-const fixture = fixtureSchema.parse(
-  JSON.parse(readFileSync(new URL('../../../fixtures/accounts/m0.json', import.meta.url), 'utf8')),
-)
-
 const byAddress = new Map(Object.values(fixture.accounts).map((a) => [a.address, a]))
 
 function fakeRpc(): ReadRpc {
@@ -59,13 +38,13 @@ describe('readPool', () => {
     expect(pool).not.toBeNull()
     if (!pool) return
 
-    expect(pool.address).toBe(fixture.accounts.pool?.address)
+    expect(pool.address).toBe(fixture.accounts.pool.address)
     expect(pool.id).toBe(fixture.poolId)
     expect(pool.operator).toBe(fixture.operator)
-    expect(pool.mint).toBe(fixture.accounts.mint?.address)
-    expect(pool.vault).toBe(fixture.accounts.vault?.address)
-    expect(pool.senior.mint).toBe(fixture.accounts.seniorMint?.address)
-    expect(pool.junior.mint).toBe(fixture.accounts.juniorMint?.address)
+    expect(pool.mint).toBe(fixture.accounts.mint.address)
+    expect(pool.vault).toBe(fixture.accounts.vault.address)
+    expect(pool.senior.mint).toBe(fixture.accounts.seniorMint.address)
+    expect(pool.junior.mint).toBe(fixture.accounts.juniorMint.address)
     expect(pool.params).toEqual({
       yieldRateBps: 800,
       seniorRateBps: 500,
@@ -101,7 +80,7 @@ describe('readWallet', () => {
     const pool = await readPool(rpc, fixture.poolId)
     if (!pool) throw new Error('fixture pool missing')
     expect(await ataAddress(fixture.owner, pool.senior.mint)).toBe(
-      fixture.accounts.ownerSenior?.address,
+      fixture.accounts.ownerSenior.address,
     )
 
     const wallet = await readWallet(rpc, pool, fixture.owner)

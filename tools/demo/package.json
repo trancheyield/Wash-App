@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "init": "node --env-file=../../.env src/init.ts",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

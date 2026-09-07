@@ -35,7 +35,7 @@ URL_SHOWN="$(printf '%s' "$URL" | sed 's#\(https\?://[^/?]*\).*#\1#')"
 cd "$ROOT"
 
 run() {
-  echo "── $* ──" >>"$LOG"
+  echo "── ${*//$URL/$URL_SHOWN} ──" >>"$LOG"
   if ! "$@" >>"$LOG" 2>&1; then
     echo "ПОМИЛКА: ${*//$URL/$URL_SHOWN}"
     echo "── останні 40 рядків $LOG ──"
@@ -70,6 +70,11 @@ ensure_deployer() {
   fi
 }
 
+# `solana rent` друкує SOL із заокругленням — беремо лампорти з JSON.
+rent_lamports() {
+  solana rent "$1" --url "$URL" --output json | sed -n 's/.*"rentExemptMinimumLamports": *\([0-9]*\).*/\1/p'
+}
+
 PROGRAM_ID="$(solana-keygen pubkey "$PROGRAM_KEYPAIR" 2>/dev/null || echo 2Yq39tVgTH5e8be8YdssyhvM6339f2WG6QweNmxGpBbf)"
 
 : >"$LOG"
@@ -87,12 +92,16 @@ case "$CMD" in
     size="$(stat -c %s "$SO")"
     # Місце під апгрейди: ProgramData фіксує довжину на весь час життя програми.
     max_len=$(( size * 3 / 2 ))
-    rent="$(solana rent "$max_len" --url "$URL" --output json | sed -n 's/.*"rentExemptMinimumLamports": *\([0-9]*\).*/\1/p')"
+    rent="$(rent_lamports "$max_len")"
+    buffer_rent="$(rent_lamports "$size")"
     balance="$(solana balance "$(solana-keygen pubkey "$DEPLOYER")" --url "$URL" --lamports | awk '{print $1}')"
+    # CLI вимагає ренту буфера і ProgramData разом, хоч буфер повертається
+    # deployer-у перед оплатою ProgramData; після деплою лишається лише ProgramData.
+    need=$(( rent + buffer_rent + 50000000 ))
     echo "deployer: $(solana-keygen pubkey "$DEPLOYER")  $(( balance / 1000000 ))e-3 SOL"
-    echo ".so:      $size байтів, max-len $max_len, рента ProgramData ≈ $(( rent / 1000000 ))e-3 SOL (+ стільки ж тимчасово на буфер)"
-    if (( balance < rent * 2 + 100000000 )); then
-      echo "ПОМИЛКА: замало SOL на deployer — поповнити: solana airdrop 5 $(solana-keygen pubkey "$DEPLOYER") --url devnet"
+    echo ".so:      $size байтів, max-len $max_len; рента ProgramData $(( rent / 1000000 ))e-3 SOL + буфер $(( buffer_rent / 1000000 ))e-3 SOL (повертається)"
+    if (( balance < need )); then
+      echo "ПОМИЛКА: на deployer $(( balance / 1000000 ))e-3 SOL, треба ≥ $(( need / 1000000 ))e-3 — faucet.solana.com або: solana airdrop 5 $(solana-keygen pubkey "$DEPLOYER") --url devnet"
       exit 1
     fi
     run solana program deploy "$SO" \

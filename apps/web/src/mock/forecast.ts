@@ -51,15 +51,5 @@ export function payout(notional: Micro, lossBps: bigint, triggerBps: bigint): Mi
   return lossBps >= triggerBps ? (notional * lossBps) / BPS : 0n
 }
 
-export function formatBps(bps: bigint): string {
-  const whole = bps / 100n
-  const frac = (bps % 100n).toString().padStart(2, '0')
-  return `${whole}.${frac} %`
-}
-
-// Лише для показу: 6 знаків з округленням до найближчого; облік ділить вниз (`nav`).
-export function formatNav(assets: Micro, supply: Micro): string {
-  const tenfold = supply === 0n ? 10_000_000n : (assets * 10_000_000n) / supply
-  const n = (tenfold + 5n) / 10n
-  return `${n / 1_000_000n}.${(n % 1_000_000n).toString().padStart(6, '0')}`
-}
+// Форматери переїхали у `format.ts`; реекспорт — доки екрани M0 ще на моках.
+export { formatBps, formatNav } from '../format.ts'

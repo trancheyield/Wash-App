@@ -1,16 +1,29 @@
 import { type ReactNode, useSyncExternalStore } from 'react'
 
-export type TitleBlockProps = { title: string; sheet: number; modelDay: number }
+export type TitleBlockProps = {
+  title: string
+  sheet: number
+  modelDay: number
+  // Аркуші на живих даних передають підписи пулу й масштабу; мок-аркуші M0 — типові.
+  poolLabel?: string
+  scale?: string
+}
 
-export function TitleBlock({ title, sheet, modelDay }: TitleBlockProps) {
+export function TitleBlock({
+  title,
+  sheet,
+  modelDay,
+  poolLabel = 'POOL 0 · WUSD',
+  scale = 'SCALE 1 MIN : 30 DAYS',
+}: TitleBlockProps) {
   const cell = 'border border-ink px-3 py-1.5 text-lbl uppercase'
   return (
     <div className="mt-10 grid w-full grid-cols-2 border border-ink bg-ground xl:absolute xl:bottom-7 xl:right-10 xl:mt-0 xl:w-auto xl:grid-cols-3">
       <div className="col-span-full border border-ink px-3 py-2 font-cond text-[22px]">{title}</div>
       <div className={cell}>SHEET {sheet} OF 5</div>
-      <div className={cell}>POOL 0 · WUSD</div>
+      <div className={cell}>{poolLabel}</div>
       <div className={cell}>MODEL DAY {modelDay}</div>
-      <div className={cell}>SCALE 1 MIN : 30 DAYS</div>
+      <div className={cell}>{scale}</div>
       <div className={cell}>REV A</div>
       <div className={cell}>WASH APP</div>
     </div>

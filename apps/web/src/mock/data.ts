@@ -7,9 +7,7 @@ export const BPS = 10_000n
 export const YEAR_SECONDS = 365n * 86_400n
 export const DAY_SECONDS = 86_400n
 
-export const TOKEN = 'WUSD'
-export const SENIOR_TOKEN = 'sWUSD'
-export const JUNIOR_TOKEN = 'jWUSD'
+export { JUNIOR_TOKEN, SENIOR_TOKEN, TOKEN } from '../tokens.ts'
 
 export const OPERATOR = 'Op3r…tR7a'
 export const BUYER = 'Buy1…9kQd'

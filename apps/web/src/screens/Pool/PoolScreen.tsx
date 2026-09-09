@@ -1,18 +1,9 @@
 import type { PoolView } from '@washapp/chain'
 import { formatAmount } from '@washapp/shared'
-import type { ReactNode } from 'react'
-import { Link, useNavigate, useParams } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { Nav } from '../../chrome/Chrome.tsx'
 import { Cascade } from '../../components/Cascade.tsx'
-import {
-  Btn,
-  Columns,
-  Pairs,
-  Refused,
-  Sheet,
-  TitleBlock,
-  useCompact,
-} from '../../components/chrome.tsx'
+import { Btn, Columns, Pairs, Sheet, TitleBlock, useCompact } from '../../components/chrome.tsx'
 import { formatBps } from '../../format.ts'
 import {
   describeScale,
@@ -21,10 +12,9 @@ import {
   projectedModelTime,
   useUnixNow,
 } from '../../model-clock.ts'
-import { useAppConfig } from '../../providers.tsx'
-import { parsePoolId, usePool } from '../../queries/pool.ts'
 import { TOKEN } from '../../tokens.ts'
 import { FaucetRow } from './Faucet.tsx'
+import { PoolGate } from './PoolGate.tsx'
 
 // Стан пулу, який показує аркуш; порожній стан і помилки — окремими гілками нижче.
 function PoolSheet({ pool }: { pool: PoolView }) {
@@ -88,7 +78,7 @@ function PoolSheet({ pool }: { pool: PoolView }) {
         <div className="flex flex-col gap-2">
           <div className="flex flex-wrap gap-3">
             <Btn label="Deposit" primary onClick={() => navigate(`${base}/deposit`)} />
-            <Btn label="Redeem" onClick={() => navigate(`${base}/deposit`)} />
+            <Btn label="Redeem" onClick={() => navigate(`${base}/redeem`)} />
           </div>
           <FaucetRow pool={pool} />
         </div>
@@ -104,53 +94,6 @@ function PoolSheet({ pool }: { pool: PoolView }) {
   )
 }
 
-function Notice({ children }: { children: ReactNode }) {
-  return (
-    <Sheet>
-      <Nav />
-      <div className="flex flex-col gap-3 text-[12px]">{children}</div>
-    </Sheet>
-  )
-}
-
 export function PoolScreen() {
-  const { id } = useParams()
-  const { defaultPool, chain } = useAppConfig()
-  const poolId = parsePoolId(id)
-  const pool = usePool(poolId)
-
-  if (pool.data) return <PoolSheet pool={pool.data} />
-  if (pool.isPending) {
-    return (
-      <Notice>
-        <span className="text-sec">
-          reading pool {id} from {chain.replace('solana:', '')}…
-        </span>
-      </Notice>
-    )
-  }
-  if (pool.isError) {
-    return (
-      <Notice>
-        <Refused>rpc error: {pool.error.message}</Refused>
-        <span className="text-sec">retrying every 5 s</span>
-      </Notice>
-    )
-  }
-  return (
-    <Notice>
-      <span>
-        pool {id} does not exist on {chain.replace('solana:', '')}
-      </span>
-      {poolId !== defaultPool ? (
-        <Link to={`/pool/${defaultPool}`} className="text-sec underline underline-offset-4">
-          open pool {defaultPool}
-        </Link>
-      ) : (
-        <span className="text-sec">
-          the operator creates it with <code>pnpm demo:init</code>
-        </span>
-      )}
-    </Notice>
-  )
+  return <PoolGate>{(pool) => <PoolSheet pool={pool} />}</PoolGate>
 }

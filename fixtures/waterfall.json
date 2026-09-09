@@ -1,0 +1,2183 @@
+{
+  "accrue": [
+    {
+      "accrual": {
+        "fee": "65753424",
+        "juniorGain": "283561644",
+        "seniorGain": "308219178",
+        "yieldAmount": "657534246"
+      },
+      "after": {
+        "assets": "100591780822",
+        "juniorAssets": "25283561644",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75308219178",
+        "seniorSupply": "75000000000"
+      },
+      "dtModel": "2592000",
+      "pool": {
+        "assets": "100000000000",
+        "juniorAssets": "25000000000",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "rates": {
+        "feeBps": 1000,
+        "seniorBps": 500,
+        "yieldBps": 800
+      }
+    },
+    {
+      "accrual": {
+        "fee": "1578082191",
+        "juniorGain": "6805479453",
+        "seniorGain": "7397260273",
+        "yieldAmount": "15780821917"
+      },
+      "after": {
+        "assets": "114202739726",
+        "juniorAssets": "31805479453",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "82397260273",
+        "seniorSupply": "75000000000"
+      },
+      "dtModel": "62208000",
+      "pool": {
+        "assets": "100000000000",
+        "juniorAssets": "25000000000",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "rates": {
+        "feeBps": 1000,
+        "seniorBps": 500,
+        "yieldBps": 800
+      }
+    },
+    {
+      "accrual": {
+        "fee": "0",
+        "juniorGain": "0",
+        "seniorGain": "0",
+        "yieldAmount": "0"
+      },
+      "after": {
+        "assets": "100000000000",
+        "juniorAssets": "25000000000",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "dtModel": "0",
+      "pool": {
+        "assets": "100000000000",
+        "juniorAssets": "25000000000",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "rates": {
+        "feeBps": 1000,
+        "seniorBps": 500,
+        "yieldBps": 800
+      }
+    },
+    {
+      "accrual": {
+        "fee": "25",
+        "juniorGain": "110",
+        "seniorGain": "118",
+        "yieldAmount": "253"
+      },
+      "after": {
+        "assets": "100000000228",
+        "juniorAssets": "25000000110",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000118",
+        "seniorSupply": "75000000000"
+      },
+      "dtModel": "1",
+      "pool": {
+        "assets": "100000000000",
+        "juniorAssets": "25000000000",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "rates": {
+        "feeBps": 1000,
+        "seniorBps": 500,
+        "yieldBps": 800
+      }
+    },
+    {
+      "accrual": {
+        "fee": "8219178",
+        "juniorGain": "0",
+        "seniorGain": "73972602",
+        "yieldAmount": "82191780"
+      },
+      "after": {
+        "assets": "100073972602",
+        "juniorAssets": "25000000000",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75073972602",
+        "seniorSupply": "75000000000"
+      },
+      "dtModel": "2592000",
+      "pool": {
+        "assets": "100000000000",
+        "juniorAssets": "25000000000",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "rates": {
+        "feeBps": 1000,
+        "seniorBps": 500,
+        "yieldBps": 100
+      }
+    },
+    {
+      "accrual": {
+        "fee": "49315068",
+        "juniorGain": "0",
+        "seniorGain": "443835616",
+        "yieldAmount": "493150684"
+      },
+      "after": {
+        "assets": "75443835616",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "75443835616",
+        "seniorSupply": "75000000000"
+      },
+      "dtModel": "2592000",
+      "pool": {
+        "assets": "75000000000",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "rates": {
+        "feeBps": 1000,
+        "seniorBps": 500,
+        "yieldBps": 800
+      }
+    },
+    {
+      "accrual": {
+        "fee": "16438356",
+        "juniorGain": "147945205",
+        "seniorGain": "0",
+        "yieldAmount": "164383561"
+      },
+      "after": {
+        "assets": "25147945205",
+        "juniorAssets": "25147945205",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "0",
+        "seniorSupply": "0"
+      },
+      "dtModel": "2592000",
+      "pool": {
+        "assets": "25000000000",
+        "juniorAssets": "25000000000",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "0",
+        "seniorSupply": "0"
+      },
+      "rates": {
+        "feeBps": 1000,
+        "seniorBps": 500,
+        "yieldBps": 800
+      }
+    },
+    {
+      "accrual": {
+        "fee": "0",
+        "juniorGain": "0",
+        "seniorGain": "0",
+        "yieldAmount": "0"
+      },
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "0",
+        "seniorSupply": "0"
+      },
+      "dtModel": "2592000",
+      "pool": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "0",
+        "seniorSupply": "0"
+      },
+      "rates": {
+        "feeBps": 1000,
+        "seniorBps": 500,
+        "yieldBps": 800
+      }
+    },
+    {
+      "accrual": {
+        "fee": "49315068",
+        "juniorGain": "135616438",
+        "seniorGain": "308219178",
+        "yieldAmount": "493150684"
+      },
+      "after": {
+        "assets": "75443835616",
+        "juniorAssets": "135616438",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75308219178",
+        "seniorSupply": "75000000000"
+      },
+      "dtModel": "2592000",
+      "pool": {
+        "assets": "75000000000",
+        "juniorAssets": "0",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "rates": {
+        "feeBps": 1000,
+        "seniorBps": 500,
+        "yieldBps": 800
+      }
+    },
+    {
+      "accrual": {
+        "fee": "2000000000000000",
+        "juniorGain": "1000000000000000",
+        "seniorGain": "7000000000000000",
+        "yieldAmount": "10000000000000000"
+      },
+      "after": {
+        "assets": "9000000000000000",
+        "juniorAssets": "1300000000000000",
+        "juniorSupply": "310000000000000",
+        "seniorAssets": "7700000000000000",
+        "seniorSupply": "650000000000000"
+      },
+      "dtModel": "315360000",
+      "pool": {
+        "assets": "1000000000000000",
+        "juniorAssets": "300000000000000",
+        "juniorSupply": "310000000000000",
+        "seniorAssets": "700000000000000",
+        "seniorSupply": "650000000000000"
+      },
+      "rates": {
+        "feeBps": 2000,
+        "seniorBps": 10000,
+        "yieldBps": 10000
+      }
+    },
+    {
+      "accrual": {
+        "fee": "156525989",
+        "juniorGain": "3646968637",
+        "seniorGain": "4940974036",
+        "yieldAmount": "8744468662"
+      },
+      "after": {
+        "assets": "130040030250",
+        "juniorAssets": "15198241990",
+        "juniorSupply": "31475002905",
+        "seniorAssets": "114841788260",
+        "seniorSupply": "97615759836"
+      },
+      "dtModel": "12959879",
+      "pool": {
+        "assets": "121452087577",
+        "juniorAssets": "11551273353",
+        "juniorSupply": "31475002905",
+        "seniorAssets": "109900814224",
+        "seniorSupply": "97615759836"
+      },
+      "rates": {
+        "feeBps": 179,
+        "seniorBps": 1094,
+        "yieldBps": 1752
+      }
+    },
+    {
+      "accrual": {
+        "fee": "76064738",
+        "juniorGain": "0",
+        "seniorGain": "316628800",
+        "yieldAmount": "392693538"
+      },
+      "after": {
+        "assets": "111958346173",
+        "juniorAssets": "63913862905",
+        "juniorSupply": "65011261802",
+        "seniorAssets": "48044483268",
+        "seniorSupply": "39208019827"
+      },
+      "dtModel": "23109610",
+      "pool": {
+        "assets": "111641717373",
+        "juniorAssets": "63913862905",
+        "juniorSupply": "65011261802",
+        "seniorAssets": "47727854468",
+        "seniorSupply": "39208019827"
+      },
+      "rates": {
+        "feeBps": 1937,
+        "seniorBps": 1411,
+        "yieldBps": 48
+      }
+    },
+    {
+      "accrual": {
+        "fee": "2697232011",
+        "juniorGain": "13452986073",
+        "seniorGain": "12574297485",
+        "yieldAmount": "28724515569"
+      },
+      "after": {
+        "assets": "304419388977",
+        "juniorAssets": "56364048784",
+        "juniorSupply": "79915787848",
+        "seniorAssets": "248055340193",
+        "seniorSupply": "189687116933"
+      },
+      "dtModel": "16772611",
+      "pool": {
+        "assets": "278392105419",
+        "juniorAssets": "42911062711",
+        "juniorSupply": "79915787848",
+        "seniorAssets": "235481042708",
+        "seniorSupply": "189687116933"
+      },
+      "rates": {
+        "feeBps": 939,
+        "seniorBps": 1004,
+        "yieldBps": 1940
+      }
+    },
+    {
+      "accrual": {
+        "fee": "613319203",
+        "juniorGain": "0",
+        "seniorGain": "3866733413",
+        "yieldAmount": "4480052616"
+      },
+      "after": {
+        "assets": "296057807850",
+        "juniorAssets": "53889030513",
+        "juniorSupply": "60546893044",
+        "seniorAssets": "242168777337",
+        "seniorSupply": "191071102472"
+      },
+      "dtModel": "10353946",
+      "pool": {
+        "assets": "292191074437",
+        "juniorAssets": "53889030513",
+        "juniorSupply": "60546893044",
+        "seniorAssets": "238302043924",
+        "seniorSupply": "191071102472"
+      },
+      "rates": {
+        "feeBps": 1369,
+        "seniorBps": 1279,
+        "yieldBps": 467
+      }
+    },
+    {
+      "accrual": {
+        "fee": "1476691037",
+        "juniorGain": "3615374804",
+        "seniorGain": "356978577",
+        "yieldAmount": "5449044418"
+      },
+      "after": {
+        "assets": "42442133644",
+        "juniorAssets": "30626794902",
+        "juniorSupply": "23825011657",
+        "seniorAssets": "11815338742",
+        "seniorSupply": "10984072963"
+      },
+      "dtModel": "23448349",
+      "pool": {
+        "assets": "38469780263",
+        "juniorAssets": "27011420098",
+        "juniorSupply": "23825011657",
+        "seniorAssets": "11458360165",
+        "seniorSupply": "10984072963"
+      },
+      "rates": {
+        "feeBps": 2710,
+        "seniorBps": 419,
+        "yieldBps": 1905
+      }
+    },
+    {
+      "accrual": {
+        "fee": "224276372",
+        "juniorGain": "9420742384",
+        "seniorGain": "367319305",
+        "yieldAmount": "10012338061"
+      },
+      "after": {
+        "assets": "197871836195",
+        "juniorAssets": "56051100181",
+        "juniorSupply": "64526581911",
+        "seniorAssets": "141820736014",
+        "seniorSupply": "130637484371"
+      },
+      "dtModel": "15165026",
+      "pool": {
+        "assets": "188083774506",
+        "juniorAssets": "46630357797",
+        "juniorSupply": "64526581911",
+        "seniorAssets": "141453416709",
+        "seniorSupply": "130637484371"
+      },
+      "rates": {
+        "feeBps": 224,
+        "seniorBps": 54,
+        "yieldBps": 1107
+      }
+    },
+    {
+      "accrual": {
+        "fee": "120223618",
+        "juniorGain": "4011171822",
+        "seniorGain": "1188233696",
+        "yieldAmount": "5319629136"
+      },
+      "after": {
+        "assets": "78044700860",
+        "juniorAssets": "14866816449",
+        "juniorSupply": "13978589085",
+        "seniorAssets": "63177884411",
+        "seniorSupply": "54350814260"
+      },
+      "dtModel": "29487328",
+      "pool": {
+        "assets": "72845295342",
+        "juniorAssets": "10855644627",
+        "juniorSupply": "13978589085",
+        "seniorAssets": "61989650715",
+        "seniorSupply": "54350814260"
+      },
+      "rates": {
+        "feeBps": 226,
+        "seniorBps": 205,
+        "yieldBps": 781
+      }
+    },
+    {
+      "accrual": {
+        "fee": "1202659734",
+        "juniorGain": "6058320982",
+        "seniorGain": "2621186372",
+        "yieldAmount": "9882167088"
+      },
+      "after": {
+        "assets": "90772818912",
+        "juniorAssets": "16950410198",
+        "juniorSupply": "74611203619",
+        "seniorAssets": "73822408714",
+        "seniorSupply": "68458143258"
+      },
+      "dtModel": "20085804",
+      "pool": {
+        "assets": "82093311558",
+        "juniorAssets": "10892089216",
+        "juniorSupply": "74611203619",
+        "seniorAssets": "71201222342",
+        "seniorSupply": "68458143258"
+      },
+      "rates": {
+        "feeBps": 1217,
+        "seniorBps": 578,
+        "yieldBps": 1890
+      }
+    },
+    {
+      "accrual": {
+        "fee": "131772195",
+        "juniorGain": "388105434",
+        "seniorGain": "80177906",
+        "yieldAmount": "600055535"
+      },
+      "after": {
+        "assets": "19441580667",
+        "juniorAssets": "5845618104",
+        "juniorSupply": "58188821658",
+        "seniorAssets": "13595962563",
+        "seniorSupply": "12879594039"
+      },
+      "dtModel": "5634845",
+      "pool": {
+        "assets": "18973297327",
+        "juniorAssets": "5457512670",
+        "juniorSupply": "58188821658",
+        "seniorAssets": "13515784657",
+        "seniorSupply": "12879594039"
+      },
+      "rates": {
+        "feeBps": 2196,
+        "seniorBps": 332,
+        "yieldBps": 1770
+      }
+    },
+    {
+      "accrual": {
+        "fee": "10853351",
+        "juniorGain": "0",
+        "seniorGain": "1131604686",
+        "yieldAmount": "1142458037"
+      },
+      "after": {
+        "assets": "227365457822",
+        "juniorAssets": "76764836092",
+        "juniorSupply": "78910391947",
+        "seniorAssets": "150600621730",
+        "seniorSupply": "132848166173"
+      },
+      "dtModel": "15167010",
+      "pool": {
+        "assets": "226233853136",
+        "juniorAssets": "76764836092",
+        "juniorSupply": "78910391947",
+        "seniorAssets": "149469017044",
+        "seniorSupply": "132848166173"
+      },
+      "rates": {
+        "feeBps": 95,
+        "seniorBps": 1243,
+        "yieldBps": 105
+      }
+    },
+    {
+      "accrual": {
+        "fee": "7944868934",
+        "juniorGain": "5689585337",
+        "seniorGain": "15596115761",
+        "yieldAmount": "29230570032"
+      },
+      "after": {
+        "assets": "278888107236",
+        "juniorAssets": "57337851393",
+        "juniorSupply": "75265678969",
+        "seniorAssets": "221550255843",
+        "seniorSupply": "169773896877"
+      },
+      "dtModel": "18541150",
+      "pool": {
+        "assets": "257602406138",
+        "juniorAssets": "51648266056",
+        "juniorSupply": "75265678969",
+        "seniorAssets": "205954140082",
+        "seniorSupply": "169773896877"
+      },
+      "rates": {
+        "feeBps": 2718,
+        "seniorBps": 1288,
+        "yieldBps": 1930
+      }
+    },
+    {
+      "accrual": {
+        "fee": "3410242495",
+        "juniorGain": "1666746157",
+        "seniorGain": "7614646983",
+        "yieldAmount": "12691635635"
+      },
+      "after": {
+        "assets": "122500904423",
+        "juniorAssets": "28995967005",
+        "juniorSupply": "26856114286",
+        "seniorAssets": "93504937418",
+        "seniorSupply": "70567972943"
+      },
+      "dtModel": "30422633",
+      "pool": {
+        "assets": "113219511283",
+        "juniorAssets": "27329220848",
+        "juniorSupply": "26856114286",
+        "seniorAssets": "85890290435",
+        "seniorSupply": "70567972943"
+      },
+      "rates": {
+        "feeBps": 2687,
+        "seniorBps": 919,
+        "yieldBps": 1162
+      }
+    },
+    {
+      "accrual": {
+        "fee": "1060698053",
+        "juniorGain": "819654595",
+        "seniorGain": "12094588772",
+        "yieldAmount": "13974941420"
+      },
+      "after": {
+        "assets": "178905994510",
+        "juniorAssets": "38391962557",
+        "juniorSupply": "27573027134",
+        "seniorAssets": "140514031953",
+        "seniorSupply": "105942154544"
+      },
+      "dtModel": "19813687",
+      "pool": {
+        "assets": "165991751143",
+        "juniorAssets": "37572307962",
+        "juniorSupply": "27573027134",
+        "seniorAssets": "128419443181",
+        "seniorSupply": "105942154544"
+      },
+      "rates": {
+        "feeBps": 759,
+        "seniorBps": 1499,
+        "yieldBps": 1340
+      }
+    },
+    {
+      "accrual": {
+        "fee": "334492816",
+        "juniorGain": "1732686630",
+        "seniorGain": "531832334",
+        "yieldAmount": "2599011780"
+      },
+      "after": {
+        "assets": "47329437026",
+        "juniorAssets": "4443237720",
+        "juniorSupply": "4514133308",
+        "seniorAssets": "42886199306",
+        "seniorSupply": "35130774969"
+      },
+      "dtModel": "9949473",
+      "pool": {
+        "assets": "45064918062",
+        "juniorAssets": "2710551090",
+        "juniorSupply": "4514133308",
+        "seniorAssets": "42354366972",
+        "seniorSupply": "35130774969"
+      },
+      "rates": {
+        "feeBps": 1287,
+        "seniorBps": 398,
+        "yieldBps": 1828
+      }
+    },
+    {
+      "accrual": {
+        "fee": "4127771143",
+        "juniorGain": "0",
+        "seniorGain": "16367616857",
+        "yieldAmount": "20495388000"
+      },
+      "after": {
+        "assets": "180042289237",
+        "juniorAssets": "7191431761",
+        "juniorSupply": "7700769822",
+        "seniorAssets": "172850857476",
+        "seniorSupply": "133924288566"
+      },
+      "dtModel": "30707206",
+      "pool": {
+        "assets": "163674672380",
+        "juniorAssets": "7191431761",
+        "juniorSupply": "7700769822",
+        "seniorAssets": "156483240619",
+        "seniorSupply": "133924288566"
+      },
+      "rates": {
+        "feeBps": 2014,
+        "seniorBps": 1390,
+        "yieldBps": 1286
+      }
+    },
+    {
+      "accrual": {
+        "fee": "92321227",
+        "juniorGain": "57431440",
+        "seniorGain": "1209911949",
+        "yieldAmount": "1359664616"
+      },
+      "after": {
+        "assets": "15315783591",
+        "juniorAssets": "2555778279",
+        "juniorSupply": "77790082715",
+        "seniorAssets": "12760005312",
+        "seniorSupply": "9516377784"
+      },
+      "dtModel": "27924804",
+      "pool": {
+        "assets": "14048440202",
+        "juniorAssets": "2498346839",
+        "juniorSupply": "77790082715",
+        "seniorAssets": "11550093363",
+        "seniorSupply": "9516377784"
+      },
+      "rates": {
+        "feeBps": 679,
+        "seniorBps": 1183,
+        "yieldBps": 1093
+      }
+    },
+    {
+      "accrual": {
+        "fee": "1754006739",
+        "juniorGain": "0",
+        "seniorGain": "5790108268",
+        "yieldAmount": "7544115007"
+      },
+      "after": {
+        "assets": "165644367009",
+        "juniorAssets": "45817071380",
+        "juniorSupply": "46309014857",
+        "seniorAssets": "119827295629",
+        "seniorSupply": "109365913553"
+      },
+      "dtModel": "21695346",
+      "pool": {
+        "assets": "159854258741",
+        "juniorAssets": "45817071380",
+        "juniorSupply": "46309014857",
+        "seniorAssets": "114037187361",
+        "seniorSupply": "109365913553"
+      },
+      "rates": {
+        "feeBps": 2325,
+        "seniorBps": 1294,
+        "yieldBps": 686
+      }
+    },
+    {
+      "accrual": {
+        "fee": "51477981",
+        "juniorGain": "0",
+        "seniorGain": "164816059",
+        "yieldAmount": "216294040"
+      },
+      "after": {
+        "assets": "154821812617",
+        "juniorAssets": "24448279718",
+        "juniorSupply": "62740708587",
+        "seniorAssets": "130373532899",
+        "seniorSupply": "107311471554"
+      },
+      "dtModel": "2845443",
+      "pool": {
+        "assets": "154656996558",
+        "juniorAssets": "24448279718",
+        "juniorSupply": "62740708587",
+        "seniorAssets": "130208716840",
+        "seniorSupply": "107311471554"
+      },
+      "rates": {
+        "feeBps": 2380,
+        "seniorBps": 588,
+        "yieldBps": 155
+      }
+    },
+    {
+      "accrual": {
+        "fee": "1573054584",
+        "juniorGain": "0",
+        "seniorGain": "7509246711",
+        "yieldAmount": "9082301295"
+      },
+      "after": {
+        "assets": "103841125212",
+        "juniorAssets": "8553134331",
+        "juniorSupply": "6545120356",
+        "seniorAssets": "95287990881",
+        "seniorSupply": "87324131366"
+      },
+      "dtModel": "25967312",
+      "pool": {
+        "assets": "96331878501",
+        "juniorAssets": "8553134331",
+        "juniorSupply": "6545120356",
+        "seniorAssets": "87778744170",
+        "seniorSupply": "87324131366"
+      },
+      "rates": {
+        "feeBps": 1732,
+        "seniorBps": 1251,
+        "yieldBps": 1145
+      }
+    },
+    {
+      "accrual": {
+        "fee": "79854509",
+        "juniorGain": "0",
+        "seniorGain": "545964533",
+        "yieldAmount": "625819042"
+      },
+      "after": {
+        "assets": "52555686011",
+        "juniorAssets": "23240526732",
+        "juniorSupply": "74045304935",
+        "seniorAssets": "29315159279",
+        "seniorSupply": "23940894633"
+      },
+      "dtModel": "12565041",
+      "pool": {
+        "assets": "52009721478",
+        "juniorAssets": "23240526732",
+        "juniorSupply": "74045304935",
+        "seniorAssets": "28769194746",
+        "seniorSupply": "23940894633"
+      },
+      "rates": {
+        "feeBps": 1276,
+        "seniorBps": 1385,
+        "yieldBps": 302
+      }
+    },
+    {
+      "accrual": {
+        "fee": "11507024",
+        "juniorGain": "0",
+        "seniorGain": "89698115",
+        "yieldAmount": "101205139"
+      },
+      "after": {
+        "assets": "144114382592",
+        "juniorAssets": "6958898312",
+        "juniorSupply": "12206316531",
+        "seniorAssets": "137155484280",
+        "seniorSupply": "133340139093"
+      },
+      "dtModel": "1787107",
+      "pool": {
+        "assets": "144024684477",
+        "juniorAssets": "6958898312",
+        "juniorSupply": "12206316531",
+        "seniorAssets": "137065786165",
+        "seniorSupply": "133340139093"
+      },
+      "rates": {
+        "feeBps": 1137,
+        "seniorBps": 226,
+        "yieldBps": 124
+      }
+    },
+    {
+      "accrual": {
+        "fee": "1528073677",
+        "juniorGain": "5211223256",
+        "seniorGain": "11604924884",
+        "yieldAmount": "18344221817"
+      },
+      "after": {
+        "assets": "152902915529",
+        "juniorAssets": "8311529916",
+        "juniorSupply": "26983949726",
+        "seniorAssets": "144591385613",
+        "seniorSupply": "117981191693"
+      },
+      "dtModel": "24859586",
+      "pool": {
+        "assets": "136086767389",
+        "juniorAssets": "3100306660",
+        "juniorSupply": "26983949726",
+        "seniorAssets": "132986460729",
+        "seniorSupply": "117981191693"
+      },
+      "rates": {
+        "feeBps": 833,
+        "seniorBps": 1107,
+        "yieldBps": 1710
+      }
+    },
+    {
+      "accrual": {
+        "fee": "596279676",
+        "juniorGain": "4354173007",
+        "seniorGain": "3629111013",
+        "yieldAmount": "8579563696"
+      },
+      "after": {
+        "assets": "129750925732",
+        "juniorAssets": "5121050989",
+        "juniorSupply": "9281257545",
+        "seniorAssets": "124629874743",
+        "seniorSupply": "101536112592"
+      },
+      "dtModel": "12511142",
+      "pool": {
+        "assets": "121767641712",
+        "juniorAssets": "766877982",
+        "juniorSupply": "9281257545",
+        "seniorAssets": "121000763730",
+        "seniorSupply": "101536112592"
+      },
+      "rates": {
+        "feeBps": 695,
+        "seniorBps": 756,
+        "yieldBps": 1776
+      }
+    },
+    {
+      "accrual": {
+        "fee": "574826743",
+        "juniorGain": "670193607",
+        "seniorGain": "966702403",
+        "yieldAmount": "2211722753"
+      },
+      "after": {
+        "assets": "51576801154",
+        "juniorAssets": "2632177606",
+        "juniorSupply": "2020769899",
+        "seniorAssets": "48944623548",
+        "seniorSupply": "43071966831"
+      },
+      "dtModel": "8987493",
+      "pool": {
+        "assets": "49939905144",
+        "juniorAssets": "1961983999",
+        "juniorSupply": "2020769899",
+        "seniorAssets": "47977921145",
+        "seniorSupply": "43071966831"
+      },
+      "rates": {
+        "feeBps": 2599,
+        "seniorBps": 707,
+        "yieldBps": 1554
+      }
+    },
+    {
+      "accrual": {
+        "fee": "24629206",
+        "juniorGain": "331475765",
+        "seniorGain": "45022164",
+        "yieldAmount": "401127135"
+      },
+      "after": {
+        "assets": "97347913330",
+        "juniorAssets": "15788767048",
+        "juniorSupply": "74254382555",
+        "seniorAssets": "81559146282",
+        "seniorSupply": "77053681220"
+      },
+      "dtModel": "3705973",
+      "pool": {
+        "assets": "96971415401",
+        "juniorAssets": "15457291283",
+        "juniorSupply": "74254382555",
+        "seniorAssets": "81514124118",
+        "seniorSupply": "77053681220"
+      },
+      "rates": {
+        "feeBps": 614,
+        "seniorBps": 47,
+        "yieldBps": 352
+      }
+    },
+    {
+      "accrual": {
+        "fee": "1522789004",
+        "juniorGain": "533087410",
+        "seniorGain": "6844117770",
+        "yieldAmount": "8899994184"
+      },
+      "after": {
+        "assets": "95884647937",
+        "juniorAssets": "15321421191",
+        "juniorSupply": "22085067785",
+        "seniorAssets": "80563226746",
+        "seniorSupply": "64572614381"
+      },
+      "dtModel": "26164589",
+      "pool": {
+        "assets": "88507442757",
+        "juniorAssets": "14788333781",
+        "juniorSupply": "22085067785",
+        "seniorAssets": "73719108976",
+        "seniorSupply": "64572614381"
+      },
+      "rates": {
+        "feeBps": 1711,
+        "seniorBps": 1119,
+        "yieldBps": 1212
+      }
+    },
+    {
+      "accrual": {
+        "fee": "3198184739",
+        "juniorGain": "20782203479",
+        "seniorGain": "3951356233",
+        "yieldAmount": "27931744451"
+      },
+      "after": {
+        "assets": "235403560724",
+        "juniorAssets": "80797697148",
+        "juniorSupply": "78845361632",
+        "seniorAssets": "154605863576",
+        "seniorSupply": "122191709254"
+      },
+      "dtModel": "32563940",
+      "pool": {
+        "assets": "210670001012",
+        "juniorAssets": "60015493669",
+        "juniorSupply": "78845361632",
+        "seniorAssets": "150654507343",
+        "seniorSupply": "122191709254"
+      },
+      "rates": {
+        "feeBps": 1145,
+        "seniorBps": 254,
+        "yieldBps": 1284
+      }
+    },
+    {
+      "accrual": {
+        "fee": "1112640797",
+        "juniorGain": "8267068140",
+        "seniorGain": "2928264486",
+        "yieldAmount": "12307973423"
+      },
+      "after": {
+        "assets": "182432214510",
+        "juniorAssets": "21915336201",
+        "juniorSupply": "15192348791",
+        "seniorAssets": "160516878309",
+        "seniorSupply": "131546093971"
+      },
+      "dtModel": "11886258",
+      "pool": {
+        "assets": "171236881884",
+        "juniorAssets": "13648268061",
+        "juniorSupply": "15192348791",
+        "seniorAssets": "157588613823",
+        "seniorSupply": "131546093971"
+      },
+      "rates": {
+        "feeBps": 904,
+        "seniorBps": 493,
+        "yieldBps": 1907
+      }
+    },
+    {
+      "accrual": {
+        "fee": "20944746",
+        "juniorGain": "5052427082",
+        "seniorGain": "1471861532",
+        "yieldAmount": "6545233360"
+      },
+      "after": {
+        "assets": "214076463057",
+        "juniorAssets": "47182244184",
+        "juniorSupply": "37013404200",
+        "seniorAssets": "166894218873",
+        "seniorSupply": "144421443599"
+      },
+      "dtModel": "5284268",
+      "pool": {
+        "assets": "207552174443",
+        "juniorAssets": "42129817102",
+        "juniorSupply": "37013404200",
+        "seniorAssets": "165422357341",
+        "seniorSupply": "144421443599"
+      },
+      "rates": {
+        "feeBps": 32,
+        "seniorBps": 531,
+        "yieldBps": 1882
+      }
+    },
+    {
+      "accrual": {
+        "fee": "43787622",
+        "juniorGain": "1502931568",
+        "seniorGain": "118209425",
+        "yieldAmount": "1664928615"
+      },
+      "after": {
+        "assets": "192248514670",
+        "juniorAssets": "71086037941",
+        "juniorSupply": "47842603418",
+        "seniorAssets": "121162476729",
+        "seniorSupply": "104296982447"
+      },
+      "dtModel": "1452709",
+      "pool": {
+        "assets": "190627373677",
+        "juniorAssets": "69583106373",
+        "juniorSupply": "47842603418",
+        "seniorAssets": "121044267304",
+        "seniorSupply": "104296982447"
+      },
+      "rates": {
+        "feeBps": 263,
+        "seniorBps": 212,
+        "yieldBps": 1896
+      }
+    }
+  ],
+  "comment": "Згенеровано `cargo test --workspace -- --ignored gen_waterfall_fixture` (wsl-build.sh fixtures). Не правити руками: waterfall.test.ts проганяє кожен вхід через packages/shared/src/waterfall.ts і звіряє результат. Усі u64 — рядками.",
+  "deposit": [
+    {
+      "amount": "1000",
+      "shares": "1000",
+      "supply": "0",
+      "trancheAssets": "0"
+    },
+    {
+      "amount": "1000",
+      "shares": "500",
+      "supply": "1000",
+      "trancheAssets": "2000"
+    },
+    {
+      "amount": "2500000000",
+      "shares": "2489768076",
+      "supply": "75000000000",
+      "trancheAssets": "75308219178"
+    },
+    {
+      "amount": "2500000000",
+      "shares": "2471961857",
+      "supply": "25000000000",
+      "trancheAssets": "25283561644"
+    },
+    {
+      "amount": "1",
+      "shares": "0",
+      "supply": "1000",
+      "trancheAssets": "3000"
+    },
+    {
+      "amount": "1000",
+      "error": "TrancheWipedOut",
+      "supply": "1000",
+      "trancheAssets": "0"
+    },
+    {
+      "amount": "18446744073709551615",
+      "shares": "18446744073709551615",
+      "supply": "18446744073709551615",
+      "trancheAssets": "18446744073709551615"
+    },
+    {
+      "amount": "18446744073709551615",
+      "error": "Overflow",
+      "supply": "18446744073709551615",
+      "trancheAssets": "1"
+    },
+    {
+      "amount": "34508995589",
+      "shares": "33242404181",
+      "supply": "194964687471",
+      "trancheAssets": "202393169375"
+    },
+    {
+      "amount": "32261685900",
+      "shares": "27098106842",
+      "supply": "54377111813",
+      "trancheAssets": "64738740298"
+    },
+    {
+      "amount": "2906596218",
+      "shares": "4623333226",
+      "supply": "43120222363",
+      "trancheAssets": "27108812864"
+    },
+    {
+      "amount": "18524016026",
+      "shares": "23511454825",
+      "supply": "34500983124",
+      "trancheAssets": "27182357240"
+    },
+    {
+      "amount": "33192774938",
+      "shares": "94179233252",
+      "supply": "13530127704",
+      "trancheAssets": "4768593545"
+    },
+    {
+      "amount": "10533305517",
+      "shares": "10157767440",
+      "supply": "52528283302",
+      "trancheAssets": "54470281936"
+    },
+    {
+      "amount": "11928040915",
+      "shares": "10435169469",
+      "supply": "126415988015",
+      "trancheAssets": "144501254320"
+    },
+    {
+      "amount": "29317654064",
+      "shares": "88021106838",
+      "supply": "13910933286",
+      "trancheAssets": "4633387882"
+    },
+    {
+      "amount": "40654876580",
+      "shares": "33128672912",
+      "supply": "169345763049",
+      "trancheAssets": "207817895826"
+    },
+    {
+      "amount": "19101527676",
+      "shares": "16923585886",
+      "supply": "48572499442",
+      "trancheAssets": "54823425047"
+    },
+    {
+      "amount": "14251813672",
+      "shares": "12154250956",
+      "supply": "120070648390",
+      "trancheAssets": "140792263913"
+    },
+    {
+      "amount": "3023939892",
+      "shares": "3010864253",
+      "supply": "43759807302",
+      "trancheAssets": "43949848220"
+    },
+    {
+      "amount": "21683574145",
+      "shares": "20726431468",
+      "supply": "25229582144",
+      "trancheAssets": "26394679465"
+    },
+    {
+      "amount": "8871747895",
+      "shares": "6042082921",
+      "supply": "6869795606",
+      "trancheAssets": "10087100012"
+    },
+    {
+      "amount": "2097034759",
+      "shares": "5637172537",
+      "supply": "67626636324",
+      "trancheAssets": "25157187592"
+    },
+    {
+      "amount": "47467631285",
+      "shares": "39967228471",
+      "supply": "6688625899",
+      "trancheAssets": "7943838993"
+    },
+    {
+      "amount": "17034885149",
+      "shares": "14923197221",
+      "supply": "22204304602",
+      "trancheAssets": "25346296312"
+    },
+    {
+      "amount": "48943445255",
+      "shares": "45536070186",
+      "supply": "136265955446",
+      "trancheAssets": "146462470370"
+    },
+    {
+      "amount": "7712027386",
+      "shares": "7193603753",
+      "supply": "31142047360",
+      "trancheAssets": "33386370772"
+    },
+    {
+      "amount": "17893890727",
+      "shares": "15330861936",
+      "supply": "135187470076",
+      "trancheAssets": "157788246167"
+    }
+  ],
+  "loss": [
+    {
+      "after": {
+        "assets": "85503013699",
+        "juniorAssets": "10194794521",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75308219178",
+        "seniorSupply": "75000000000"
+      },
+      "juniorLoss": "15088767123",
+      "loss": "15088767123",
+      "lossBps": 1500,
+      "pool": {
+        "assets": "100591780822",
+        "juniorAssets": "25283561644",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75308219178",
+        "seniorSupply": "75000000000"
+      },
+      "seniorLoss": "0"
+    },
+    {
+      "after": {
+        "assets": "70000000000",
+        "juniorAssets": "0",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "70000000000",
+        "seniorSupply": "75000000000"
+      },
+      "juniorLoss": "25000000000",
+      "loss": "30000000000",
+      "lossBps": 3000,
+      "pool": {
+        "assets": "100000000000",
+        "juniorAssets": "25000000000",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "seniorLoss": "5000000000"
+    },
+    {
+      "after": {
+        "assets": "100000000000",
+        "juniorAssets": "25000000000",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "juniorLoss": "0",
+      "loss": "0",
+      "lossBps": 0,
+      "pool": {
+        "assets": "100000000000",
+        "juniorAssets": "25000000000",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "seniorLoss": "0"
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "0",
+        "seniorSupply": "75000000000"
+      },
+      "juniorLoss": "25000000000",
+      "loss": "100000000000",
+      "lossBps": 10000,
+      "pool": {
+        "assets": "100000000000",
+        "juniorAssets": "25000000000",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "seniorLoss": "75000000000"
+    },
+    {
+      "after": {
+        "assets": "75000000000",
+        "juniorAssets": "0",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "juniorLoss": "25000000000",
+      "loss": "25000000000",
+      "lossBps": 2500,
+      "pool": {
+        "assets": "100000000000",
+        "juniorAssets": "25000000000",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "seniorLoss": "0"
+    },
+    {
+      "after": {
+        "assets": "74990000000",
+        "juniorAssets": "0",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "74990000000",
+        "seniorSupply": "75000000000"
+      },
+      "juniorLoss": "25000000000",
+      "loss": "25010000000",
+      "lossBps": 2501,
+      "pool": {
+        "assets": "100000000000",
+        "juniorAssets": "25000000000",
+        "juniorSupply": "25000000000",
+        "seniorAssets": "75000000000",
+        "seniorSupply": "75000000000"
+      },
+      "seniorLoss": "10000000"
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "0",
+        "seniorSupply": "0"
+      },
+      "juniorLoss": "0",
+      "loss": "0",
+      "lossBps": 1500,
+      "pool": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "0",
+        "seniorSupply": "0"
+      },
+      "seniorLoss": "0"
+    },
+    {
+      "after": {
+        "assets": "74861575062",
+        "juniorAssets": "0",
+        "juniorSupply": "22170130099",
+        "seniorAssets": "74861575062",
+        "seniorSupply": "144486121751"
+      },
+      "juniorLoss": "31085773784",
+      "loss": "115383850762",
+      "lossBps": 6065,
+      "pool": {
+        "assets": "190245425824",
+        "juniorAssets": "31085773784",
+        "juniorSupply": "22170130099",
+        "seniorAssets": "159159652040",
+        "seniorSupply": "144486121751"
+      },
+      "seniorLoss": "84298076978"
+    },
+    {
+      "after": {
+        "assets": "87541616894",
+        "juniorAssets": "0",
+        "juniorSupply": "28543233335",
+        "seniorAssets": "87541616894",
+        "seniorSupply": "137170920123"
+      },
+      "juniorLoss": "14421359320",
+      "loss": "77258113703",
+      "lossBps": 4688,
+      "pool": {
+        "assets": "164799730597",
+        "juniorAssets": "14421359320",
+        "juniorSupply": "28543233335",
+        "seniorAssets": "150378371277",
+        "seniorSupply": "137170920123"
+      },
+      "seniorLoss": "62836754383"
+    },
+    {
+      "after": {
+        "assets": "48931333445",
+        "juniorAssets": "0",
+        "juniorSupply": "8792687303",
+        "seniorAssets": "48931333445",
+        "seniorSupply": "74177762218"
+      },
+      "juniorLoss": "12011535816",
+      "loss": "44663413005",
+      "lossBps": 4772,
+      "pool": {
+        "assets": "93594746450",
+        "juniorAssets": "12011535816",
+        "juniorSupply": "8792687303",
+        "seniorAssets": "81583210634",
+        "seniorSupply": "74177762218"
+      },
+      "seniorLoss": "32651877189"
+    },
+    {
+      "after": {
+        "assets": "43202027595",
+        "juniorAssets": "0",
+        "juniorSupply": "7813596067",
+        "seniorAssets": "43202027595",
+        "seniorSupply": "45403007837"
+      },
+      "juniorLoss": "2166190315",
+      "loss": "13065265443",
+      "lossBps": 2322,
+      "pool": {
+        "assets": "56267293038",
+        "juniorAssets": "2166190315",
+        "juniorSupply": "7813596067",
+        "seniorAssets": "54101102723",
+        "seniorSupply": "45403007837"
+      },
+      "seniorLoss": "10899075128"
+    },
+    {
+      "after": {
+        "assets": "6367934190",
+        "juniorAssets": "0",
+        "juniorSupply": "11455307810",
+        "seniorAssets": "6367934190",
+        "seniorSupply": "58155375600"
+      },
+      "juniorLoss": "2235233884",
+      "loss": "59895689009",
+      "lossBps": 9039,
+      "pool": {
+        "assets": "66263623199",
+        "juniorAssets": "2235233884",
+        "juniorSupply": "11455307810",
+        "seniorAssets": "64028389315",
+        "seniorSupply": "58155375600"
+      },
+      "seniorLoss": "57660455125"
+    },
+    {
+      "after": {
+        "assets": "61322113175",
+        "juniorAssets": "0",
+        "juniorSupply": "2793292175",
+        "seniorAssets": "61322113175",
+        "seniorSupply": "88512091609"
+      },
+      "juniorLoss": "1008879003",
+      "loss": "31957645228",
+      "lossBps": 3426,
+      "pool": {
+        "assets": "93279758403",
+        "juniorAssets": "1008879003",
+        "juniorSupply": "2793292175",
+        "seniorAssets": "92270879400",
+        "seniorSupply": "88512091609"
+      },
+      "seniorLoss": "30948766225"
+    },
+    {
+      "after": {
+        "assets": "43554819296",
+        "juniorAssets": "0",
+        "juniorSupply": "76310917028",
+        "seniorAssets": "43554819296",
+        "seniorSupply": "92960229910"
+      },
+      "juniorLoss": "581953045",
+      "loss": "57947905699",
+      "lossBps": 5709,
+      "pool": {
+        "assets": "101502724995",
+        "juniorAssets": "581953045",
+        "juniorSupply": "76310917028",
+        "seniorAssets": "100920771950",
+        "seniorSupply": "92960229910"
+      },
+      "seniorLoss": "57365952654"
+    },
+    {
+      "after": {
+        "assets": "136947834611",
+        "juniorAssets": "0",
+        "juniorSupply": "61822374577",
+        "seniorAssets": "136947834611",
+        "seniorSupply": "139929215129"
+      },
+      "juniorLoss": "37079536976",
+      "loss": "70548884496",
+      "lossBps": 3400,
+      "pool": {
+        "assets": "207496719107",
+        "juniorAssets": "37079536976",
+        "juniorSupply": "61822374577",
+        "seniorAssets": "170417182131",
+        "seniorSupply": "139929215129"
+      },
+      "seniorLoss": "33469347520"
+    },
+    {
+      "after": {
+        "assets": "83426222873",
+        "juniorAssets": "0",
+        "juniorSupply": "54225705381",
+        "seniorAssets": "83426222873",
+        "seniorSupply": "166722932218"
+      },
+      "juniorLoss": "78783520773",
+      "loss": "168540623615",
+      "lossBps": 6689,
+      "pool": {
+        "assets": "251966846488",
+        "juniorAssets": "78783520773",
+        "juniorSupply": "54225705381",
+        "seniorAssets": "173183325715",
+        "seniorSupply": "166722932218"
+      },
+      "seniorLoss": "89757102842"
+    },
+    {
+      "after": {
+        "assets": "108932972505",
+        "juniorAssets": "0",
+        "juniorSupply": "18439204244",
+        "seniorAssets": "108932972505",
+        "seniorSupply": "177957693899"
+      },
+      "juniorLoss": "17950227837",
+      "loss": "95635989945",
+      "lossBps": 4675,
+      "pool": {
+        "assets": "204568962450",
+        "juniorAssets": "17950227837",
+        "juniorSupply": "18439204244",
+        "seniorAssets": "186618734613",
+        "seniorSupply": "177957693899"
+      },
+      "seniorLoss": "77685762108"
+    },
+    {
+      "after": {
+        "assets": "15238244192",
+        "juniorAssets": "0",
+        "juniorSupply": "24044225889",
+        "seniorAssets": "15238244192",
+        "seniorSupply": "98200467059"
+      },
+      "juniorLoss": "7042306622",
+      "loss": "110282712903",
+      "lossBps": 8786,
+      "pool": {
+        "assets": "125520957095",
+        "juniorAssets": "7042306622",
+        "juniorSupply": "24044225889",
+        "seniorAssets": "118478650473",
+        "seniorSupply": "98200467059"
+      },
+      "seniorLoss": "103240406281"
+    },
+    {
+      "after": {
+        "assets": "143317611694",
+        "juniorAssets": "25773378501",
+        "juniorSupply": "64166973049",
+        "seniorAssets": "117544233193",
+        "seniorSupply": "105804673867"
+      },
+      "juniorLoss": "9979651857",
+      "loss": "9979651857",
+      "lossBps": 651,
+      "pool": {
+        "assets": "153297263551",
+        "juniorAssets": "35753030358",
+        "juniorSupply": "64166973049",
+        "seniorAssets": "117544233193",
+        "seniorSupply": "105804673867"
+      },
+      "seniorLoss": "0"
+    },
+    {
+      "after": {
+        "assets": "96082364536",
+        "juniorAssets": "0",
+        "juniorSupply": "13596060318",
+        "seniorAssets": "96082364536",
+        "seniorSupply": "182235296196"
+      },
+      "juniorLoss": "12068550222",
+      "loss": "130740970062",
+      "lossBps": 5764,
+      "pool": {
+        "assets": "226823334598",
+        "juniorAssets": "12068550222",
+        "juniorSupply": "13596060318",
+        "seniorAssets": "214754784376",
+        "seniorSupply": "182235296196"
+      },
+      "seniorLoss": "118672419840"
+    },
+    {
+      "after": {
+        "assets": "33920942846",
+        "juniorAssets": "0",
+        "juniorSupply": "67715741735",
+        "seniorAssets": "33920942846",
+        "seniorSupply": "90163055401"
+      },
+      "juniorLoss": "61230087405",
+      "loss": "121894136828",
+      "lossBps": 7823,
+      "pool": {
+        "assets": "155815079674",
+        "juniorAssets": "61230087405",
+        "juniorSupply": "67715741735",
+        "seniorAssets": "94584992269",
+        "seniorSupply": "90163055401"
+      },
+      "seniorLoss": "60664049423"
+    },
+    {
+      "after": {
+        "assets": "12535855671",
+        "juniorAssets": "0",
+        "juniorSupply": "15626414603",
+        "seniorAssets": "12535855671",
+        "seniorSupply": "76374446976"
+      },
+      "juniorLoss": "3275425674",
+      "loss": "84191425740",
+      "lossBps": 8704,
+      "pool": {
+        "assets": "96727281411",
+        "juniorAssets": "3275425674",
+        "juniorSupply": "15626414603",
+        "seniorAssets": "93451855737",
+        "seniorSupply": "76374446976"
+      },
+      "seniorLoss": "80916000066"
+    },
+    {
+      "after": {
+        "assets": "74527888773",
+        "juniorAssets": "0",
+        "juniorSupply": "65334320435",
+        "seniorAssets": "74527888773",
+        "seniorSupply": "113016940586"
+      },
+      "juniorLoss": "5169094060",
+      "loss": "50121532154",
+      "lossBps": 4021,
+      "pool": {
+        "assets": "124649420927",
+        "juniorAssets": "5169094060",
+        "juniorSupply": "65334320435",
+        "seniorAssets": "119480326867",
+        "seniorSupply": "113016940586"
+      },
+      "seniorLoss": "44952438094"
+    },
+    {
+      "after": {
+        "assets": "74448617580",
+        "juniorAssets": "0",
+        "juniorSupply": "54216387204",
+        "seniorAssets": "74448617580",
+        "seniorSupply": "174348925081"
+      },
+      "juniorLoss": "3546015253",
+      "loss": "126981624790",
+      "lossBps": 6304,
+      "pool": {
+        "assets": "201430242370",
+        "juniorAssets": "3546015253",
+        "juniorSupply": "54216387204",
+        "seniorAssets": "197884227117",
+        "seniorSupply": "174348925081"
+      },
+      "seniorLoss": "123435609537"
+    },
+    {
+      "after": {
+        "assets": "97191427747",
+        "juniorAssets": "0",
+        "juniorSupply": "57399402714",
+        "seniorAssets": "97191427747",
+        "seniorSupply": "161824066688"
+      },
+      "juniorLoss": "32877211794",
+      "loss": "103079389782",
+      "lossBps": 5147,
+      "pool": {
+        "assets": "200270817529",
+        "juniorAssets": "32877211794",
+        "juniorSupply": "57399402714",
+        "seniorAssets": "167393605735",
+        "seniorSupply": "161824066688"
+      },
+      "seniorLoss": "70202177988"
+    },
+    {
+      "after": {
+        "assets": "120693269869",
+        "juniorAssets": "42887255581",
+        "juniorSupply": "44716688760",
+        "seniorAssets": "77806014288",
+        "seniorSupply": "70402154737"
+      },
+      "juniorLoss": "18739805303",
+      "loss": "18739805303",
+      "lossBps": 1344,
+      "pool": {
+        "assets": "139433075172",
+        "juniorAssets": "61627060884",
+        "juniorSupply": "44716688760",
+        "seniorAssets": "77806014288",
+        "seniorSupply": "70402154737"
+      },
+      "seniorLoss": "0"
+    },
+    {
+      "after": {
+        "assets": "79170783098",
+        "juniorAssets": "0",
+        "juniorSupply": "19716820680",
+        "seniorAssets": "79170783098",
+        "seniorSupply": "192236315643"
+      },
+      "juniorLoss": "8944906242",
+      "loss": "126735024697",
+      "lossBps": 6155,
+      "pool": {
+        "assets": "205905807795",
+        "juniorAssets": "8944906242",
+        "juniorSupply": "19716820680",
+        "seniorAssets": "196960901553",
+        "seniorSupply": "192236315643"
+      },
+      "seniorLoss": "117790118455"
+    }
+  ],
+  "redeem": [
+    {
+      "amount": "1000",
+      "shares": "500",
+      "supply": "1000",
+      "trancheAssets": "2000"
+    },
+    {
+      "amount": "0",
+      "shares": "0",
+      "supply": "0",
+      "trancheAssets": "0"
+    },
+    {
+      "error": "ParameterOutOfRange",
+      "shares": "2",
+      "supply": "1",
+      "trancheAssets": "10"
+    },
+    {
+      "error": "TrancheWipedOut",
+      "shares": "1000",
+      "supply": "1000",
+      "trancheAssets": "0"
+    },
+    {
+      "amount": "10041095890",
+      "shares": "10000000000",
+      "supply": "75000000000",
+      "trancheAssets": "75308219178"
+    },
+    {
+      "amount": "5056712328",
+      "shares": "5000000000",
+      "supply": "25000000000",
+      "trancheAssets": "25283561644"
+    },
+    {
+      "amount": "0",
+      "shares": "1",
+      "supply": "1000",
+      "trancheAssets": "1"
+    },
+    {
+      "amount": "18446744073709551615",
+      "shares": "18446744073709551615",
+      "supply": "18446744073709551615",
+      "trancheAssets": "18446744073709551615"
+    },
+    {
+      "amount": "49181510669",
+      "shares": "43432643890",
+      "supply": "79430245230",
+      "trancheAssets": "89943855667"
+    },
+    {
+      "amount": "10873381336",
+      "shares": "10647964861",
+      "supply": "11931682245",
+      "trancheAssets": "12184274904"
+    },
+    {
+      "amount": "65377289317",
+      "shares": "57482731115",
+      "supply": "140513917053",
+      "trancheAssets": "159811804869"
+    },
+    {
+      "amount": "4058785843",
+      "shares": "3262287490",
+      "supply": "17814874531",
+      "trancheAssets": "22164435468"
+    },
+    {
+      "amount": "4407911391",
+      "shares": "3594179418",
+      "supply": "15167106395",
+      "trancheAssets": "18600980440"
+    },
+    {
+      "amount": "26703999085",
+      "shares": "27866517544",
+      "supply": "78297398449",
+      "trancheAssets": "75031035122"
+    },
+    {
+      "amount": "19609981279",
+      "shares": "16149430087",
+      "supply": "23832709334",
+      "trancheAssets": "28939658016"
+    },
+    {
+      "amount": "50080206751",
+      "shares": "40169227366",
+      "supply": "103904276453",
+      "trancheAssets": "129540645623"
+    },
+    {
+      "amount": "75758217120",
+      "shares": "62631166667",
+      "supply": "137435005278",
+      "trancheAssets": "166240412305"
+    },
+    {
+      "amount": "7966506393",
+      "shares": "11268965607",
+      "supply": "20560830509",
+      "trancheAssets": "14535317030"
+    },
+    {
+      "amount": "41872467738",
+      "shares": "32187205964",
+      "supply": "62982507682",
+      "trancheAssets": "81934201557"
+    },
+    {
+      "amount": "447842754",
+      "shares": "319739484",
+      "supply": "16436004478",
+      "trancheAssets": "23021071482"
+    },
+    {
+      "amount": "63286213979",
+      "shares": "45236817198",
+      "supply": "54725439616",
+      "trancheAssets": "76560777176"
+    },
+    {
+      "amount": "52236333446",
+      "shares": "47679372033",
+      "supply": "164270229048",
+      "trancheAssets": "179970374903"
+    },
+    {
+      "amount": "59683364013",
+      "shares": "58220287589",
+      "supply": "116977163201",
+      "trancheAssets": "119916800513"
+    },
+    {
+      "amount": "153363381314",
+      "shares": "125507069714",
+      "supply": "168785971458",
+      "trancheAssets": "206248041327"
+    },
+    {
+      "amount": "48032603987",
+      "shares": "39770635421",
+      "supply": "94508184251",
+      "trancheAssets": "114141354284"
+    },
+    {
+      "amount": "12853802561",
+      "shares": "12807504159",
+      "supply": "154355037555",
+      "trancheAssets": "154913022281"
+    },
+    {
+      "amount": "48274845198",
+      "shares": "46024817449",
+      "supply": "47156322537",
+      "trancheAssets": "49461666483"
+    },
+    {
+      "amount": "2836541477",
+      "shares": "2413104274",
+      "supply": "127443233465",
+      "trancheAssets": "149806215043"
+    }
+  ],
+  "subordination": [
+    {
+      "juniorAfter": "20",
+      "minBps": 2000,
+      "ok": true,
+      "seniorAfter": "80"
+    },
+    {
+      "juniorAfter": "19",
+      "minBps": 2000,
+      "ok": false,
+      "seniorAfter": "81"
+    },
+    {
+      "juniorAfter": "0",
+      "minBps": 2000,
+      "ok": true,
+      "seniorAfter": "0"
+    },
+    {
+      "juniorAfter": "18446744073709551615",
+      "minBps": 5000,
+      "ok": true,
+      "seniorAfter": "18446744073709551615"
+    },
+    {
+      "juniorAfter": "0",
+      "minBps": 0,
+      "ok": true,
+      "seniorAfter": "100"
+    },
+    {
+      "juniorAfter": "1",
+      "minBps": 10000,
+      "ok": true,
+      "seniorAfter": "0"
+    },
+    {
+      "juniorAfter": "0",
+      "minBps": 10000,
+      "ok": false,
+      "seniorAfter": "1"
+    },
+    {
+      "juniorAfter": "25283561644",
+      "minBps": 2000,
+      "ok": true,
+      "seniorAfter": "100308219178"
+    },
+    {
+      "juniorAfter": "25283561644",
+      "minBps": 2000,
+      "ok": false,
+      "seniorAfter": "101308219178"
+    },
+    {
+      "juniorAfter": "11075136546",
+      "minBps": 3253,
+      "ok": false,
+      "seniorAfter": "93780254425"
+    },
+    {
+      "juniorAfter": "45064905700",
+      "minBps": 169,
+      "ok": true,
+      "seniorAfter": "55809496851"
+    },
+    {
+      "juniorAfter": "1638030884",
+      "minBps": 4283,
+      "ok": false,
+      "seniorAfter": "114458795829"
+    },
+    {
+      "juniorAfter": "18459509470",
+      "minBps": 3271,
+      "ok": false,
+      "seniorAfter": "226009749752"
+    },
+    {
+      "juniorAfter": "69109156754",
+      "minBps": 4973,
+      "ok": false,
+      "seniorAfter": "207859534845"
+    },
+    {
+      "juniorAfter": "82735556776",
+      "minBps": 1585,
+      "ok": true,
+      "seniorAfter": "128524465719"
+    },
+    {
+      "juniorAfter": "15299752805",
+      "minBps": 1661,
+      "ok": false,
+      "seniorAfter": "215918774300"
+    },
+    {
+      "juniorAfter": "105838404096",
+      "minBps": 3542,
+      "ok": true,
+      "seniorAfter": "98683134851"
+    },
+    {
+      "juniorAfter": "10260976856",
+      "minBps": 1653,
+      "ok": false,
+      "seniorAfter": "70782814964"
+    },
+    {
+      "juniorAfter": "827852961",
+      "minBps": 1131,
+      "ok": false,
+      "seniorAfter": "102442539404"
+    },
+    {
+      "juniorAfter": "4722125188",
+      "minBps": 4307,
+      "ok": false,
+      "seniorAfter": "190260093842"
+    },
+    {
+      "juniorAfter": "63843522278",
+      "minBps": 3466,
+      "ok": true,
+      "seniorAfter": "17701244952"
+    },
+    {
+      "juniorAfter": "80052377440",
+      "minBps": 4204,
+      "ok": false,
+      "seniorAfter": "195532251144"
+    },
+    {
+      "juniorAfter": "58754599870",
+      "minBps": 2851,
+      "ok": false,
+      "seniorAfter": "189233481283"
+    },
+    {
+      "juniorAfter": "12549390094",
+      "minBps": 4792,
+      "ok": false,
+      "seniorAfter": "212451920493"
+    },
+    {
+      "juniorAfter": "6065546659",
+      "minBps": 2362,
+      "ok": false,
+      "seniorAfter": "110491355537"
+    },
+    {
+      "juniorAfter": "45467304082",
+      "minBps": 1104,
+      "ok": true,
+      "seniorAfter": "148458607886"
+    },
+    {
+      "juniorAfter": "38504684415",
+      "minBps": 4630,
+      "ok": true,
+      "seniorAfter": "23619982545"
+    },
+    {
+      "juniorAfter": "46860283121",
+      "minBps": 4166,
+      "ok": false,
+      "seniorAfter": "167909471585"
+    },
+    {
+      "juniorAfter": "7576664408",
+      "minBps": 2606,
+      "ok": true,
+      "seniorAfter": "3698092056"
+    }
+  ]
+}

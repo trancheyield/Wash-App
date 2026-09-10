@@ -87,8 +87,12 @@ function floorReason(input: PreviewInput, after: PoolBalances): string {
   const min = formatBps(input.pool.params.minJuniorBps)
   // Порожній пул: перший вкладник може зайти лише в junior — без підказки це виглядає
   // як зламана кнопка.
-  if (after.juniorAssets === 0n) {
+  if (after.juniorAssets === 0n && input.mode === 'deposit') {
     return `The junior tranche is empty: senior needs junior at ${min} of assets or more — deposit into junior first.`
+  }
+  // Останній junior не може вийти з-під senior — спершу виходить senior.
+  if (after.juniorAssets === 0n) {
+    return `Redeeming all ${formatAmount(input.value)} ${JUNIOR_TOKEN} would leave senior with no junior beneath it — senior holders redeem first.`
   }
   return input.mode === 'deposit'
     ? `Senior deposit of ${formatAmount(input.value)} ${TOKEN} would put the junior floor at ${floor}, below the ${min} minimum — refused before signing.`

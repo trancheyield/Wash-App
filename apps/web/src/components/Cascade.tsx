@@ -54,6 +54,25 @@ export type CascadeProps = {
   minJuniorBps: bigint
 }
 
+// Посудина senior росте чи меншає разом із прев'ю, але в межах ½…2 номіналу: нижче не
+// вміщаються підписи всередині, вище — креслення виходить за екран. Порожній еталон
+// (перший депозит у senior) — номінал: нема з чим порівнювати.
+export const VESSEL_SCALE_MIN = 0.5
+export const VESSEL_SCALE_MAX = 2
+
+export function vesselScale(assets: bigint, reference: bigint): number {
+  if (reference <= 0n) return 1
+  const ratio = Number((assets * 1000n) / reference) / 1000
+  return Math.min(VESSEL_SCALE_MAX, Math.max(VESSEL_SCALE_MIN, ratio))
+}
+
+// Рівень junior після збитку відносно стану до нього — частка 0…1; порожній junior до
+// збитку лишає посудину порожньою, а не ділить на нуль.
+export function juniorLevel(assets: bigint, before: bigint): number {
+  if (before <= 0n) return 0
+  return Math.min(1, Number((assets * 1000n) / before) / 1000)
+}
+
 type LeaderProps = { y: number; x1: number; x2: number; text: string; fs: number }
 
 function Leader({ y, x1, x2, text, fs }: LeaderProps) {
@@ -81,11 +100,7 @@ export function Cascade({
 }: CascadeProps) {
   const g = compact ? COMPACT : DESKTOP
   const reference = baseline ?? pool
-  const sh =
-    Math.round(
-      (g.sh * Number(pool.senior.assets / 1_000_000n)) /
-        Number(reference.senior.assets / 1_000_000n),
-    ) || g.sh
+  const sh = Math.round(g.sh * vesselScale(pool.senior.assets, reference.senior.assets))
   const sy = g.top
   const jy = sy + sh + g.gap
   const cx = g.vx + g.vw / 2
@@ -98,10 +113,8 @@ export function Cascade({
   const oy = bottom + (compact ? 30 : 40)
   const vxv = g.vx + g.vw - (compact ? 30 : 40)
   const t = compact ? 7 : 9
-  const juniorLevel = before
-    ? Number((pool.junior.assets * 1000n) / before.junior.assets) / 1000
-    : 1
-  const jl = Math.max(1, Math.round(g.jh * juniorLevel))
+  const level = before ? juniorLevel(pool.junior.assets, before.junior.assets) : 1
+  const jl = Math.max(1, Math.round(g.jh * level))
   const step = compact ? Math.floor((sh - 12) / 3) : Math.floor((sh - 20) / 3)
   const floor = `JUNIOR FLOOR ${formatBps(minJuniorBps)} OF ASSETS · NOW ${formatBps(juniorShareBps(pool.senior.assets, pool.junior.assets))}`
   const seniorLabels = [

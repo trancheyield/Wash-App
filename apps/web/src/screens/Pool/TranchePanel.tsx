@@ -222,9 +222,13 @@ type PreviewRowsProps = {
   unit: string
   receiveUnit: string
   navNow: string
+  idle: boolean
 }
 
-function PreviewRows({ result, mode, unit, receiveUnit, navNow }: PreviewRowsProps) {
+// Порожнє поле — не відмова, а очікування: після підтвердженої операції сума
+// очищається, і креслення показує сам пул, а не ще один гіпотетичний внесок.
+function PreviewRows({ result, mode, unit, receiveUnit, navNow, idle }: PreviewRowsProps) {
+  if (idle) return <div className="text-[11px] text-sec">enter an amount to preview</div>
   if (result.kind === 'refused') return <Refused>{result.reason}</Refused>
   const rows: Array<[string, string]> = [
     ['NAV now', navNow],
@@ -387,6 +391,7 @@ export function TranchePanel({ pool, mode }: { pool: PoolView; mode: Mode }) {
           unit={unit}
           receiveUnit={mode === 'deposit' ? trancheToken(tranche) : TOKEN}
           navNow={navNow}
+          idle={text.trim() === ''}
         />
         <div className="flex flex-col gap-2">
           <div className="flex flex-wrap gap-3">
@@ -399,7 +404,10 @@ export function TranchePanel({ pool, mode }: { pool: PoolView; mode: Mode }) {
                 form={form}
                 result={result}
                 ready={Boolean(balances.data)}
-                onDone={setOutcome}
+                onDone={(done) => {
+                  setOutcome(done)
+                  setText('')
+                }}
               />
             ) : (
               <Btn label="connect a wallet to sign" primary disabled />

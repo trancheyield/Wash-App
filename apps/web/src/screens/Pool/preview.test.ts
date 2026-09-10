@@ -148,6 +148,15 @@ describe('preview · redeem', () => {
     ok(preview({ pool, mode: 'redeem', tranche: 'senior', value: 75_000_000_000n, wallet: whale }))
   })
 
+  it('refuses to empty junior under a live senior without the empty-pool hint', () => {
+    const all = { ...wallet, juniorShares: pool.junior.supply }
+    const reason = refusedReason(
+      preview({ pool, mode: 'redeem', tranche: 'junior', value: pool.junior.supply, wallet: all }),
+    )
+    expect(reason).toContain('senior holders redeem first')
+    expect(reason).not.toContain('deposit into junior first')
+  })
+
   it('refuses more shares than the wallet holds', () => {
     expect(
       refusedReason(

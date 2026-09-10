@@ -1,5 +1,6 @@
 import type { PoolView } from '@washapp/chain'
 import { formatAmount } from '@washapp/shared'
+import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { Nav } from '../../chrome/Chrome.tsx'
 import { Cascade } from '../../components/Cascade.tsx'
@@ -16,8 +17,15 @@ import { TOKEN } from '../../tokens.ts'
 import { FaucetRow } from './Faucet.tsx'
 import { PoolGate } from './PoolGate.tsx'
 
+// Мітка першого рендера з даними пулу — число SC-008 знімається з
+// `performance.getEntriesByName(POOL_RENDERED_MARK)` у браузері.
+export const POOL_RENDERED_MARK = 'washapp:pool-rendered'
+
 // Стан пулу, який показує аркуш; порожній стан і помилки — окремими гілками нижче.
 function PoolSheet({ pool }: { pool: PoolView }) {
+  useEffect(() => {
+    performance.mark(POOL_RENDERED_MARK)
+  }, [])
   const compact = useCompact()
   const navigate = useNavigate()
   const now = useUnixNow()

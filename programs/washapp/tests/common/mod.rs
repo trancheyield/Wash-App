@@ -21,7 +21,7 @@ use spl_token_interface::state::{Account as TokenAccount, AccountState, Mint};
 use washapp::constants::DEMO_MINT_DECIMALS;
 use washapp::instructions::PoolParams;
 use washapp::math::{PoolBalances, Tranche};
-use washapp::state::{Config, Pool};
+use washapp::state::{Config, LossEvent, Pool};
 
 pub const TOKEN_PROGRAM: Pubkey = token::ID;
 pub const ATA_PROGRAM: Pubkey = associated_token::ID;
@@ -145,6 +145,11 @@ pub fn account_of<'a>(accounts: &'a [(Pubkey, Account)], key: &Pubkey) -> &'a Ac
 pub fn pool_state(accounts: &[(Pubkey, Account)], key: &Pubkey) -> Pool {
     Pool::try_deserialize(&mut account_of(accounts, key).data.as_slice())
         .unwrap_or_else(|e| panic!("{key} не Pool: {e}"))
+}
+
+pub fn loss_event_state(accounts: &[(Pubkey, Account)], key: &Pubkey) -> LossEvent {
+    LossEvent::try_deserialize(&mut &account_of(accounts, key).data[..])
+        .unwrap_or_else(|e| panic!("{key} не LossEvent: {e}"))
 }
 
 pub fn config_state(accounts: &[(Pubkey, Account)], key: &Pubkey) -> Config {
@@ -504,6 +509,35 @@ pub fn redeem(
         }
         .to_account_metas(None),
         data: washapp::instruction::Redeem { tranche, shares }.data(),
+    }
+}
+
+// `LossEvent` — під поточним `loss_count` пулу з сесії: тест не рахує індекс сам.
+pub fn record_loss(
+    session: &Session,
+    s: &ConfigSetup,
+    p: &PoolSetup,
+    operator: Pubkey,
+    loss_bps: u16,
+) -> Instruction {
+    let index = pool_state(&[(p.pool, session.get(&p.pool))], &p.pool).loss_count;
+    Instruction {
+        program_id: washapp::ID,
+        accounts: washapp::accounts::RecordLoss {
+            config: s.config,
+            mint: s.mint,
+            treasury: s.treasury,
+            pool: p.pool,
+            vault: p.vault,
+            senior_mint: p.senior_mint,
+            junior_mint: p.junior_mint,
+            loss_event: pda::loss_event(&p.pool, index).0,
+            operator,
+            token_program: TOKEN_PROGRAM,
+            system_program: anchor_lang::system_program::ID,
+        }
+        .to_account_metas(None),
+        data: washapp::instruction::RecordLoss { loss_bps }.data(),
     }
 }
 

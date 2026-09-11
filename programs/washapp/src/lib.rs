@@ -39,4 +39,8 @@ pub mod washapp {
     pub fn redeem(ctx: Context<Redeem>, tranche: Tranche, shares: u64) -> Result<()> {
         instructions::redeem_handler(ctx, tranche, shares)
     }
+
+    pub fn record_loss(ctx: Context<RecordLoss>, loss_bps: u16) -> Result<()> {
+        instructions::record_loss_handler(ctx, loss_bps)
+    }
 }

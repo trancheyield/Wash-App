@@ -1,4 +1,4 @@
-// CU-гейт (SC-005): кожна інструкція US1 на демо-сценарії брифу M0 — під стелею
+// CU-гейт (SC-005): кожна інструкція M1 на демо-сценарії брифу M0 — під стелею
 // 200 000. Ключі фіксовані (`common`), інакше bump-пошук PDA гуляє на ~1 500 CU
 // за спробу і гейт то проходить, то ні. Фактичні числа — в SCRATCHPAD; щоб
 // побачити їх, `cargo test --test cu -- --nocapture`.
@@ -6,8 +6,8 @@ mod common;
 
 use common::{
     ata, config_setup, configured_session, create_pool, demo_params, deposit, faucet, init_config,
-    init_config_accounts, open_tranche_atas, pool_session, pool_setup, redeem, signer_account,
-    Harness, Session, GENESIS_TS, USER_A, USER_B,
+    init_config_accounts, open_tranche_atas, pool_session, pool_setup, record_loss, redeem,
+    signer_account, Harness, Session, GENESIS_TS, OPERATOR, USER_A, USER_B,
 };
 use mollusk_svm::result::{Check, InstructionResult};
 use washapp::math::Tranche;
@@ -64,7 +64,8 @@ fn faucet_fits_the_ceiling_with_and_without_ata() {
 }
 
 // Найдорожчі шляхи: accrue з обома CPI, депозит за NAV із subordination,
-// погашення junior зі subordination — усі після 30 модельних днів.
+// погашення junior зі subordination, збиток з accrue + burn + init події —
+// усі після 30 модельних днів.
 #[test]
 fn user_instructions_fit_the_ceiling_on_the_m0_scenario() {
     let (mut session, s, p) = pool_session();
@@ -116,4 +117,16 @@ fn user_instructions_fit_the_ceiling_on_the_m0_scenario() {
         &redeem(&s, &p, USER_A, Tranche::Senior, SENIOR),
     );
     assert!(common::token_amount(&session.snapshot(), &ata(&USER_A, &s.mint)) > SENIOR);
+
+    // Обидві гілки waterfall: 15 % лягає на junior, 80 % вичерпує його і доходить до senior.
+    session.harness.warp(5, GENESIS_TS + 240);
+    let ix = record_loss(&session, &s, &p, OPERATOR, 1_500);
+    run(&mut session, "record_loss (junior, accrue)", &ix);
+    session.harness.warp(6, GENESIS_TS + 300);
+    let ix = record_loss(&session, &s, &p, OPERATOR, 8_000);
+    run(&mut session, "record_loss (into senior)", &ix);
+    let pool = common::pool_state(&session.snapshot(), &p.pool);
+    assert_eq!(pool.loss_count, 2);
+    assert_eq!(pool.junior_assets, 0);
+    assert!(pool.senior_assets > 0);
 }

@@ -11,7 +11,7 @@ import {
   type Rates,
   type Tranche as TrancheSide,
 } from '@washapp/shared'
-import { type Pool, Tranche } from './generated/index.ts'
+import { type LossEvent, type Pool, Tranche } from './generated/index.ts'
 
 export const NAV_ONE: Micro = 1_000_000n
 
@@ -30,6 +30,20 @@ export type TrancheView = {
   nav: Micro
 }
 
+// Подія збитку з ланцюга — незмінна, тож `assetsAfter` можна порахувати тут раз.
+export type LossEventView = {
+  address: Address
+  index: number
+  ts: bigint
+  modelTime: bigint
+  lossBps: number
+  amount: Micro
+  juniorLoss: Micro
+  seniorLoss: Micro
+  assetsBefore: Micro
+  assetsAfter: Micro
+}
+
 export type PoolView = {
   address: Address
   id: number
@@ -44,6 +58,8 @@ export type PoolView = {
   lastAccruedTs: bigint
   createdAt: bigint
   lossCount: number
+  // Усі події за індексами `0..lossCount`, за зростанням індексу.
+  lossEvents: LossEventView[]
 }
 
 export type WalletView = {
@@ -71,11 +87,27 @@ function tranche(mint: Address, assets: Micro, supply: Micro): TrancheView {
   return { mint, assets, supply, nav: nav(assets, supply) }
 }
 
+export function lossEventView(address: Address, event: LossEvent): LossEventView {
+  return {
+    address,
+    index: event.index,
+    ts: event.ts,
+    modelTime: event.modelTime,
+    lossBps: event.lossBps,
+    amount: event.amount,
+    juniorLoss: event.juniorLoss,
+    seniorLoss: event.seniorLoss,
+    assetsBefore: event.assetsBefore,
+    assetsAfter: event.assetsBefore - event.amount,
+  }
+}
+
 export function poolView(
   address: Address,
   pool: Pool,
   seniorSupply: Micro,
   juniorSupply: Micro,
+  lossEvents: LossEventView[] = [],
 ): PoolView {
   return {
     address,
@@ -97,6 +129,7 @@ export function poolView(
     lastAccruedTs: pool.lastAccruedTs,
     createdAt: pool.createdAt,
     lossCount: pool.lossCount,
+    lossEvents,
   }
 }
 

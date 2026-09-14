@@ -35,9 +35,12 @@ import {
 } from "@solana/program-client-core";
 import {
   getConfigCodec,
+  getLossEventCodec,
   getPoolCodec,
   type Config,
   type ConfigArgs,
+  type LossEvent,
+  type LossEventArgs,
   type Pool,
   type PoolArgs,
 } from "../accounts/index.ts";
@@ -47,12 +50,14 @@ import {
   getDepositInstructionAsync,
   getFaucetInstructionAsync,
   getInitConfigInstructionAsync,
+  getRecordLossInstructionAsync,
   getRedeemInstructionAsync,
   parseAccrueInstruction,
   parseCreatePoolInstruction,
   parseDepositInstruction,
   parseFaucetInstruction,
   parseInitConfigInstruction,
+  parseRecordLossInstruction,
   parseRedeemInstruction,
   type AccrueAsyncInput,
   type CreatePoolAsyncInput,
@@ -64,7 +69,9 @@ import {
   type ParsedDepositInstruction,
   type ParsedFaucetInstruction,
   type ParsedInitConfigInstruction,
+  type ParsedRecordLossInstruction,
   type ParsedRedeemInstruction,
+  type RecordLossAsyncInput,
   type RedeemAsyncInput,
 } from "../instructions/index.ts";
 import {
@@ -82,9 +89,11 @@ export const WASHAPP_PROGRAM_ADDRESS =
 
 export const WashappAccount = {
   0: "Config",
-  1: "Pool",
+  1: "LossEvent",
+  2: "Pool",
   Config: 0,
-  Pool: 1,
+  LossEvent: 1,
+  Pool: 2,
 } as const;
 
 export type WashappAccount = (typeof WashappAccount)[Exclude<
@@ -106,6 +115,17 @@ export function identifyWashappAccount(
     )
   ) {
     return WashappAccount.Config;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([167, 200, 239, 160, 230, 47, 250, 129]),
+      ),
+      0,
+    )
+  ) {
+    return WashappAccount.LossEvent;
   }
   if (
     containsBytes(
@@ -238,13 +258,15 @@ export const WashappInstruction = {
   2: "Deposit",
   3: "Faucet",
   4: "InitConfig",
-  5: "Redeem",
+  5: "RecordLoss",
+  6: "Redeem",
   Accrue: 0,
   CreatePool: 1,
   Deposit: 2,
   Faucet: 3,
   InitConfig: 4,
-  Redeem: 5,
+  RecordLoss: 5,
+  Redeem: 6,
 } as const;
 
 export type WashappInstruction = (typeof WashappInstruction)[Exclude<
@@ -315,6 +337,17 @@ export function identifyWashappInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([112, 182, 48, 145, 171, 216, 247, 43]),
+      ),
+      0,
+    )
+  ) {
+    return WashappInstruction.RecordLoss;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
         new Uint8Array([184, 12, 86, 149, 70, 196, 97, 225]),
       ),
       0,
@@ -346,6 +379,9 @@ export type ParsedWashappInstruction<
   | ({
       instructionType: typeof WashappInstruction.InitConfig;
     } & ParsedInitConfigInstruction<TProgram>)
+  | ({
+      instructionType: typeof WashappInstruction.RecordLoss;
+    } & ParsedRecordLossInstruction<TProgram>)
   | ({
       instructionType: typeof WashappInstruction.Redeem;
     } & ParsedRedeemInstruction<TProgram>);
@@ -390,6 +426,13 @@ export function parseWashappInstruction<TProgram extends string>(
         ...parseInitConfigInstruction(instruction),
       };
     }
+    case WashappInstruction.RecordLoss: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: WashappInstruction.RecordLoss,
+        ...parseRecordLossInstruction(instruction),
+      };
+    }
     case WashappInstruction.Redeem: {
       assertIsInstructionWithAccounts(instruction);
       return {
@@ -417,6 +460,8 @@ export type WashappPlugin = {
 export type WashappPluginAccounts = {
   config: ReturnType<typeof getConfigCodec> &
     SelfFetchFunctions<ConfigArgs, Config>;
+  lossEvent: ReturnType<typeof getLossEventCodec> &
+    SelfFetchFunctions<LossEventArgs, LossEvent>;
   pool: ReturnType<typeof getPoolCodec> & SelfFetchFunctions<PoolArgs, Pool>;
 };
 
@@ -437,6 +482,10 @@ export type WashappPluginInstructions = {
   initConfig: (
     input: InitConfigAsyncInput,
   ) => ReturnType<typeof getInitConfigInstructionAsync> &
+    SelfPlanAndSendFunctions;
+  recordLoss: (
+    input: RecordLossAsyncInput,
+  ) => ReturnType<typeof getRecordLossInstructionAsync> &
     SelfPlanAndSendFunctions;
   redeem: (
     input: RedeemAsyncInput,
@@ -467,6 +516,7 @@ export function washappProgram() {
       washapp: {
         accounts: {
           config: addSelfFetchFunctions(client, getConfigCodec()),
+          lossEvent: addSelfFetchFunctions(client, getLossEventCodec()),
           pool: addSelfFetchFunctions(client, getPoolCodec()),
         },
         instructions: {
@@ -494,6 +544,11 @@ export function washappProgram() {
             addSelfPlanAndSendFunctions(
               client,
               getInitConfigInstructionAsync(input),
+            ),
+          recordLoss: (input) =>
+            addSelfPlanAndSendFunctions(
+              client,
+              getRecordLossInstructionAsync(input),
             ),
           redeem: (input) =>
             addSelfPlanAndSendFunctions(

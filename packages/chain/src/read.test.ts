@@ -1,18 +1,24 @@
 import { type Address, address } from '@solana/kit'
 import { describe, expect, it } from 'vitest'
-import { ataAddress, type ReadRpc, readPool, readWallet } from './read.ts'
+import { ataAddress, type ReadRpc, readLossEvents, readPool, readWallet } from './read.ts'
 import { m0Fixture as fixture } from './testing/m0-fixture.ts'
 import { modelDays, nav } from './view.ts'
 
 // Байти акаунтів пише Rust із SVM (`wsl-build.sh fixtures`); тут RPC підмінено
 // на ті самі байти, тож декодери перевіряються проти програми, а не проти себе.
-const byAddress = new Map(Object.values(fixture.accounts).map((a) => [a.address, a]))
+// `afterLoss` перекриває пул, vault і мінт тим самим станом після збитку 15 %.
+type Stage = 'beforeLoss' | 'afterLoss'
 
-function fakeRpc(): ReadRpc {
+function fakeRpc(stage: Stage = 'beforeLoss', calls: Address[][] = []): ReadRpc {
+  const byAddress = new Map(Object.values(fixture.accounts).map((a) => [a.address, a]))
+  if (stage === 'afterLoss') {
+    for (const a of Object.values(fixture.afterLoss.accounts)) byAddress.set(a.address, a)
+  }
   const getMultipleAccounts = (addresses: readonly Address[]) => ({
     send: async () => ({
       context: { slot: 1n },
       value: addresses.map((key) => {
+        calls.push([...addresses])
         const account = byAddress.get(key)
         if (!account) return null
         return {
@@ -67,10 +73,71 @@ describe('readPool', () => {
     expect(pool.createdAt).toBe(BigInt(fixture.genesisTs))
     expect(pool.lastAccruedTs).toBe(BigInt(fixture.genesisTs + 60))
     expect(pool.lossCount).toBe(0)
+    expect(pool.lossEvents).toEqual([])
+  })
+
+  it('reads the pool and its loss events in a single RPC call', async () => {
+    const calls: Address[][] = []
+    const pool = await readPool(fakeRpc('afterLoss', calls), fixture.poolId)
+    expect(pool).not.toBeNull()
+    if (!pool) return
+
+    // Пул + два мінти + 5 подій наосліп — один `getMultipleAccounts`.
+    expect(new Set(calls.map((c) => c.join(','))).size).toBe(1)
+    expect(calls[0]).toHaveLength(8)
+
+    // Аркуш 3 брифу: junior узяв усе, senior без змін.
+    const loss = 15_088_767_123n
+    expect(pool.lossCount).toBe(1)
+    expect(pool.assets).toBe(100_591_780_822n - loss)
+    expect(pool.senior.assets).toBe(75_308_219_178n)
+    expect(pool.junior.assets).toBe(10_194_794_521n)
+    expect(pool.junior.nav).toBe(407_791n)
+
+    expect(pool.lossEvents).toHaveLength(1)
+    const event = pool.lossEvents[0]
+    expect(event).toEqual({
+      address: fixture.afterLoss.accounts.lossEvent0.address,
+      index: 0,
+      ts: BigInt(fixture.genesisTs + 60),
+      modelTime: 30n * 86_400n,
+      lossBps: fixture.afterLoss.lossBps,
+      amount: loss,
+      juniorLoss: loss,
+      seniorLoss: 0n,
+      assetsBefore: 100_591_780_822n,
+      assetsAfter: 100_591_780_822n - loss,
+    })
   })
 
   it('returns null for a pool that does not exist', async () => {
     expect(await readPool(fakeRpc(), fixture.poolId + 1)).toBeNull()
+  })
+})
+
+describe('readLossEvents', () => {
+  it('returns nothing without a call when there is nothing past `from`', async () => {
+    const calls: Address[][] = []
+    const events = await readLossEvents(
+      fakeRpc('afterLoss', calls),
+      fixture.accounts.pool.address,
+      1,
+      1,
+    )
+    expect(events).toEqual([])
+    expect(calls).toEqual([])
+  })
+
+  it('reads events by index from the pool address', async () => {
+    const events = await readLossEvents(fakeRpc('afterLoss'), fixture.accounts.pool.address, 1)
+    expect(events.map((e) => e.index)).toEqual([0])
+    expect(events[0]?.address).toBe(fixture.afterLoss.accounts.lossEvent0.address)
+  })
+
+  it('throws when an event below loss_count is missing', async () => {
+    await expect(
+      readLossEvents(fakeRpc('afterLoss'), fixture.accounts.pool.address, 2),
+    ).rejects.toThrow(/loss event 1/)
   })
 })
 

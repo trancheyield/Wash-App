@@ -11,4 +11,5 @@ export * from "./createPool.ts";
 export * from "./deposit.ts";
 export * from "./faucet.ts";
 export * from "./initConfig.ts";
+export * from "./recordLoss.ts";
 export * from "./redeem.ts";

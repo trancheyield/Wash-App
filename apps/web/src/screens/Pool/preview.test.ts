@@ -25,6 +25,7 @@ const pool: PoolView = {
   lastAccruedTs: 0n,
   createdAt: 0n,
   lossCount: 0,
+  lossEvents: [],
 }
 
 const wallet: WalletView = {

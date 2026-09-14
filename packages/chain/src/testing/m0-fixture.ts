@@ -1,7 +1,8 @@
 // Стан брифу M0 після 30 модельних днів, знятий із SVM (`wsl-build.sh fixtures`,
-// генератор `programs/washapp/tests/fixture_accounts.rs`). Адреси й байти тут —
-// те, що реально записала програма, тож читачі й білдери звіряються з нею,
-// а не самі з собою. Лише для тестів — з `index.ts` не експортується.
+// генератор `programs/washapp/tests/fixture_accounts.rs`), і розділ `afterLoss` —
+// той самий пул після `record_loss 15 %` у тому ж слоті (аркуш 3 брифу). Адреси й
+// байти тут — те, що реально записала програма, тож читачі й білдери звіряються
+// з нею, а не самі з собою. Лише для тестів — з `index.ts` не експортується.
 
 import { readFileSync } from 'node:fs'
 import { addressSchema } from '@washapp/shared'
@@ -30,6 +31,15 @@ const fixtureSchema = z.object({
     ownerBase: accountSchema,
     ownerSenior: accountSchema,
     ownerJunior: accountSchema,
+  }),
+  afterLoss: z.object({
+    lossBps: z.number().int().min(0).max(10_000),
+    accounts: z.object({
+      pool: accountSchema,
+      vault: accountSchema,
+      mint: accountSchema,
+      lossEvent0: accountSchema,
+    }),
   }),
 })
 

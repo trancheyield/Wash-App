@@ -61,6 +61,36 @@
       "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
     }
   },
+  "afterLoss": {
+    "accounts": {
+      "lossEvent0": {
+        "address": "CVWAH4gnwLjQszFmxhzHzPera3vGZ196PkV1ZmJwfLpP",
+        "data": "a7c8efa0e62ffa819676040670d914bb6373a2c2d4d4d42c1ff4456f9704cff104e5035d91b1c986000000003cf1536500000000008d270000000000dc0593505c830300000093505c83030000000000000000000000d6c3bc6b17000000fc",
+        "lamports": 1552080,
+        "owner": "2Yq39tVgTH5e8be8YdssyhvM6339f2WG6QweNmxGpBbf"
+      },
+      "mint": {
+        "address": "CUUL7yH9rHZc16ncEnQNPYeYPxAwNoYPsq3dgQW4VoGe",
+        "data": "01000000488691c1f378f016fc07b73acf31a63a4fa8b68d0c0b97cd5307ed0d9d1e503a93c44bec130000000601000000000000000000000000000000000000000000000000000000000000000000000000",
+        "lamports": 1461600,
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+      },
+      "pool": {
+        "address": "B8LXeRxjgZ14wStLKDc1GEQCBpUkHNQgTBgojKBk4fdX",
+        "data": "f19a6d0411b16dbc00000707070707070707070707070707070707070707070707070707070707070707aa7a23c87d897c98943b9fae4d348f526ab34474f81aee6d393716d534ee27f32d29ac70e4ecb222fbf92c615963b68b084849144a3a57577ca466adbacee774a85addc33967a4d85b48b6c723d8d16aa723f8391b4353d94d94820626496aa62d80dba6256788b00ef3ba8af9e3385ee741067d86f2e5e3d57c24a1f0a098b32003f401d007e803c0a80000437360e8130000002a3bb888110000001938a85f02000000008d2700000000003cf15365000000000100000000f1536500000000fb",
+        "lamports": 2526480,
+        "owner": "2Yq39tVgTH5e8be8YdssyhvM6339f2WG6QweNmxGpBbf"
+      },
+      "vault": {
+        "address": "43JCm24L3pL9fHzmNe5mMBaiiLeGMrAefYU7oLZjqwcF",
+        "data": "aa7a23c87d897c98943b9fae4d348f526ab34474f81aee6d393716d534ee27f39676040670d914bb6373a2c2d4d4d42c1ff4456f9704cff104e5035d91b1c986437360e813000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "lamports": 2039280,
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+      }
+    },
+    "lossBps": 1500,
+    "scenario": "record_loss 15 % оператором у тому самому слоті, що й accrue: junior бере все, senior без змін"
+  },
   "comment": "Згенеровано `cargo test --workspace -- --ignored gen_account_fixtures` (wsl-build.sh fixtures). Не правити руками: read.test.ts декодує ці байти.",
   "genesisTs": 1700000000,
   "operator": "US517G5965aydkZ46HS38QLi7UQiSojurfbQfKCELFx",

@@ -7,4 +7,5 @@
  */
 
 export * from "./config.ts";
+export * from "./lossEvent.ts";
 export * from "./pool.ts";

@@ -100,7 +100,12 @@ function OperatorPanel({ account, pool, projected, text, onText, preview, onDone
       const confirmedMs = performance.now() - t0
       await queryClient.invalidateQueries({ queryKey: poolQueryKey(pool.id) })
       const refreshedMs = performance.now() - t0
-      const split = input.kind === 'loss' && input.preview.kind === 'ok' ? input.preview : null
+      // Числа в рядку — з події на ланцюзі, не з прев'ю: між кліком і слотом набігає
+      // дохід, і прев'ю відстає на кілька центів від того, що записала програма.
+      const refreshed = queryClient.getQueryData<PoolView | null>(poolQueryKey(pool.id))
+      const event = refreshed?.lossEvents.find((e) => e.index === pool.lossCount)
+      const split =
+        event ?? (input.kind === 'loss' && input.preview.kind === 'ok' ? input.preview : null)
       const outcome: Outcome = {
         kind: input.kind,
         signature,
@@ -112,7 +117,7 @@ function OperatorPanel({ account, pool, projected, text, onText, preview, onDone
       }
       if (import.meta.env.DEV) {
         console.info(
-          `[SC-001] ${input.kind}${split ? ` ${formatBps(split.lossBps)}` : ''}: confirmed ${seconds(confirmedMs)} · screen refreshed ${seconds(refreshedMs)} · tx ${signature}`,
+          `[SC-001] ${input.kind}${input.kind === 'loss' && input.preview.kind === 'ok' ? ` ${formatBps(input.preview.lossBps)}` : ''}: confirmed ${seconds(confirmedMs)} · screen refreshed ${seconds(refreshedMs)} · tx ${signature}`,
         )
       }
       return outcome

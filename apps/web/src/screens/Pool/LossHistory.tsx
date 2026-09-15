@@ -7,7 +7,7 @@ import { modelDay } from '../../model-clock.ts'
 import { TOKEN } from '../../tokens.ts'
 
 const GRID =
-  'grid grid-cols-[1fr_1.2fr_1.4fr_2fr_2fr_1.6fr] gap-3 border-b border-hair py-1.5 text-[12px]'
+  'grid grid-cols-[auto_auto_auto_1fr_1fr_1fr] gap-3 whitespace-nowrap border-b border-hair py-1.5 text-[12px]'
 
 // Таблиця подій збитку з ланцюга — на сторінці пулу і на аркуші збитку та сама:
 // `#`, модельний день, частка, сума і розклад на транші.
@@ -29,7 +29,7 @@ export function LossTable({ events }: { events: LossEventView[] }) {
       {events.map((e) => (
         <div key={e.index} className={GRID}>
           <span>#{e.index}</span>
-          <span>day {modelDay(e.modelTime)}</span>
+          <span>{modelDay(e.modelTime)}</span>
           <span className="text-right">{formatBps(e.lossBps)}</span>
           <span className="text-right">{formatAmount(e.amount)}</span>
           <span className="text-right">{formatAmount(e.juniorLoss)}</span>

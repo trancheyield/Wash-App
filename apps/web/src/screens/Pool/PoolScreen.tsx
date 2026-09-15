@@ -1,7 +1,7 @@
 import type { PoolView } from '@washapp/chain'
 import { formatAmount } from '@washapp/shared'
 import { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import { Nav } from '../../chrome/Chrome.tsx'
 import { Cascade } from '../../components/Cascade.tsx'
 import { Btn, Columns, Pairs, Sheet, TitleBlock, useCompact } from '../../components/chrome.tsx'
@@ -15,6 +15,7 @@ import {
 } from '../../model-clock.ts'
 import { TOKEN } from '../../tokens.ts'
 import { FaucetRow } from './Faucet.tsx'
+import { LossHistory } from './LossHistory.tsx'
 import { PoolGate } from './PoolGate.tsx'
 
 // Мітка першого рендера з даними пулу — число SC-008 знімається з
@@ -67,16 +68,7 @@ function PoolSheet({ pool }: { pool: PoolView }) {
             ['Assets', `${formatAmount(pool.assets)} ${TOKEN}`],
           ]}
         />
-        <div>
-          <div className="lbl">Loss events</div>
-          <div className="text-[11px] text-sec">
-            {pool.lossCount === 0 ? (
-              'none recorded'
-            ) : (
-              <Link to={`${base}/loss`}>{pool.lossCount} recorded · see loss events</Link>
-            )}
-          </div>
-        </div>
+        <LossHistory pool={pool} />
         <div className="flex flex-col gap-2.5">
           <div className="lbl">Protection</div>
           <div className="text-[11px] text-sec">

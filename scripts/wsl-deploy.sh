@@ -90,16 +90,30 @@ case "$CMD" in
     ensure_deployer
     check_v0 "$SO"
     size="$(stat -c %s "$SO")"
-    # Місце під апгрейди: ProgramData фіксує довжину на весь час життя програми.
-    max_len=$(( size * 3 / 2 ))
-    rent="$(rent_lamports "$max_len")"
     buffer_rent="$(rent_lamports "$size")"
     balance="$(solana balance "$(solana-keygen pubkey "$DEPLOYER")" --url "$URL" --lamports | awk '{print $1}')"
-    # CLI вимагає ренту буфера і ProgramData разом, хоч буфер повертається
-    # deployer-у перед оплатою ProgramData; після деплою лишається лише ProgramData.
-    need=$(( rent + buffer_rent + 50000000 ))
     echo "deployer: $(solana-keygen pubkey "$DEPLOYER")  $(( balance / 1000000 ))e-3 SOL"
-    echo ".so:      $size байтів, max-len $max_len; рента ProgramData $(( rent / 1000000 ))e-3 SOL + буфер $(( buffer_rent / 1000000 ))e-3 SOL (повертається)"
+    existing_len="$(solana program show "$PROGRAM_ID" --url "$URL" 2>/dev/null | sed -n 's/^Data Length: \([0-9]*\).*/\1/p')"
+    max_len_args=()
+    if [[ -n "$existing_len" ]]; then
+      # Апгрейд: ProgramData вже оплачений і має фіксовану довжину; платиться лише
+      # буфер (повертається після запису) і комісії. `--max-len` тут не приймається.
+      if (( existing_len < size )); then
+        echo "ПОМИЛКА: ProgramData вміщає $existing_len байтів, .so — $size: solana program extend $PROGRAM_ID $(( size - existing_len ))"
+        exit 1
+      fi
+      need=$(( buffer_rent + 50000000 ))
+      echo ".so:      $size байтів, апгрейд у ProgramData на $existing_len; буфер $(( buffer_rent / 1000000 ))e-3 SOL (повертається)"
+    else
+      # Перший деплой: місце під апгрейди — ProgramData фіксує довжину на весь час життя.
+      max_len=$(( size * 3 / 2 ))
+      max_len_args=(--max-len "$max_len")
+      rent="$(rent_lamports "$max_len")"
+      # CLI вимагає ренту буфера і ProgramData разом, хоч буфер повертається
+      # deployer-у перед оплатою ProgramData; після деплою лишається лише ProgramData.
+      need=$(( rent + buffer_rent + 50000000 ))
+      echo ".so:      $size байтів, max-len $max_len; рента ProgramData $(( rent / 1000000 ))e-3 SOL + буфер $(( buffer_rent / 1000000 ))e-3 SOL (повертається)"
+    fi
     if (( balance < need )); then
       echo "ПОМИЛКА: на deployer $(( balance / 1000000 ))e-3 SOL, треба ≥ $(( need / 1000000 ))e-3 — faucet.solana.com або: solana airdrop 5 $(solana-keygen pubkey "$DEPLOYER") --url devnet"
       exit 1
@@ -108,7 +122,7 @@ case "$CMD" in
       --program-id "$PROGRAM_KEYPAIR" \
       --upgrade-authority "$DEPLOYER" \
       --keypair "$DEPLOYER" \
-      --max-len "$max_len" \
+      "${max_len_args[@]}" \
       --url "$URL" \
       --commitment confirmed
     echo "OK — задеплоєно $PROGRAM_ID"

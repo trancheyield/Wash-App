@@ -15,7 +15,7 @@ external lending protocols is out of scope.
 - `packages/chain` — Codama-generated client on `@solana/kit`, PDAs, readers, builders
 - `packages/shared` — waterfall math mirror, formatting, form schemas
 - `apps/web` — React SPA (pool page, positions, protection, operator panel)
-- `tools/demo` — scripted devnet scenario: deposit → yield → loss → payout
+- `tools/demo` — devnet init and the scripted scenario: deposit → yield → loss → redeem (payout arrives with the protection market)
 
 ## Commands
 
@@ -23,7 +23,12 @@ external lending protocols is out of scope.
 pnpm install
 pnpm gate            # biome + tsc + vitest across the workspace
 pnpm dev             # web on :5173
+pnpm demo:init       # devnet: config, demo mint and pool 0 (idempotent)
+pnpm demo:scenario   # devnet: fresh wallet → faucet → deposits → 60 s → accrue → loss → redeem, timings to fixtures/demo-run.json
 ```
+
+Both demo commands read `SOLANA_RPC_URL` and `WASH_KEYS_DIR` from `.env` (see `.env.example`);
+the operator and deployer keypairs live outside the repository.
 
 On-chain (WSL, from PowerShell):
 

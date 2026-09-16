@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "init": "node --env-file=../../.env src/init.ts",
+    "scenario": "node --env-file=../../.env src/scenario.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },

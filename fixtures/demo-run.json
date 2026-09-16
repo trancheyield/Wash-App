@@ -1,0 +1,94 @@
+{
+  "comment": "Таймінги демо-сценарію M1 на devnet (tools/demo scenario): підпис → confirmed → зміна Pool в RPC на кожному кроці (SC-001 ≤ 10 с), waterfall збитку звірено з подією на ланцюзі (SC-003), загальний час (SC-007 ≤ 180 с). Суми — мікро-одиниці рядками.",
+  "ranAt": "2026-09-16T16:39:27.026Z",
+  "programId": "2Yq39tVgTH5e8be8YdssyhvM6339f2WG6QweNmxGpBbf",
+  "poolId": 0,
+  "wallet": "41HEjqGFmkVQbjQDsixdSyW929w1ZvWZRzPXw2ssa16h",
+  "steps": [
+    {
+      "name": "fund",
+      "signature": "5RZou2iQvD8v4jngGfbHVC8dwjVJN6qEdyTT8HXu32kBJiLsWG4FWxo6rnE7z7kEmMU9cnA8DVZy9uQw9U2AgmDN",
+      "confirmedMs": 2065.1868999999997,
+      "visibleMs": 2208.2389,
+      "note": "0.02 SOL від deployer"
+    },
+    {
+      "name": "faucet",
+      "signature": "4wyThKdHkyrv48Qq7SrR9z2B4SzYLLr6j1uHG9re9NTidcqp2o2BZs61JiNX5ZQRSoMVeioViBYNMskxgjNck2bb",
+      "confirmedMs": 1548.5986999999996,
+      "visibleMs": 1684.9660999999996,
+      "note": "3,000.00 WUSD у гаманці"
+    },
+    {
+      "name": "deposit junior",
+      "signature": "3mBEVjLDZfXvTSysb7AuMmuWVHtGbGrZX6rMK9XtKWVACNTd5VLGmmJRTbRD812PEFVuAsyXcAvZ8VVVdghz95gK",
+      "confirmedMs": 1087.2978000000003,
+      "visibleMs": 1229.317,
+      "note": "junior 2,296.87 WUSD, NAV 1.296870"
+    },
+    {
+      "name": "deposit senior",
+      "signature": "3gWkTxJCgSMCJTvEcEy3FE5sFUSLgDPHgKiSMENmkEY5ykYwwpyYHnneJApnpX6eGf54QXG1JNwXR9aiksFtCQPb",
+      "confirmedMs": 1280.8808,
+      "visibleMs": 1418.9573,
+      "note": "senior 2,000.00 WUSD, NAV 1.000000"
+    },
+    {
+      "name": "wait",
+      "signature": null,
+      "confirmedMs": 60009.44069999999,
+      "visibleMs": null,
+      "note": "60 с = 30 модельних днів"
+    },
+    {
+      "name": "accrue",
+      "signature": "bqsnd6S66cFyGemGc8dc9XkPZBFKM5srxMoUYjuWrCwk8PZPbDszREVRefuAsKbo6ZyEPedPNPKk8jLCDg8tY2i",
+      "confirmedMs": 947.2037999999884,
+      "visibleMs": 1102.392200000002,
+      "note": "NAV senior 1.000000 → 1.004178, junior 1.297125 → 1.307005"
+    },
+    {
+      "name": "record_loss",
+      "signature": "3jJK4BtqKtkcVLhhMoFBYkF6L36Y66pFM4bmPFYuHHFk9dfAMr5THXsYdY91gGWekm8WfA5QqupFQZ6DHKctttnb",
+      "confirmedMs": 1654.8435000000027,
+      "visibleMs": 1795.5144,
+      "note": "подія #2: −648.54 WUSD, junior −648.54, senior −0.00"
+    },
+    {
+      "name": "redeem senior",
+      "signature": "5KAEgoVAtdTyWt5novzwkXoxCB7vLq8F2JsqwixMzaEvN2UTrDzA8vf3JiGQNy3ASuKpx1LgnTid9aJjVmUT9WP",
+      "confirmedMs": 1715.9131000000052,
+      "visibleMs": 1854.0151000000042,
+      "note": "2,000.00 sWUSD → 2,008.49 WUSD; senior лишилось 0.00"
+    },
+    {
+      "name": "redeem junior",
+      "signature": "4efTvATcw13P4v8rum8izEDUdsfSUqTuu1U9SD3F7icFHzDJ4ezEnCA1fFL8GJ8D6Q4UKWDrCVtxUySZd4EEWLUE",
+      "confirmedMs": 1685.7857000000076,
+      "visibleMs": 1831.817200000005,
+      "note": "771.09 jWUSD → 725.58 WUSD; junior лишилось 941.43"
+    }
+  ],
+  "waterfall": {
+    "lossBps": 1500,
+    "amount": "648540625",
+    "juniorLoss": "648540625",
+    "seniorLoss": "0",
+    "assetsBefore": "4323604173",
+    "assetsAfter": "3675063548",
+    "seniorBefore": "2008493722",
+    "seniorAfter": "2008493722",
+    "juniorBefore": "2315110451",
+    "juniorAfter": "1666569826",
+    "seniorUnchanged": true,
+    "mismatches": []
+  },
+  "nav": {
+    "seniorBefore": "1000000",
+    "seniorAfterAccrue": "1004178",
+    "juniorBefore": "1297125",
+    "juniorAfterAccrue": "1307005"
+  },
+  "totalMs": 73560.3677,
+  "sc001MaxMs": 2208.2389
+}

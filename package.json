@@ -17,6 +17,7 @@
     "lint:fix": "biome check --write .",
     "codama": "pnpm --filter @washapp/chain codama",
     "demo:init": "pnpm --filter @washapp/demo run init",
+    "demo:scenario": "pnpm --filter @washapp/demo run scenario",
     "gate": "pnpm lint && pnpm typecheck && pnpm test"
   },
   "devDependencies": {

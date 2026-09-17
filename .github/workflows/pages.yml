@@ -1,0 +1,70 @@
+name: Pages
+
+# Сайт збирається ТУТ, а не локальним `pnpm build`: локальна збірка читає `.env`
+# з кореня (`envDir: '../..'`) і вшила б у публічний бандл ключ RPC. У CI `.env`
+# немає, тож `VITE_SOLANA_RPC_URL` порожній і клієнт бере публічний devnet
+# (`apps/web/src/config.ts`). Ключів у бандлі не буває взагалі.
+#
+# Джерело в налаштуваннях репозиторію має бути **GitHub Actions**, не «Deploy from
+# a branch»: у корені гілки немає `index.html` — застосунок це Vite SPA у `apps/web`.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Один деплой за раз; чергу не скасовуємо, щоб не лишити сайт на половині викату.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # `base_path` — підшлях сайту: `/Wash-App` для project page, порожньо для
+      # користувацької сторінки або власного домену. Береться звідси, щоб
+      # перемикання домену не вимагало правок у коді.
+      - id: pages
+        uses: actions/configure-pages@v5
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Збірка
+        run: pnpm --filter @washapp/web exec vite build --base="${{ steps.pages.outputs.base_path }}/"
+
+      # Pages віддає статику: `/pool/0/loss` файлом не існує і отримує 404. Та сама
+      # сторінка під іменем 404.html повертає застосунок, і маршрут розбирає роутер —
+      # інакше пряме посилання на аркуш збитку відкривалося б порожнім.
+      - name: SPA-fallback
+        run: cp apps/web/dist/index.html apps/web/dist/404.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/web/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

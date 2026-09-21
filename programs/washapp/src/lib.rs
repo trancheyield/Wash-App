@@ -43,4 +43,21 @@ pub mod washapp {
     pub fn record_loss(ctx: Context<RecordLoss>, loss_bps: u16) -> Result<()> {
         instructions::record_loss_handler(ctx, loss_bps)
     }
+
+    pub fn init_protection(
+        ctx: Context<InitProtection>,
+        premium_rate_bps: u16,
+        trigger_bps: u16,
+        premium_fee_bps: u16,
+    ) -> Result<()> {
+        instructions::init_protection_handler(ctx, premium_rate_bps, trigger_bps, premium_fee_bps)
+    }
+
+    pub fn provide_protection(ctx: Context<ProvideProtection>, amount: u64) -> Result<()> {
+        instructions::provide_protection_handler(ctx, amount)
+    }
+
+    pub fn withdraw_protection(ctx: Context<WithdrawProtection>, shares: u64) -> Result<()> {
+        instructions::withdraw_protection_handler(ctx, shares)
+    }
 }

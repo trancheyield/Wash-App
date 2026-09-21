@@ -21,7 +21,7 @@ use spl_token_interface::state::{Account as TokenAccount, AccountState, Mint};
 use washapp::constants::DEMO_MINT_DECIMALS;
 use washapp::instructions::PoolParams;
 use washapp::math::{PoolBalances, Tranche};
-use washapp::state::{Config, LossEvent, Pool};
+use washapp::state::{Config, LossEvent, Pool, ProtectionPool, SellerPosition};
 
 pub const TOKEN_PROGRAM: Pubkey = token::ID;
 pub const ATA_PROGRAM: Pubkey = associated_token::ID;
@@ -152,6 +152,16 @@ pub fn loss_event_state(accounts: &[(Pubkey, Account)], key: &Pubkey) -> LossEve
         .unwrap_or_else(|e| panic!("{key} не LossEvent: {e}"))
 }
 
+pub fn protection_state(accounts: &[(Pubkey, Account)], key: &Pubkey) -> ProtectionPool {
+    ProtectionPool::try_deserialize(&mut &account_of(accounts, key).data[..])
+        .unwrap_or_else(|e| panic!("{key} не ProtectionPool: {e}"))
+}
+
+pub fn seller_state(accounts: &[(Pubkey, Account)], key: &Pubkey) -> SellerPosition {
+    SellerPosition::try_deserialize(&mut &account_of(accounts, key).data[..])
+        .unwrap_or_else(|e| panic!("{key} не SellerPosition: {e}"))
+}
+
 pub fn config_state(accounts: &[(Pubkey, Account)], key: &Pubkey) -> Config {
     Config::try_deserialize(&mut account_of(accounts, key).data.as_slice())
         .unwrap_or_else(|e| panic!("{key} не Config: {e}"))
@@ -179,6 +189,21 @@ pub fn assert_pool_invariant(accounts: &[(Pubkey, Account)], pool_key: &Pubkey) 
         "pool {pool_key}: assets ≠ senior + junior"
     );
     assert_eq!(pool.assets, vault, "pool {pool_key}: assets ≠ vault.amount");
+}
+
+// Те саме для захисного пулу: облік забезпечення — це баланс pvault, а
+// зарезервоване ніколи не перевищує забезпечення.
+pub fn assert_protection_invariant(accounts: &[(Pubkey, Account)], key: &Pubkey) {
+    let protection = protection_state(accounts, key);
+    let pvault = token_amount(accounts, &protection.pvault);
+    assert_eq!(
+        protection.collateral, pvault,
+        "protection {key}: collateral ≠ pvault.amount"
+    );
+    assert!(
+        protection.reserved <= protection.collateral,
+        "protection {key}: reserved > collateral"
+    );
 }
 
 // Стан між інструкціями: кожен `run` бере з мапи лише акаунти інструкції
@@ -556,4 +581,152 @@ pub fn open_tranche_atas(session: &mut Session, p: &PoolSetup, user: Pubkey) {
             session.set(key, account);
         }
     }
+}
+
+pub struct ProtectionSetup {
+    pub protection: Pubkey,
+    pub bump: u8,
+    pub pvault: Pubkey,
+    pub premium_rate_bps: u16,
+    pub trigger_bps: u16,
+    pub premium_fee_bps: u16,
+}
+
+// Параметри захисту — з того самого `fixtures/params.json` (блок `protection`).
+pub fn protection_setup(p: &PoolSetup) -> ProtectionSetup {
+    let raw = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../fixtures/params.json"
+    ))
+    .expect("fixtures/params.json");
+    let v: serde_json::Value = serde_json::from_str(&raw).expect("params.json — не JSON");
+    let field = |name: &str| -> u16 {
+        v["protection"][name]
+            .as_u64()
+            .unwrap_or_else(|| panic!("params.json: немає числа `protection.{name}`"))
+            as u16
+    };
+    let (protection, bump) = pda::protection(&p.pool);
+    ProtectionSetup {
+        protection,
+        bump,
+        pvault: pda::pvault(&p.pool).0,
+        premium_rate_bps: field("premium_rate_bps"),
+        trigger_bps: field("trigger_bps"),
+        premium_fee_bps: field("premium_fee_bps"),
+    }
+}
+
+pub fn init_protection(
+    s: &ConfigSetup,
+    p: &PoolSetup,
+    pr: &ProtectionSetup,
+    operator: Pubkey,
+) -> Instruction {
+    Instruction {
+        program_id: washapp::ID,
+        accounts: washapp::accounts::InitProtection {
+            pool: p.pool,
+            mint: s.mint,
+            protection: pr.protection,
+            pvault: pr.pvault,
+            operator,
+            token_program: TOKEN_PROGRAM,
+            system_program: anchor_lang::system_program::ID,
+        }
+        .to_account_metas(None),
+        data: washapp::instruction::InitProtection {
+            premium_rate_bps: pr.premium_rate_bps,
+            trigger_bps: pr.trigger_bps,
+            premium_fee_bps: pr.premium_fee_bps,
+        }
+        .data(),
+    }
+}
+
+// Сесія з демо-пулом і його захисним пулом — старт для provide/withdraw/buy.
+pub fn protection_session() -> (Session, ConfigSetup, PoolSetup, ProtectionSetup) {
+    let (mut session, s, p) = pool_session();
+    let pr = protection_setup(&p);
+    session.run(
+        &init_protection(&s, &p, &pr, s.authority),
+        &[Check::success()],
+    );
+    (session, s, p, pr)
+}
+
+pub fn provide_protection(
+    s: &ConfigSetup,
+    p: &PoolSetup,
+    pr: &ProtectionSetup,
+    owner: Pubkey,
+    amount: u64,
+) -> Instruction {
+    Instruction {
+        program_id: washapp::ID,
+        accounts: washapp::accounts::ProvideProtection {
+            pool: p.pool,
+            protection: pr.protection,
+            pvault: pr.pvault,
+            owner_ata: ata(&owner, &s.mint),
+            position: pda::seller(&p.pool, &owner).0,
+            owner,
+            token_program: TOKEN_PROGRAM,
+            system_program: anchor_lang::system_program::ID,
+        }
+        .to_account_metas(None),
+        data: washapp::instruction::ProvideProtection { amount }.data(),
+    }
+}
+
+pub fn withdraw_protection(
+    s: &ConfigSetup,
+    p: &PoolSetup,
+    pr: &ProtectionSetup,
+    owner: Pubkey,
+    shares: u64,
+) -> Instruction {
+    Instruction {
+        program_id: washapp::ID,
+        accounts: washapp::accounts::WithdrawProtection {
+            pool: p.pool,
+            protection: pr.protection,
+            pvault: pr.pvault,
+            owner_ata: ata(&owner, &s.mint),
+            position: pda::seller(&p.pool, &owner).0,
+            owner,
+            token_program: TOKEN_PROGRAM,
+        }
+        .to_account_metas(None),
+        data: washapp::instruction::WithdrawProtection { shares }.data(),
+    }
+}
+
+// Стан захисного пулу, якого `provide` сам не створить: премія без нових
+// часток (частка дорожчає), резерв під контракт до появи `buy_protection`,
+// забезпечення, вичерпане виплатами. Демо-мінт отримує той самий приріст,
+// щоб supply лишався узгодженим з балансами.
+pub fn seed_protection_state(
+    session: &mut Session,
+    pr: &ProtectionSetup,
+    collateral: u64,
+    reserved: u64,
+    share_supply: u64,
+) {
+    let mut account = session.get(&pr.protection);
+    let mut protection = protection_state(&[(pr.protection, account.clone())], &pr.protection);
+    let before = protection.collateral;
+    protection.collateral = collateral;
+    protection.reserved = reserved;
+    protection.share_supply = share_supply;
+    let mut data = Vec::new();
+    protection.try_serialize(&mut data).unwrap();
+    account.data = data;
+    session.set(pr.protection, account);
+
+    let (config, _) = pda::config();
+    let mint = pda::mint().0;
+    let demo_supply = mint_supply(&session.snapshot(), &mint) - before + collateral;
+    session.set(mint, mint_account(config, demo_supply));
+    session.set(pr.pvault, token_account(mint, pr.protection, collateral));
 }

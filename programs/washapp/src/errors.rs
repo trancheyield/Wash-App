@@ -13,7 +13,7 @@ pub enum WashError {
     SubordinationBreached,
     #[msg("vault holds less than the requested amount")]
     InsufficientLiquidity,
-    #[msg("free collateral is less than the requested notional")]
+    #[msg("free collateral is less than the requested amount")]
     InsufficientFreeCollateral,
     #[msg("contract is not active")]
     ContractNotActive,
@@ -29,4 +29,6 @@ pub enum WashError {
     ZeroAmount,
     #[msg("faucet request exceeds the cap")]
     FaucetCapExceeded,
+    #[msg("protection pool has shares but no collateral")]
+    CollateralWipedOut,
 }

@@ -121,6 +121,26 @@ pub fn loss_amount(assets: u64, loss_bps: u16) -> Result<u64> {
     mul_bps(assets, loss_bps)
 }
 
+// Частки продавців захисту — ті самі правила, що й у траншів: 1:1 для першого,
+// далі за вартістю; забезпечення, вичерпане виплатами при живих частках, нових
+// внесків не приймає — інакше внесок розділився б зі старими держателями.
+pub fn shares_for_collateral(amount: u64, collateral: u64, share_supply: u64) -> Result<u64> {
+    if share_supply == 0 {
+        return Ok(amount);
+    }
+    require!(collateral > 0, WashError::CollateralWipedOut);
+    mul_div(amount, share_supply, collateral)
+}
+
+pub fn collateral_for_shares(shares: u64, collateral: u64, share_supply: u64) -> Result<u64> {
+    require!(shares <= share_supply, WashError::ParameterOutOfRange);
+    if share_supply == 0 {
+        return Ok(0);
+    }
+    require!(collateral > 0, WashError::CollateralWipedOut);
+    mul_div(shares, collateral, share_supply)
+}
+
 // Waterfall: спочатку junior, лише його вичерпання доходить до senior.
 pub fn apply_loss(loss: u64, senior_assets: u64, junior_assets: u64) -> Result<LossSplit> {
     let junior_loss = loss.min(junior_assets);
@@ -353,6 +373,29 @@ mod tests {
         assert!(is(&err, WashError::TrancheWipedOut));
     }
 
+    // Два продавці: другий заходить після того, як премія підняла вартість
+    // частки, і отримує пропорційно менше; кожен виходить рівно зі своєю часткою.
+    #[test]
+    fn collateral_shares_are_one_to_one_first_and_by_value_after() {
+        assert_eq!(shares_for_collateral(1_000, 0, 0).unwrap(), 1_000);
+        // Премія 100 без нових часток: 1 000 часток коштують 1 100.
+        assert_eq!(shares_for_collateral(1_100, 1_100, 1_000).unwrap(), 1_000);
+        assert_eq!(collateral_for_shares(1_000, 2_200, 2_000).unwrap(), 1_100);
+        assert_eq!(collateral_for_shares(0, 0, 0).unwrap(), 0);
+        // Внесок, що дає нуль часток, — на совісті інструкції (`ZeroAmount`).
+        assert_eq!(shares_for_collateral(5, 10, 1).unwrap(), 0);
+        let err = collateral_for_shares(2, 10, 1).unwrap_err();
+        assert!(is(&err, WashError::ParameterOutOfRange));
+    }
+
+    #[test]
+    fn wiped_out_collateral_refuses_provide_and_withdraw() {
+        let err = shares_for_collateral(1_000, 0, 1_000).unwrap_err();
+        assert!(is(&err, WashError::CollateralWipedOut));
+        let err = collateral_for_shares(1_000, 0, 1_000).unwrap_err();
+        assert!(is(&err, WashError::CollateralWipedOut));
+    }
+
     #[test]
     fn subordination_threshold_is_inclusive() {
         assert!(subordination_ok(80, 20, 2_000));
@@ -551,6 +594,29 @@ mod tests {
             prop_assert!(a.fee <= a.yield_amount);
         }
 
+        // Частки продавців: вихід ніколи не віддає більше, ніж коштує частка,
+        // а два продавці ділять забезпечення пропорційно часткам з точністю до
+        // округлення вниз — сума виходів не перевищує забезпечення.
+        #[test]
+        fn collateral_shares_round_trip_never_exceeds_value(
+            first in 1..=MAX_AMOUNT,
+            premium in 0..=MAX_AMOUNT,
+            second in 1..=MAX_AMOUNT,
+        ) {
+            let s1 = shares_for_collateral(first, 0, 0).unwrap();
+            prop_assert_eq!(s1, first);
+            let collateral = first + premium;
+            let s2 = shares_for_collateral(second, collateral, s1).unwrap();
+            prop_assert!(s2 <= second);
+            let supply = s1 + s2;
+            let collateral = collateral + second;
+            let out1 = collateral_for_shares(s1, collateral, supply).unwrap();
+            let out2 = collateral_for_shares(s2, collateral, supply).unwrap();
+            prop_assert!(out2 <= second);
+            prop_assert!(out1 + out2 <= collateral);
+            prop_assert!(collateral - (out1 + out2) <= 1);
+        }
+
         // Межі `u64`: будь-який вхід — `Ok` або `Err`, ніколи паніка.
         #[test]
         fn no_panic_anywhere_on_u64_edges(
@@ -565,6 +631,8 @@ mod tests {
             }
             let _ = shares_for_deposit(a, b, c);
             let _ = amount_for_redeem(a, b, c);
+            let _ = shares_for_collateral(a, b, c);
+            let _ = collateral_for_shares(a, b, c);
             if let Ok(split) = apply_loss(a, b, c) {
                 let _ = pool.after_loss(&split);
             }

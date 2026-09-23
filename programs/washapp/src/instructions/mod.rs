@@ -1,4 +1,5 @@
 mod accrue;
+mod buy_protection;
 mod create_pool;
 mod deposit;
 mod faucet;
@@ -10,6 +11,7 @@ mod redeem;
 mod withdraw_protection;
 
 pub use accrue::*;
+pub use buy_protection::*;
 pub use create_pool::*;
 pub use deposit::*;
 pub use faucet::*;

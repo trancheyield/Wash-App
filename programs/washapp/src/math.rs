@@ -141,6 +141,18 @@ pub fn collateral_for_shares(shares: u64, collateral: u64, share_supply: u64) ->
     mul_div(shares, collateral, share_supply)
 }
 
+// Премія — та сама pro rata, що й дохід: номінал × річна ставка × строк / рік.
+// Строк — у модельних секундах; стеля `MAX_TERM_SECONDS` тримає добуток далеко
+// від межі `u128`, а результат — не більший за десятикратний номінал.
+pub fn premium(notional: u64, rate_bps: u16, term: u64) -> Result<u64> {
+    pro_rata(notional, rate_bps, term)
+}
+
+// Комісія протоколу з премії — до зарахування решти продавцям (FR-014).
+pub fn premium_fee(premium: u64, fee_bps: u16) -> Result<u64> {
+    mul_bps(premium, fee_bps)
+}
+
 // Waterfall: спочатку junior, лише його вичерпання доходить до senior.
 pub fn apply_loss(loss: u64, senior_assets: u64, junior_assets: u64) -> Result<LossSplit> {
     let junior_loss = loss.min(junior_assets);
@@ -238,6 +250,7 @@ mod tests {
     use proptest::prelude::*;
 
     use super::*;
+    use crate::constants::MAX_TERM_SECONDS;
     use proptest::test_runner::{Config, TestRunner};
 
     const DAY: u64 = 86_400;
@@ -394,6 +407,23 @@ mod tests {
         assert!(is(&err, WashError::CollateralWipedOut));
         let err = collateral_for_shares(1_000, 0, 1_000).unwrap_err();
         assert!(is(&err, WashError::CollateralWipedOut));
+    }
+
+    // Демо-захист: 10 000 токенів номіналу під 2 % річних на 30 модельних днів.
+    #[test]
+    fn premium_matches_demo_protection_params() {
+        let notional = 10_000_000_000;
+        let p = premium(notional, 200, 30 * DAY).unwrap();
+        assert_eq!(p, 16_438_356);
+        assert_eq!(premium_fee(p, 1_000).unwrap(), 1_643_835);
+        // Рівно рік під 2 % — рівно 2 % номіналу, без залишку.
+        assert_eq!(premium(notional, 200, YEAR_SECONDS).unwrap(), 200_000_000);
+        // Нульова ставка, нульовий строк і замалий добуток дають нуль, не помилку:
+        // відмовляє інструкція, бо тільки вона знає, чи ставка була ненульовою.
+        assert_eq!(premium(notional, 0, 30 * DAY).unwrap(), 0);
+        assert_eq!(premium(notional, 200, 0).unwrap(), 0);
+        assert_eq!(premium(1_000, 200, 60).unwrap(), 0);
+        assert_eq!(premium_fee(16_438_356, 0).unwrap(), 0);
     }
 
     #[test]
@@ -617,6 +647,29 @@ mod tests {
             prop_assert!(collateral - (out1 + out2) <= 1);
         }
 
+        // Премія: більший номінал чи довший строк ніколи не дають меншої премії,
+        // комісія — частина премії, а в межах стелі строку добуток не переповнюється.
+        #[test]
+        fn premium_is_monotonic_and_fits_within_the_term_ceiling(
+            notional in 0..=MAX_AMOUNT,
+            extra in 0..=MAX_AMOUNT,
+            rate in 0..=10_000u16,
+            term in 0..=MAX_TERM_SECONDS,
+            other_term in 0..=MAX_TERM_SECONDS,
+            fee_bps in 0..=10_000u16,
+        ) {
+            let p = premium(notional, rate, term).unwrap();
+            // Ставка ≤ 100 % річних і строк ≤ 10 років — не більше десяти номіналів.
+            prop_assert!(p as u128 <= notional as u128 * 10);
+            prop_assert!(premium(notional + extra, rate, term).unwrap() >= p);
+            let (shorter, longer) = (term.min(other_term), term.max(other_term));
+            prop_assert!(
+                premium(notional, rate, longer).unwrap()
+                    >= premium(notional, rate, shorter).unwrap()
+            );
+            prop_assert!(premium_fee(p, fee_bps).unwrap() <= p);
+        }
+
         // Межі `u64`: будь-який вхід — `Ok` або `Err`, ніколи паніка.
         #[test]
         fn no_panic_anywhere_on_u64_edges(
@@ -637,6 +690,8 @@ mod tests {
                 let _ = pool.after_loss(&split);
             }
             let _ = loss_amount(a, r1);
+            let _ = premium(a, r1, dt);
+            let _ = premium_fee(a, r2);
             let _ = subordination_ok(a, b, r1);
             let _ = pool.after_deposit(Tranche::Senior, a, b);
             let _ = pool.after_redeem(Tranche::Junior, a, b);

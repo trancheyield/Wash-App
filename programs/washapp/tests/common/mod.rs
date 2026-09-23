@@ -21,7 +21,7 @@ use spl_token_interface::state::{Account as TokenAccount, AccountState, Mint};
 use washapp::constants::DEMO_MINT_DECIMALS;
 use washapp::instructions::PoolParams;
 use washapp::math::{PoolBalances, Tranche};
-use washapp::state::{Config, LossEvent, Pool, ProtectionPool, SellerPosition};
+use washapp::state::{Config, LossEvent, Pool, ProtectionContract, ProtectionPool, SellerPosition};
 
 pub const TOKEN_PROGRAM: Pubkey = token::ID;
 pub const ATA_PROGRAM: Pubkey = associated_token::ID;
@@ -155,6 +155,11 @@ pub fn loss_event_state(accounts: &[(Pubkey, Account)], key: &Pubkey) -> LossEve
 pub fn protection_state(accounts: &[(Pubkey, Account)], key: &Pubkey) -> ProtectionPool {
     ProtectionPool::try_deserialize(&mut &account_of(accounts, key).data[..])
         .unwrap_or_else(|e| panic!("{key} не ProtectionPool: {e}"))
+}
+
+pub fn contract_state(accounts: &[(Pubkey, Account)], key: &Pubkey) -> ProtectionContract {
+    ProtectionContract::try_deserialize(&mut &account_of(accounts, key).data[..])
+        .unwrap_or_else(|e| panic!("{key} не ProtectionContract: {e}"))
 }
 
 pub fn seller_state(accounts: &[(Pubkey, Account)], key: &Pubkey) -> SellerPosition {
@@ -700,6 +705,64 @@ pub fn withdraw_protection(
         .to_account_metas(None),
         data: washapp::instruction::WithdrawProtection { shares }.data(),
     }
+}
+
+pub fn buy_protection(
+    s: &ConfigSetup,
+    p: &PoolSetup,
+    pr: &ProtectionSetup,
+    buyer: Pubkey,
+    notional: u64,
+    term: u64,
+    nonce: u64,
+) -> Instruction {
+    Instruction {
+        program_id: washapp::ID,
+        accounts: washapp::accounts::BuyProtection {
+            config: s.config,
+            mint: s.mint,
+            treasury: s.treasury,
+            pool: p.pool,
+            vault: p.vault,
+            senior_mint: p.senior_mint,
+            junior_mint: p.junior_mint,
+            protection: pr.protection,
+            pvault: pr.pvault,
+            buyer_ata: ata(&buyer, &s.mint),
+            contract: pda::contract(&p.pool, &buyer, nonce).0,
+            buyer,
+            token_program: TOKEN_PROGRAM,
+            system_program: anchor_lang::system_program::ID,
+        }
+        .to_account_metas(None),
+        data: washapp::instruction::BuyProtection {
+            notional,
+            term,
+            nonce,
+        }
+        .data(),
+    }
+}
+
+// Параметри захисту, відмінні від демо-фікстури: ставка премії 0 (безкоштовне
+// покриття), інший поріг чи комісія. `init_protection` дає лише одні —
+// переписати їх дешевше, ніж заводити другий пул.
+pub fn seed_protection_rates(
+    session: &mut Session,
+    pr: &ProtectionSetup,
+    premium_rate_bps: u16,
+    trigger_bps: u16,
+    premium_fee_bps: u16,
+) {
+    let mut account = session.get(&pr.protection);
+    let mut protection = protection_state(&[(pr.protection, account.clone())], &pr.protection);
+    protection.premium_rate_bps = premium_rate_bps;
+    protection.trigger_bps = trigger_bps;
+    protection.premium_fee_bps = premium_fee_bps;
+    let mut data = Vec::new();
+    protection.try_serialize(&mut data).unwrap();
+    account.data = data;
+    session.set(pr.protection, account);
 }
 
 // Стан захисного пулу, якого `provide` сам не створить: премія без нових

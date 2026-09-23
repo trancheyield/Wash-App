@@ -60,4 +60,13 @@ pub mod washapp {
     pub fn withdraw_protection(ctx: Context<WithdrawProtection>, shares: u64) -> Result<()> {
         instructions::withdraw_protection_handler(ctx, shares)
     }
+
+    pub fn buy_protection(
+        ctx: Context<BuyProtection>,
+        notional: u64,
+        term: u64,
+        nonce: u64,
+    ) -> Result<()> {
+        instructions::buy_protection_handler(ctx, notional, term, nonce)
+    }
 }

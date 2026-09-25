@@ -7,7 +7,7 @@
 // junior; при збитку senior не зачіпається, поки junior не вичерпано (SC-003).
 use anchor_lang::prelude::*;
 
-use crate::constants::{BPS_DENOMINATOR, YEAR_SECONDS};
+use crate::constants::{BPS_DENOMINATOR, MAX_BPS, YEAR_SECONDS};
 use crate::errors::WashError;
 
 const BPS: u128 = BPS_DENOMINATOR as u128;
@@ -151,6 +151,14 @@ pub fn premium(notional: u64, rate_bps: u16, term: u64) -> Result<u64> {
 // Комісія протоколу з премії — до зарахування решти продавцям (FR-014).
 pub fn premium_fee(premium: u64, fee_bps: u16) -> Result<u64> {
     mul_bps(premium, fee_bps)
+}
+
+// Payout of a protection contract: notional × the pool's loss share (FR-009).
+// The share is at most 100 %, so the payout never exceeds the notional, and the
+// notional is reserved in the collateral — pvault always has enough to pay.
+pub fn payout(notional: u64, loss_bps: u16) -> Result<u64> {
+    require!(loss_bps <= MAX_BPS, WashError::ParameterOutOfRange);
+    mul_bps(notional, loss_bps)
 }
 
 // Waterfall: спочатку junior, лише його вичерпання доходить до senior.
@@ -574,6 +582,22 @@ mod tests {
         );
     }
 
+    // SC-004 on the demo numbers: a notional of 1,000 tokens and a loss of 15 %
+    // give exactly 150 tokens; a loss of 100 % pays the whole notional and no more.
+    #[test]
+    fn payout_is_the_loss_share_of_the_notional() {
+        let notional = 1_000_000_000;
+        assert_eq!(payout(notional, 1_500).unwrap(), 150_000_000);
+        assert_eq!(payout(notional, 10_000).unwrap(), notional);
+        assert_eq!(payout(notional, 0).unwrap(), 0);
+        // A notional smaller than 1/share gives zero — division rounds down.
+        assert_eq!(payout(6, 1_500).unwrap(), 0);
+        assert!(is(
+            &payout(notional, 10_001).unwrap_err(),
+            WashError::ParameterOutOfRange
+        ));
+    }
+
     proptest! {
         #![proptest_config(ProptestConfig { cases: 500, ..ProptestConfig::default() })]
 
@@ -670,6 +694,24 @@ mod tests {
             prop_assert!(premium_fee(p, fee_bps).unwrap() <= p);
         }
 
+        // SC-004: the payout is exactly notional × the loss share rounded down,
+        // never above the notional and never below the payout of a smaller loss.
+        // 500 runs — well past the 50 pairs the criterion asks for.
+        #[test]
+        fn payout_matches_the_contract_rule_and_never_exceeds_the_notional(
+            notional in 0..=MAX_AMOUNT,
+            loss_bps in 0..=10_000u16,
+            other_bps in 0..=10_000u16,
+        ) {
+            let p = payout(notional, loss_bps).unwrap();
+            prop_assert_eq!(p as u128, notional as u128 * loss_bps as u128 / BPS);
+            prop_assert!(p <= notional);
+            let (smaller, bigger) = (loss_bps.min(other_bps), loss_bps.max(other_bps));
+            prop_assert!(payout(notional, bigger).unwrap() >= payout(notional, smaller).unwrap());
+            // Above 100 % is not a payout but a broken parameter.
+            prop_assert!(payout(notional, 10_001).is_err());
+        }
+
         // Межі `u64`: будь-який вхід — `Ok` або `Err`, ніколи паніка.
         #[test]
         fn no_panic_anywhere_on_u64_edges(
@@ -690,6 +732,7 @@ mod tests {
                 let _ = pool.after_loss(&split);
             }
             let _ = loss_amount(a, r1);
+            let _ = payout(a, r1);
             let _ = premium(a, r1, dt);
             let _ = premium_fee(a, r2);
             let _ = subordination_ok(a, b, r1);

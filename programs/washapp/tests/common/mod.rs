@@ -744,6 +744,62 @@ pub fn buy_protection(
     }
 }
 
+// `loss_event` goes by the event index: a test names an event by the number the
+// client sees in the loss list.
+pub fn settle_protection(
+    s: &ConfigSetup,
+    p: &PoolSetup,
+    pr: &ProtectionSetup,
+    buyer: Pubkey,
+    nonce: u64,
+    loss_index: u32,
+) -> Instruction {
+    Instruction {
+        program_id: washapp::ID,
+        accounts: washapp::accounts::SettleProtection {
+            pool: p.pool,
+            protection: pr.protection,
+            pvault: pr.pvault,
+            contract: pda::contract(&p.pool, &buyer, nonce).0,
+            loss_event: pda::loss_event(&p.pool, loss_index).0,
+            buyer_ata: ata(&buyer, &s.mint),
+            token_program: TOKEN_PROGRAM,
+        }
+        .to_account_metas(None),
+        data: washapp::instruction::SettleProtection {}.data(),
+    }
+}
+
+// The signer is a separate argument: a contract is closed by its buyer or by the
+// pool operator, and the tests cover both branches and a foreign signature.
+pub fn expire_protection(
+    s: &ConfigSetup,
+    p: &PoolSetup,
+    pr: &ProtectionSetup,
+    buyer: Pubkey,
+    nonce: u64,
+    signer: Pubkey,
+) -> Instruction {
+    Instruction {
+        program_id: washapp::ID,
+        accounts: washapp::accounts::ExpireProtection {
+            config: s.config,
+            mint: s.mint,
+            treasury: s.treasury,
+            pool: p.pool,
+            vault: p.vault,
+            senior_mint: p.senior_mint,
+            junior_mint: p.junior_mint,
+            protection: pr.protection,
+            contract: pda::contract(&p.pool, &buyer, nonce).0,
+            signer,
+            token_program: TOKEN_PROGRAM,
+        }
+        .to_account_metas(None),
+        data: washapp::instruction::ExpireProtection {}.data(),
+    }
+}
+
 // Параметри захисту, відмінні від демо-фікстури: ставка премії 0 (безкоштовне
 // покриття), інший поріг чи комісія. `init_protection` дає лише одні —
 // переписати їх дешевше, ніж заводити другий пул.

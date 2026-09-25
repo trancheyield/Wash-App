@@ -69,4 +69,12 @@ pub mod washapp {
     ) -> Result<()> {
         instructions::buy_protection_handler(ctx, notional, term, nonce)
     }
+
+    pub fn settle_protection(ctx: Context<SettleProtection>) -> Result<()> {
+        instructions::settle_protection_handler(ctx)
+    }
+
+    pub fn expire_protection(ctx: Context<ExpireProtection>) -> Result<()> {
+        instructions::expire_protection_handler(ctx)
+    }
 }

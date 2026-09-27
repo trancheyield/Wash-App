@@ -35,6 +35,9 @@ const wallet: WalletView = {
   juniorShares: 5_000_000_000n,
   seniorValue: 0n,
   juniorValue: 0n,
+  sellerShares: 0n,
+  sellerValue: 0n,
+  contracts: [],
 }
 
 function ok(p: ReturnType<typeof preview>) {

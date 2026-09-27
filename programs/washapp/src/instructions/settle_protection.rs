@@ -72,7 +72,7 @@ pub fn settle_protection_handler(ctx: Context<SettleProtection>) -> Result<()> {
 
     let payout = math::payout(contract.notional, loss_event.loss_bps)?;
     // A payout that rounds down to zero is not worth the claim: the contract
-    // stays active and waits for a bigger loss or for expiry (Pavlo's call).
+    // stays active and waits for a bigger loss or for expiry.
     require!(payout > 0, WashError::ZeroAmount);
 
     let pool_key = pool.key();

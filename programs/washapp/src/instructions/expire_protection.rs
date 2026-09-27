@@ -60,7 +60,7 @@ pub fn expire_protection_handler(ctx: Context<ExpireProtection>) -> Result<()> {
         contract.status == ContractStatus::Active,
         WashError::ContractNotActive
     );
-    // Only the buyer or the pool operator may close a contract (Pavlo's call):
+    // Only the buyer or the pool operator may close a contract:
     // otherwise a seller could extinguish a claim that has not been filed yet
     // right after expiry and keep the reserve.
     require!(

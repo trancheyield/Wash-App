@@ -172,6 +172,9 @@ describe('readWallet', () => {
       juniorShares: 0n,
       seniorValue: 0n,
       juniorValue: 0n,
+      sellerShares: 0n,
+      sellerValue: 0n,
+      contracts: [],
     })
   })
 })

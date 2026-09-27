@@ -37,48 +37,85 @@ import {
   getConfigCodec,
   getLossEventCodec,
   getPoolCodec,
+  getProtectionContractCodec,
+  getProtectionPoolCodec,
+  getSellerPositionCodec,
   type Config,
   type ConfigArgs,
   type LossEvent,
   type LossEventArgs,
   type Pool,
   type PoolArgs,
+  type ProtectionContract,
+  type ProtectionContractArgs,
+  type ProtectionPool,
+  type ProtectionPoolArgs,
+  type SellerPosition,
+  type SellerPositionArgs,
 } from "../accounts/index.ts";
 import {
   getAccrueInstructionAsync,
+  getBuyProtectionInstructionAsync,
   getCreatePoolInstructionAsync,
   getDepositInstructionAsync,
+  getExpireProtectionInstructionAsync,
   getFaucetInstructionAsync,
   getInitConfigInstructionAsync,
+  getInitProtectionInstructionAsync,
+  getProvideProtectionInstructionAsync,
   getRecordLossInstructionAsync,
   getRedeemInstructionAsync,
+  getSettleProtectionInstructionAsync,
+  getWithdrawProtectionInstructionAsync,
   parseAccrueInstruction,
+  parseBuyProtectionInstruction,
   parseCreatePoolInstruction,
   parseDepositInstruction,
+  parseExpireProtectionInstruction,
   parseFaucetInstruction,
   parseInitConfigInstruction,
+  parseInitProtectionInstruction,
+  parseProvideProtectionInstruction,
   parseRecordLossInstruction,
   parseRedeemInstruction,
+  parseSettleProtectionInstruction,
+  parseWithdrawProtectionInstruction,
   type AccrueAsyncInput,
+  type BuyProtectionAsyncInput,
   type CreatePoolAsyncInput,
   type DepositAsyncInput,
+  type ExpireProtectionAsyncInput,
   type FaucetAsyncInput,
   type InitConfigAsyncInput,
+  type InitProtectionAsyncInput,
   type ParsedAccrueInstruction,
+  type ParsedBuyProtectionInstruction,
   type ParsedCreatePoolInstruction,
   type ParsedDepositInstruction,
+  type ParsedExpireProtectionInstruction,
   type ParsedFaucetInstruction,
   type ParsedInitConfigInstruction,
+  type ParsedInitProtectionInstruction,
+  type ParsedProvideProtectionInstruction,
   type ParsedRecordLossInstruction,
   type ParsedRedeemInstruction,
+  type ParsedSettleProtectionInstruction,
+  type ParsedWithdrawProtectionInstruction,
+  type ProvideProtectionAsyncInput,
   type RecordLossAsyncInput,
   type RedeemAsyncInput,
+  type SettleProtectionAsyncInput,
+  type WithdrawProtectionAsyncInput,
 } from "../instructions/index.ts";
 import {
   findConfigPda,
+  findContractPda,
   findJuniorMintPda,
   findMintPda,
   findPoolPda,
+  findPositionPda,
+  findProtectionPda,
+  findPvaultPda,
   findSeniorMintPda,
   findTreasuryPda,
   findVaultPda,
@@ -91,9 +128,15 @@ export const WashappAccount = {
   0: "Config",
   1: "LossEvent",
   2: "Pool",
+  3: "ProtectionContract",
+  4: "ProtectionPool",
+  5: "SellerPosition",
   Config: 0,
   LossEvent: 1,
   Pool: 2,
+  ProtectionContract: 3,
+  ProtectionPool: 4,
+  SellerPosition: 5,
 } as const;
 
 export type WashappAccount = (typeof WashappAccount)[Exclude<
@@ -137,6 +180,39 @@ export function identifyWashappAccount(
     )
   ) {
     return WashappAccount.Pool;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([233, 254, 133, 159, 235, 220, 212, 217]),
+      ),
+      0,
+    )
+  ) {
+    return WashappAccount.ProtectionContract;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([75, 41, 14, 170, 253, 190, 141, 110]),
+      ),
+      0,
+    )
+  ) {
+    return WashappAccount.ProtectionPool;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([135, 242, 248, 236, 189, 14, 140, 204]),
+      ),
+      0,
+    )
+  ) {
+    return WashappAccount.SellerPosition;
   }
   throw new SolanaError(
     SOLANA_ERROR__PROGRAM_CLIENTS__FAILED_TO_IDENTIFY_ACCOUNT,
@@ -254,19 +330,31 @@ export function identifyWashappEvent(
 
 export const WashappInstruction = {
   0: "Accrue",
-  1: "CreatePool",
-  2: "Deposit",
-  3: "Faucet",
-  4: "InitConfig",
-  5: "RecordLoss",
-  6: "Redeem",
+  1: "BuyProtection",
+  2: "CreatePool",
+  3: "Deposit",
+  4: "ExpireProtection",
+  5: "Faucet",
+  6: "InitConfig",
+  7: "InitProtection",
+  8: "ProvideProtection",
+  9: "RecordLoss",
+  10: "Redeem",
+  11: "SettleProtection",
+  12: "WithdrawProtection",
   Accrue: 0,
-  CreatePool: 1,
-  Deposit: 2,
-  Faucet: 3,
-  InitConfig: 4,
-  RecordLoss: 5,
-  Redeem: 6,
+  BuyProtection: 1,
+  CreatePool: 2,
+  Deposit: 3,
+  ExpireProtection: 4,
+  Faucet: 5,
+  InitConfig: 6,
+  InitProtection: 7,
+  ProvideProtection: 8,
+  RecordLoss: 9,
+  Redeem: 10,
+  SettleProtection: 11,
+  WithdrawProtection: 12,
 } as const;
 
 export type WashappInstruction = (typeof WashappInstruction)[Exclude<
@@ -288,6 +376,17 @@ export function identifyWashappInstruction(
     )
   ) {
     return WashappInstruction.Accrue;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([187, 253, 20, 83, 31, 188, 124, 156]),
+      ),
+      0,
+    )
+  ) {
+    return WashappInstruction.BuyProtection;
   }
   if (
     containsBytes(
@@ -315,6 +414,17 @@ export function identifyWashappInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([244, 247, 149, 55, 218, 113, 38, 4]),
+      ),
+      0,
+    )
+  ) {
+    return WashappInstruction.ExpireProtection;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
         new Uint8Array([0, 98, 59, 30, 144, 142, 113, 12]),
       ),
       0,
@@ -332,6 +442,28 @@ export function identifyWashappInstruction(
     )
   ) {
     return WashappInstruction.InitConfig;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([194, 224, 72, 145, 146, 75, 226, 102]),
+      ),
+      0,
+    )
+  ) {
+    return WashappInstruction.InitProtection;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([125, 30, 236, 61, 23, 97, 139, 75]),
+      ),
+      0,
+    )
+  ) {
+    return WashappInstruction.ProvideProtection;
   }
   if (
     containsBytes(
@@ -355,6 +487,28 @@ export function identifyWashappInstruction(
   ) {
     return WashappInstruction.Redeem;
   }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([188, 82, 212, 180, 126, 39, 1, 49]),
+      ),
+      0,
+    )
+  ) {
+    return WashappInstruction.SettleProtection;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([15, 88, 203, 206, 22, 63, 34, 140]),
+      ),
+      0,
+    )
+  ) {
+    return WashappInstruction.WithdrawProtection;
+  }
   throw new SolanaError(
     SOLANA_ERROR__PROGRAM_CLIENTS__FAILED_TO_IDENTIFY_INSTRUCTION,
     { instructionData: data, programName: "washapp" },
@@ -368,11 +522,17 @@ export type ParsedWashappInstruction<
       instructionType: typeof WashappInstruction.Accrue;
     } & ParsedAccrueInstruction<TProgram>)
   | ({
+      instructionType: typeof WashappInstruction.BuyProtection;
+    } & ParsedBuyProtectionInstruction<TProgram>)
+  | ({
       instructionType: typeof WashappInstruction.CreatePool;
     } & ParsedCreatePoolInstruction<TProgram>)
   | ({
       instructionType: typeof WashappInstruction.Deposit;
     } & ParsedDepositInstruction<TProgram>)
+  | ({
+      instructionType: typeof WashappInstruction.ExpireProtection;
+    } & ParsedExpireProtectionInstruction<TProgram>)
   | ({
       instructionType: typeof WashappInstruction.Faucet;
     } & ParsedFaucetInstruction<TProgram>)
@@ -380,11 +540,23 @@ export type ParsedWashappInstruction<
       instructionType: typeof WashappInstruction.InitConfig;
     } & ParsedInitConfigInstruction<TProgram>)
   | ({
+      instructionType: typeof WashappInstruction.InitProtection;
+    } & ParsedInitProtectionInstruction<TProgram>)
+  | ({
+      instructionType: typeof WashappInstruction.ProvideProtection;
+    } & ParsedProvideProtectionInstruction<TProgram>)
+  | ({
       instructionType: typeof WashappInstruction.RecordLoss;
     } & ParsedRecordLossInstruction<TProgram>)
   | ({
       instructionType: typeof WashappInstruction.Redeem;
-    } & ParsedRedeemInstruction<TProgram>);
+    } & ParsedRedeemInstruction<TProgram>)
+  | ({
+      instructionType: typeof WashappInstruction.SettleProtection;
+    } & ParsedSettleProtectionInstruction<TProgram>)
+  | ({
+      instructionType: typeof WashappInstruction.WithdrawProtection;
+    } & ParsedWithdrawProtectionInstruction<TProgram>);
 
 export function parseWashappInstruction<TProgram extends string>(
   instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
@@ -396,6 +568,13 @@ export function parseWashappInstruction<TProgram extends string>(
       return {
         instructionType: WashappInstruction.Accrue,
         ...parseAccrueInstruction(instruction),
+      };
+    }
+    case WashappInstruction.BuyProtection: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: WashappInstruction.BuyProtection,
+        ...parseBuyProtectionInstruction(instruction),
       };
     }
     case WashappInstruction.CreatePool: {
@@ -412,6 +591,13 @@ export function parseWashappInstruction<TProgram extends string>(
         ...parseDepositInstruction(instruction),
       };
     }
+    case WashappInstruction.ExpireProtection: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: WashappInstruction.ExpireProtection,
+        ...parseExpireProtectionInstruction(instruction),
+      };
+    }
     case WashappInstruction.Faucet: {
       assertIsInstructionWithAccounts(instruction);
       return {
@@ -426,6 +612,20 @@ export function parseWashappInstruction<TProgram extends string>(
         ...parseInitConfigInstruction(instruction),
       };
     }
+    case WashappInstruction.InitProtection: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: WashappInstruction.InitProtection,
+        ...parseInitProtectionInstruction(instruction),
+      };
+    }
+    case WashappInstruction.ProvideProtection: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: WashappInstruction.ProvideProtection,
+        ...parseProvideProtectionInstruction(instruction),
+      };
+    }
     case WashappInstruction.RecordLoss: {
       assertIsInstructionWithAccounts(instruction);
       return {
@@ -438,6 +638,20 @@ export function parseWashappInstruction<TProgram extends string>(
       return {
         instructionType: WashappInstruction.Redeem,
         ...parseRedeemInstruction(instruction),
+      };
+    }
+    case WashappInstruction.SettleProtection: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: WashappInstruction.SettleProtection,
+        ...parseSettleProtectionInstruction(instruction),
+      };
+    }
+    case WashappInstruction.WithdrawProtection: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: WashappInstruction.WithdrawProtection,
+        ...parseWithdrawProtectionInstruction(instruction),
       };
     }
     default:
@@ -463,12 +677,22 @@ export type WashappPluginAccounts = {
   lossEvent: ReturnType<typeof getLossEventCodec> &
     SelfFetchFunctions<LossEventArgs, LossEvent>;
   pool: ReturnType<typeof getPoolCodec> & SelfFetchFunctions<PoolArgs, Pool>;
+  protectionContract: ReturnType<typeof getProtectionContractCodec> &
+    SelfFetchFunctions<ProtectionContractArgs, ProtectionContract>;
+  protectionPool: ReturnType<typeof getProtectionPoolCodec> &
+    SelfFetchFunctions<ProtectionPoolArgs, ProtectionPool>;
+  sellerPosition: ReturnType<typeof getSellerPositionCodec> &
+    SelfFetchFunctions<SellerPositionArgs, SellerPosition>;
 };
 
 export type WashappPluginInstructions = {
   accrue: (
     input: AccrueAsyncInput,
   ) => ReturnType<typeof getAccrueInstructionAsync> & SelfPlanAndSendFunctions;
+  buyProtection: (
+    input: BuyProtectionAsyncInput,
+  ) => ReturnType<typeof getBuyProtectionInstructionAsync> &
+    SelfPlanAndSendFunctions;
   createPool: (
     input: CreatePoolAsyncInput,
   ) => ReturnType<typeof getCreatePoolInstructionAsync> &
@@ -476,12 +700,24 @@ export type WashappPluginInstructions = {
   deposit: (
     input: DepositAsyncInput,
   ) => ReturnType<typeof getDepositInstructionAsync> & SelfPlanAndSendFunctions;
+  expireProtection: (
+    input: ExpireProtectionAsyncInput,
+  ) => ReturnType<typeof getExpireProtectionInstructionAsync> &
+    SelfPlanAndSendFunctions;
   faucet: (
     input: FaucetAsyncInput,
   ) => ReturnType<typeof getFaucetInstructionAsync> & SelfPlanAndSendFunctions;
   initConfig: (
     input: InitConfigAsyncInput,
   ) => ReturnType<typeof getInitConfigInstructionAsync> &
+    SelfPlanAndSendFunctions;
+  initProtection: (
+    input: InitProtectionAsyncInput,
+  ) => ReturnType<typeof getInitProtectionInstructionAsync> &
+    SelfPlanAndSendFunctions;
+  provideProtection: (
+    input: ProvideProtectionAsyncInput,
+  ) => ReturnType<typeof getProvideProtectionInstructionAsync> &
     SelfPlanAndSendFunctions;
   recordLoss: (
     input: RecordLossAsyncInput,
@@ -490,16 +726,28 @@ export type WashappPluginInstructions = {
   redeem: (
     input: RedeemAsyncInput,
   ) => ReturnType<typeof getRedeemInstructionAsync> & SelfPlanAndSendFunctions;
+  settleProtection: (
+    input: SettleProtectionAsyncInput,
+  ) => ReturnType<typeof getSettleProtectionInstructionAsync> &
+    SelfPlanAndSendFunctions;
+  withdrawProtection: (
+    input: WithdrawProtectionAsyncInput,
+  ) => ReturnType<typeof getWithdrawProtectionInstructionAsync> &
+    SelfPlanAndSendFunctions;
 };
 
 export type WashappPluginPdas = {
   config: typeof findConfigPda;
+  protection: typeof findProtectionPda;
+  contract: typeof findContractPda;
   pool: typeof findPoolPda;
   vault: typeof findVaultPda;
   seniorMint: typeof findSeniorMintPda;
   juniorMint: typeof findJuniorMintPda;
   mint: typeof findMintPda;
   treasury: typeof findTreasuryPda;
+  pvault: typeof findPvaultPda;
+  position: typeof findPositionPda;
 };
 
 export type WashappPluginRequirements = ClientWithRpc<
@@ -518,12 +766,29 @@ export function washappProgram() {
           config: addSelfFetchFunctions(client, getConfigCodec()),
           lossEvent: addSelfFetchFunctions(client, getLossEventCodec()),
           pool: addSelfFetchFunctions(client, getPoolCodec()),
+          protectionContract: addSelfFetchFunctions(
+            client,
+            getProtectionContractCodec(),
+          ),
+          protectionPool: addSelfFetchFunctions(
+            client,
+            getProtectionPoolCodec(),
+          ),
+          sellerPosition: addSelfFetchFunctions(
+            client,
+            getSellerPositionCodec(),
+          ),
         },
         instructions: {
           accrue: (input) =>
             addSelfPlanAndSendFunctions(
               client,
               getAccrueInstructionAsync(input),
+            ),
+          buyProtection: (input) =>
+            addSelfPlanAndSendFunctions(
+              client,
+              getBuyProtectionInstructionAsync(input),
             ),
           createPool: (input) =>
             addSelfPlanAndSendFunctions(
@@ -535,6 +800,11 @@ export function washappProgram() {
               client,
               getDepositInstructionAsync(input),
             ),
+          expireProtection: (input) =>
+            addSelfPlanAndSendFunctions(
+              client,
+              getExpireProtectionInstructionAsync(input),
+            ),
           faucet: (input) =>
             addSelfPlanAndSendFunctions(
               client,
@@ -544,6 +814,16 @@ export function washappProgram() {
             addSelfPlanAndSendFunctions(
               client,
               getInitConfigInstructionAsync(input),
+            ),
+          initProtection: (input) =>
+            addSelfPlanAndSendFunctions(
+              client,
+              getInitProtectionInstructionAsync(input),
+            ),
+          provideProtection: (input) =>
+            addSelfPlanAndSendFunctions(
+              client,
+              getProvideProtectionInstructionAsync(input),
             ),
           recordLoss: (input) =>
             addSelfPlanAndSendFunctions(
@@ -555,15 +835,29 @@ export function washappProgram() {
               client,
               getRedeemInstructionAsync(input),
             ),
+          settleProtection: (input) =>
+            addSelfPlanAndSendFunctions(
+              client,
+              getSettleProtectionInstructionAsync(input),
+            ),
+          withdrawProtection: (input) =>
+            addSelfPlanAndSendFunctions(
+              client,
+              getWithdrawProtectionInstructionAsync(input),
+            ),
         },
         pdas: {
           config: findConfigPda,
+          protection: findProtectionPda,
+          contract: findContractPda,
           pool: findPoolPda,
           vault: findVaultPda,
           seniorMint: findSeniorMintPda,
           juniorMint: findJuniorMintPda,
           mint: findMintPda,
           treasury: findTreasuryPda,
+          pvault: findPvaultPda,
+          position: findPositionPda,
         },
         identifyAccount: identifyWashappAccount,
         identifyInstruction: identifyWashappInstruction,

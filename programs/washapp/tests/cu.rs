@@ -5,9 +5,11 @@
 mod common;
 
 use common::{
-    ata, config_setup, configured_session, create_pool, demo_params, deposit, faucet, init_config,
-    init_config_accounts, open_tranche_atas, pool_session, pool_setup, record_loss, redeem,
-    signer_account, Harness, Session, GENESIS_TS, OPERATOR, USER_A, USER_B,
+    ata, buy_protection, config_setup, configured_session, create_pool, demo_params, deposit,
+    expire_protection, faucet, fund_user, init_config, init_config_accounts, init_protection,
+    open_tranche_atas, pool_session, pool_setup, protection_setup, provide_protection, record_loss,
+    redeem, settle_protection, signer_account, withdraw_protection, Harness, Session, GENESIS_TS,
+    OPERATOR, USER_A, USER_B,
 };
 use mollusk_svm::result::{Check, InstructionResult};
 use washapp::math::Tranche;
@@ -129,4 +131,77 @@ fn user_instructions_fit_the_ceiling_on_the_m0_scenario() {
     assert_eq!(pool.loss_count, 2);
     assert_eq!(pool.junior_assets, 0);
     assert!(pool.senior_assets > 0);
+}
+
+// The protection market on the same demo pool. The expensive paths: the first
+// `provide` creates the seller position, `buy` and `expire` run accrue with both
+// CPIs after 30 model days, `settle` signs the payout for the protection pool.
+#[test]
+fn protection_instructions_fit_the_ceiling() {
+    const TERM: u64 = 30 * 86_400;
+    const NOTIONAL: u64 = 1_000_000_000;
+    let (mut session, s, p) = pool_session();
+    let pr = protection_setup(&p);
+    run(
+        &mut session,
+        "init_protection",
+        &init_protection(&s, &p, &pr, s.authority),
+    );
+
+    fund_user(&mut session, &s, USER_A, SENIOR + JUNIOR + 10_000_000_000);
+    fund_user(&mut session, &s, USER_B, SENIOR + JUNIOR);
+    open_tranche_atas(&mut session, &p, USER_A);
+    session.run(
+        &deposit(&s, &p, USER_A, Tranche::Junior, JUNIOR),
+        &[Check::success()],
+    );
+    session.run(
+        &deposit(&s, &p, USER_A, Tranche::Senior, SENIOR),
+        &[Check::success()],
+    );
+
+    run(
+        &mut session,
+        "provide (creates position)",
+        &provide_protection(&s, &p, &pr, USER_A, 5_000_000_000),
+    );
+    run(
+        &mut session,
+        "provide (position exists)",
+        &provide_protection(&s, &p, &pr, USER_A, 1_000_000_000),
+    );
+    run(
+        &mut session,
+        "withdraw_protection",
+        &withdraw_protection(&s, &p, &pr, USER_A, 500_000_000),
+    );
+
+    session.harness.warp(2, GENESIS_TS + 60);
+    run(
+        &mut session,
+        "buy (accrue, premium, init)",
+        &buy_protection(&s, &p, &pr, USER_B, NOTIONAL, TERM, 0),
+    );
+    run(
+        &mut session,
+        "buy (second nonce)",
+        &buy_protection(&s, &p, &pr, USER_B, NOTIONAL, TERM, 1),
+    );
+
+    session.harness.warp(3, GENESIS_TS + 90);
+    let ix = record_loss(&session, &s, &p, OPERATOR, 1_500);
+    session.run(&ix, &[Check::success()]);
+    run(
+        &mut session,
+        "settle_protection",
+        &settle_protection(&s, &p, &pr, USER_B, 0, 0),
+    );
+
+    // The term is 60 chain seconds from the purchase at +60.
+    session.harness.warp(4, GENESIS_TS + 180);
+    run(
+        &mut session,
+        "expire (accrue, buyer)",
+        &expire_protection(&s, &p, &pr, USER_B, 1, USER_B),
+    );
 }

@@ -9,3 +9,6 @@
 export * from "./config.ts";
 export * from "./lossEvent.ts";
 export * from "./pool.ts";
+export * from "./protectionContract.ts";
+export * from "./protectionPool.ts";
+export * from "./sellerPosition.ts";

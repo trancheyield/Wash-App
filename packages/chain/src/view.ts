@@ -11,7 +11,14 @@ import {
   type Rates,
   type Tranche as TrancheSide,
 } from '@washapp/shared'
-import { type LossEvent, type Pool, Tranche } from './generated/index.ts'
+import {
+  type ContractStatus,
+  type LossEvent,
+  type Pool,
+  type ProtectionContract,
+  type ProtectionPool,
+  Tranche,
+} from './generated/index.ts'
 
 export const NAV_ONE: Micro = 1_000_000n
 
@@ -62,6 +69,43 @@ export type PoolView = {
   lossEvents: LossEventView[]
 }
 
+export type ProtectionParamsView = {
+  premiumRateBps: number
+  triggerBps: number
+  premiumFeeBps: number
+}
+
+export type ProtectionView = {
+  address: Address
+  pool: Address
+  pvault: Address
+  params: ProtectionParamsView
+  collateral: Micro
+  reserved: Micro
+  // What sellers can withdraw and buyers can still cover: collateral − reserved.
+  free: Micro
+  shareSupply: Micro
+  // Value of one seller share × 10⁶, rounded down — the same scale as tranche NAV.
+  shareValue: Micro
+  // The next nonce for `buildBuy`.
+  contracts: bigint
+}
+
+export type ContractView = {
+  address: Address
+  buyer: Address
+  nonce: bigint
+  notional: Micro
+  premium: Micro
+  startModelTime: bigint
+  expiryModelTime: bigint
+  triggerBps: number
+  lossIndexFrom: number
+  status: ContractStatus
+  settledLossIndex: number
+  payout: Micro
+}
+
 export type WalletView = {
   owner: Address
   base: Micro
@@ -70,6 +114,12 @@ export type WalletView = {
   // Вартість часток за поточним NAV — те, що вкладник отримав би при погашенні.
   seniorValue: Micro
   juniorValue: Micro
+  // Seller shares valued at the current collateral; part of it may be reserved and
+  // not withdrawable until the contracts close.
+  sellerShares: Micro
+  sellerValue: Micro
+  // Contracts bought by this wallet in this pool, by nonce.
+  contracts: ContractView[]
 }
 
 // Порожній транш коштує рівно 1: перший вкладник заходить 1:1.
@@ -133,13 +183,57 @@ export function poolView(
   }
 }
 
+export function protectionView(address: Address, protection: ProtectionPool): ProtectionView {
+  return {
+    address,
+    pool: protection.pool,
+    pvault: protection.pvault,
+    params: {
+      premiumRateBps: protection.premiumRateBps,
+      triggerBps: protection.triggerBps,
+      premiumFeeBps: protection.premiumFeeBps,
+    },
+    collateral: protection.collateral,
+    reserved: protection.reserved,
+    free: protection.collateral - protection.reserved,
+    shareSupply: protection.shareSupply,
+    shareValue: nav(protection.collateral, protection.shareSupply),
+    contracts: protection.contracts,
+  }
+}
+
+export function contractView(address: Address, contract: ProtectionContract): ContractView {
+  return {
+    address,
+    buyer: contract.buyer,
+    nonce: contract.nonce,
+    notional: contract.notional,
+    premium: contract.premium,
+    startModelTime: contract.startModelTime,
+    expiryModelTime: contract.expiryModelTime,
+    triggerBps: contract.triggerBps,
+    lossIndexFrom: contract.lossIndexFrom,
+    status: contract.status,
+    settledLossIndex: contract.settledLossIndex,
+    payout: contract.payout,
+  }
+}
+
+export type SellerHolding = {
+  shares: Micro
+  protection: ProtectionView | null
+}
+
 export function walletView(
   owner: Address,
   pool: PoolView,
   base: Micro,
   seniorShares: Micro,
   juniorShares: Micro,
+  seller: SellerHolding = { shares: 0n, protection: null },
+  contracts: ContractView[] = [],
 ): WalletView {
+  const protection = seller.protection
   return {
     owner,
     base,
@@ -147,6 +241,11 @@ export function walletView(
     juniorShares,
     seniorValue: amountForShares(seniorShares, pool.senior.assets, pool.senior.supply),
     juniorValue: amountForShares(juniorShares, pool.junior.assets, pool.junior.supply),
+    sellerShares: seller.shares,
+    sellerValue: protection
+      ? amountForShares(seller.shares, protection.collateral, protection.shareSupply)
+      : 0n,
+    contracts,
   }
 }
 

@@ -24,7 +24,7 @@ export const WASHAPP_ERROR__TRANCHE_WIPED_OUT = 0x1772; // 6002
 export const WASHAPP_ERROR__SUBORDINATION_BREACHED = 0x1773; // 6003
 /** InsufficientLiquidity: vault holds less than the requested amount */
 export const WASHAPP_ERROR__INSUFFICIENT_LIQUIDITY = 0x1774; // 6004
-/** InsufficientFreeCollateral: free collateral is less than the requested notional */
+/** InsufficientFreeCollateral: free collateral is less than the requested amount */
 export const WASHAPP_ERROR__INSUFFICIENT_FREE_COLLATERAL = 0x1775; // 6005
 /** ContractNotActive: contract is not active */
 export const WASHAPP_ERROR__CONTRACT_NOT_ACTIVE = 0x1776; // 6006
@@ -40,8 +40,11 @@ export const WASHAPP_ERROR__UNAUTHORIZED = 0x177a; // 6010
 export const WASHAPP_ERROR__ZERO_AMOUNT = 0x177b; // 6011
 /** FaucetCapExceeded: faucet request exceeds the cap */
 export const WASHAPP_ERROR__FAUCET_CAP_EXCEEDED = 0x177c; // 6012
+/** CollateralWipedOut: protection pool has shares but no collateral */
+export const WASHAPP_ERROR__COLLATERAL_WIPED_OUT = 0x177d; // 6013
 
 export type WashappError =
+  | typeof WASHAPP_ERROR__COLLATERAL_WIPED_OUT
   | typeof WASHAPP_ERROR__CONTRACT_NOT_ACTIVE
   | typeof WASHAPP_ERROR__FAUCET_CAP_EXCEEDED
   | typeof WASHAPP_ERROR__INSUFFICIENT_FREE_COLLATERAL
@@ -59,9 +62,10 @@ export type WashappError =
 let washappErrorMessages: Record<WashappError, string> | undefined;
 if (process.env["NODE_ENV"] !== "production") {
   washappErrorMessages = {
+    [WASHAPP_ERROR__COLLATERAL_WIPED_OUT]: `protection pool has shares but no collateral`,
     [WASHAPP_ERROR__CONTRACT_NOT_ACTIVE]: `contract is not active`,
     [WASHAPP_ERROR__FAUCET_CAP_EXCEEDED]: `faucet request exceeds the cap`,
-    [WASHAPP_ERROR__INSUFFICIENT_FREE_COLLATERAL]: `free collateral is less than the requested notional`,
+    [WASHAPP_ERROR__INSUFFICIENT_FREE_COLLATERAL]: `free collateral is less than the requested amount`,
     [WASHAPP_ERROR__INSUFFICIENT_LIQUIDITY]: `vault holds less than the requested amount`,
     [WASHAPP_ERROR__LOSS_BELOW_TRIGGER]: `loss is below the contract trigger`,
     [WASHAPP_ERROR__LOSS_OUTSIDE_TERM]: `loss event is outside the contract term`,

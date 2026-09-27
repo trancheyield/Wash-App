@@ -343,7 +343,7 @@ fn a_total_loss_pays_exactly_the_notional() {
 }
 
 // A payout that rounds down to zero does not close the claim: the contract stays
-// active and waits for a bigger loss or for expiry (Pavlo's call).
+// active and waits for a bigger loss or for expiry.
 #[test]
 fn a_payout_that_rounds_to_zero_leaves_the_contract_active() {
     let (mut session, s, p, pr) = market();

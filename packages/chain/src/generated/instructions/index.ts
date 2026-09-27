@@ -7,9 +7,15 @@
  */
 
 export * from "./accrue.ts";
+export * from "./buyProtection.ts";
 export * from "./createPool.ts";
 export * from "./deposit.ts";
+export * from "./expireProtection.ts";
 export * from "./faucet.ts";
 export * from "./initConfig.ts";
+export * from "./initProtection.ts";
+export * from "./provideProtection.ts";
 export * from "./recordLoss.ts";
 export * from "./redeem.ts";
+export * from "./settleProtection.ts";
+export * from "./withdrawProtection.ts";

@@ -7,9 +7,13 @@
  */
 
 export * from "./config.ts";
+export * from "./contract.ts";
 export * from "./juniorMint.ts";
 export * from "./mint.ts";
 export * from "./pool.ts";
+export * from "./position.ts";
+export * from "./protection.ts";
+export * from "./pvault.ts";
 export * from "./seniorMint.ts";
 export * from "./treasury.ts";
 export * from "./vault.ts";

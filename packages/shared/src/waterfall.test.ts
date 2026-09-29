@@ -7,7 +7,12 @@ import {
   afterLoss,
   amountForRedeem,
   applyLoss,
+  collateralForShares,
   lossAmount,
+  payout,
+  premium,
+  premiumFee,
+  sharesForCollateral,
   sharesForDeposit,
   subordinationOk,
   WaterfallError,
@@ -173,5 +178,46 @@ describe('waterfall on the M0 brief', () => {
 
   it('u64 overflow is an error, not a silent wrap', () => {
     expect(errorCode(() => sharesForDeposit(2n ** 64n - 1n, 1n, 2n ** 64n - 1n))).toBe('Overflow')
+  })
+})
+
+// The golden numbers of the protection tests in `math.rs`, one to one; the premiums the
+// program really wrote are checked against `premium` in `packages/chain` on the SVM fixture.
+describe('protection math mirrors math.rs', () => {
+  const DAY = 86_400n
+
+  it('seller shares go 1:1 first and by value after', () => {
+    expect(sharesForCollateral(1_000n, 0n, 0n)).toBe(1_000n)
+    expect(sharesForCollateral(1_100n, 1_100n, 1_000n)).toBe(1_000n)
+    expect(collateralForShares(1_000n, 2_200n, 2_000n)).toBe(1_100n)
+    expect(collateralForShares(0n, 0n, 0n)).toBe(0n)
+    expect(sharesForCollateral(5n, 10n, 1n)).toBe(0n)
+    expect(errorCode(() => collateralForShares(2n, 10n, 1n))).toBe('ParameterOutOfRange')
+  })
+
+  it('collateral paid out to zero refuses provide and withdraw', () => {
+    expect(errorCode(() => sharesForCollateral(1_000n, 0n, 1_000n))).toBe('CollateralWipedOut')
+    expect(errorCode(() => collateralForShares(1_000n, 0n, 1_000n))).toBe('CollateralWipedOut')
+  })
+
+  it('premium and fee on the demo protection params', () => {
+    const notional = 10_000_000_000n
+    const p = premium(notional, 200, 30n * DAY)
+    expect(p).toBe(16_438_356n)
+    expect(premiumFee(p, 1_000)).toBe(1_643_835n)
+    expect(premium(notional, 200, 365n * DAY)).toBe(200_000_000n)
+    expect(premium(notional, 0, 30n * DAY)).toBe(0n)
+    expect(premium(notional, 200, 0n)).toBe(0n)
+    expect(premium(1_000n, 200, 60n)).toBe(0n)
+    expect(premiumFee(16_438_356n, 0)).toBe(0n)
+  })
+
+  it('payout is the loss share of the notional', () => {
+    const notional = 1_000_000_000n
+    expect(payout(notional, 1_500)).toBe(150_000_000n)
+    expect(payout(notional, 10_000)).toBe(notional)
+    expect(payout(notional, 0)).toBe(0n)
+    expect(payout(6n, 1_500)).toBe(0n)
+    expect(errorCode(() => payout(notional, 10_001))).toBe('ParameterOutOfRange')
   })
 })

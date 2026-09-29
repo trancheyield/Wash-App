@@ -1,4 +1,5 @@
 import { type Address, address, getBase58Encoder } from '@solana/kit'
+import { payout, premium, premiumFee } from '@washapp/shared'
 import { describe, expect, it } from 'vitest'
 import { ContractStatus } from './generated/index.ts'
 import { type ReadRpc, readContracts, readPool, readProtection, readWallet } from './read.ts'
@@ -175,5 +176,29 @@ describe('readWallet with protection', () => {
     expect(calls.program).toBe(0)
     expect(wallet.contracts).toEqual([])
     expect(wallet.sellerValue).toBe(0n)
+  })
+})
+
+// The screens preview premiums and payouts with `@washapp/shared` before signing; these are
+// the numbers `buy_protection` and `settle_protection` really wrote in SVM.
+describe('the shared protection math against the program', () => {
+  it('premium, fee and payout equal what the program wrote', async () => {
+    const rpc = fakeRpc()
+    const market = await readProtection(rpc, m0Fixture.accounts.pool.address)
+    if (!market) throw new Error('fixture protection missing')
+    const bought = [
+      ...(await readContracts(rpc, m0Fixture.accounts.pool.address, fixture.buyer)),
+      ...(await readContracts(rpc, m0Fixture.accounts.pool.address, fixture.seller)),
+    ]
+    expect(bought).toHaveLength(3)
+    let net = 0n
+    for (const c of bought) {
+      const term = c.expiryModelTime - c.startModelTime
+      expect(premium(c.notional, market.params.premiumRateBps, term)).toBe(c.premium)
+      net += c.premium - premiumFee(c.premium, market.params.premiumFeeBps)
+    }
+    expect(net).toBe(NET_PREMIUMS)
+    const settled = bought.find((c) => c.status === ContractStatus.Settled)
+    expect(settled?.payout).toBe(payout(settled?.notional ?? 0n, fixture.lossBps))
   })
 })

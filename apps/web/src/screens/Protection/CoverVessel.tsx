@@ -1,15 +1,21 @@
 import { formatAmount } from '@washapp/shared'
-import { TOKEN } from '../../mock/data.ts'
+import { TOKEN } from '../../tokens.ts'
 
 const INK = '#F2F4F1'
 const GROUND = '#5C6B7A'
 
-export type CoverVesselProps = { collateral: bigint; reserved: bigint; compact: boolean }
+export type CoverVesselProps = {
+  poolId: number
+  collateral: bigint
+  reserved: bigint
+  compact: boolean
+}
 
 // Третя посудина — забезпечення продавців; пунктир ділить її на зарезервоване й вільне.
-export function CoverVessel({ collateral, reserved, compact }: CoverVesselProps) {
+export function CoverVessel({ poolId, collateral, reserved, compact }: CoverVesselProps) {
   const [w, h] = compact ? [343, 260] : [820, 360]
-  const [vx, vw, vh] = compact ? [40, 180, 160] : [300, 260, 220]
+  // Narrow: the vessel leaves the right ~170 units to the leader labels with four-digit sums.
+  const [vx, vw, vh] = compact ? [30, 130, 160] : [300, 260, 220]
   const fs = compact ? 9 : 11
   const top = compact ? 40 : 60
   const ratio = collateral === 0n ? 0 : Number((reserved * 1000n) / collateral) / 1000
@@ -26,10 +32,10 @@ export function CoverVessel({ collateral, reserved, compact }: CoverVesselProps)
       fill={INK}
       letterSpacing="0.08em"
       role="img"
-      aria-label="FIG. 3 — COVER, POOL 0"
+      aria-label={`FIG. 3 — COVER, POOL ${poolId}`}
     >
       <text x="0" y={fs + 2}>
-        FIG. 3 — COVER, POOL 0
+        FIG. 3 — COVER, POOL {poolId}
       </text>
       <rect x={vx} y={top} width={vw} height={vh} fill="none" stroke={INK} strokeWidth="1.5" />
       <rect

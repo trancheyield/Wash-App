@@ -17,6 +17,7 @@ import { TOKEN } from '../../tokens.ts'
 import { FaucetRow } from './Faucet.tsx'
 import { LossHistory } from './LossHistory.tsx'
 import { PoolGate } from './PoolGate.tsx'
+import { ProtectionBlock } from './ProtectionBlock.tsx'
 
 // Мітка першого рендера з даними пулу — число SC-008 знімається з
 // `performance.getEntriesByName(POOL_RENDERED_MARK)` у браузері.
@@ -69,12 +70,7 @@ function PoolSheet({ pool }: { pool: PoolView }) {
           ]}
         />
         <LossHistory pool={pool} />
-        <div className="flex flex-col gap-2.5">
-          <div className="lbl">Protection</div>
-          <div className="text-[11px] text-sec">
-            not yet on this pool · the protection desk arrives with the next release
-          </div>
-        </div>
+        <ProtectionBlock pool={pool} />
         <div className="flex flex-col gap-2">
           <div className="flex flex-wrap gap-3">
             <Btn label="Deposit" primary onClick={() => navigate(`${base}/deposit`)} />

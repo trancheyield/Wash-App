@@ -6,7 +6,7 @@ import { Refused, Sheet } from '../../components/chrome.tsx'
 import { useAppConfig } from '../../providers.tsx'
 import { parsePoolId, usePool } from '../../queries/pool.ts'
 
-function Notice({ children }: { children: ReactNode }) {
+export function Notice({ children }: { children: ReactNode }) {
   return (
     <Sheet>
       <Nav />

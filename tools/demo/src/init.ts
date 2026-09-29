@@ -1,15 +1,18 @@
-// `pnpm --filter @washapp/demo init` — Config + демо-мінт + treasury і пул 0 на
-// devnet. Ідемпотентний: те, що вже є в мережі, пропускається, тож повторний
-// запуск лише друкує адреси. Запуск: `node --env-file=../../.env src/init.ts`.
+// `pnpm demo:init` — Config + demo mint + treasury, pool 0 and its protection market on
+// devnet. Idempotent: what is already on the chain is skipped, so a rerun only prints the
+// addresses. Run: `node --env-file=../../.env src/init.ts`.
 
 import {
   buildCreatePool,
   buildInitConfig,
+  buildInitProtection,
   configAddress,
   fetchMaybeConfig,
   mintAddress,
   poolAccounts,
+  protectionAccounts,
   readPool,
+  readProtection,
   treasuryAddress,
   WASHAPP_PROGRAM_ADDRESS,
 } from '@washapp/chain'
@@ -71,4 +74,26 @@ if (pool) {
   })
   const signature = await sendInstructions(client, operator, [ix])
   console.log(`create_pool: ${signature}`)
+}
+
+// The protection market comes after the pool: `init_protection` needs the pool and its
+// operator. Parameters are the demo ones from `fixtures/params.json`.
+const market = await protectionAccounts(params.pool_id)
+console.log(`protection: ${market.protection}`)
+console.log(`pvault:    ${market.pvault}`)
+const existingMarket = await readProtection(client.rpc, market.pool)
+if (existingMarket) {
+  console.log(
+    `init_protection: already there (collateral ${existingMarket.collateral}, reserved ${existingMarket.reserved}, contracts ${existingMarket.contracts})`,
+  )
+} else {
+  const ix = await buildInitProtection({
+    operator,
+    poolId: params.pool_id,
+    premiumRateBps: params.protection.premium_rate_bps,
+    triggerBps: params.protection.trigger_bps,
+    premiumFeeBps: params.protection.premium_fee_bps,
+  })
+  const signature = await sendInstructions(client, operator, [ix])
+  console.log(`init_protection: ${signature}`)
 }

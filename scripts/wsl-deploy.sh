@@ -98,12 +98,15 @@ case "$CMD" in
     if [[ -n "$existing_len" ]]; then
       # Апгрейд: ProgramData вже оплачений і має фіксовану довжину; платиться лише
       # буфер (повертається після запису) і комісії. `--max-len` тут не приймається.
-      if (( existing_len < size )); then
-        echo "ПОМИЛКА: ProgramData вміщає $existing_len байтів, .so — $size: solana program extend $PROGRAM_ID $(( size - existing_len ))"
-        exit 1
-      fi
       need=$(( buffer_rent + 50000000 ))
       echo ".so:      $size байтів, апгрейд у ProgramData на $existing_len; буфер $(( buffer_rent / 1000000 ))e-3 SOL (повертається)"
+      if (( existing_len < size )); then
+        # CLI 3.x extends ProgramData in the upgrade itself and tops its balance up to
+        # the rent of the new length; the payer covers the difference on top of the buffer.
+        extend_rent=$(( $(rent_lamports $(( size + 45 ))) - $(rent_lamports $(( existing_len + 45 ))) ))
+        need=$(( need + extend_rent ))
+        echo "extend:   +$(( size - existing_len )) bytes of ProgramData, ~$(( extend_rent / 1000000 ))e-3 SOL for good"
+      fi
     else
       # Перший деплой: місце під апгрейди — ProgramData фіксує довжину на весь час життя.
       max_len=$(( size * 3 / 2 ))

@@ -6,6 +6,8 @@ import type { Micro } from './units.ts'
 
 export const BPS = 10_000n
 export const YEAR_SECONDS = 365n * 86_400n
+// `MAX_TERM_SECONDS` in `constants.rs`: the longest protection term `buy_protection` takes.
+export const MAX_TERM_SECONDS = 10n * YEAR_SECONDS
 const U64_MAX = 2n ** 64n - 1n
 
 export type Tranche = 'senior' | 'junior'
@@ -37,7 +39,11 @@ export type LossSplit = {
 }
 
 // Імена збігаються з `WashError` — програма відмовляє тим самим кодом.
-export type WaterfallErrorCode = 'TrancheWipedOut' | 'ParameterOutOfRange' | 'Overflow'
+export type WaterfallErrorCode =
+  | 'TrancheWipedOut'
+  | 'ParameterOutOfRange'
+  | 'Overflow'
+  | 'CollateralWipedOut'
 
 // Без параметра-властивості в конструкторі: Node зі strip-only типами його не терпить.
 export class WaterfallError extends Error {
@@ -99,6 +105,39 @@ export function amountForRedeem(shares: Micro, trancheAssets: Micro, supply: Mic
   if (supply === 0n) return 0n
   if (trancheAssets === 0n) throw new WaterfallError('TrancheWipedOut')
   return mulDiv(shares, trancheAssets, supply)
+}
+
+// Seller shares of the protection pool: the tranche share rules with their own error —
+// collateral paid out to zero while shares remain.
+export function sharesForCollateral(amount: Micro, collateral: Micro, shareSupply: Micro): Micro {
+  if (shareSupply === 0n) return amount
+  if (collateral === 0n) throw new WaterfallError('CollateralWipedOut')
+  return mulDiv(amount, shareSupply, collateral)
+}
+
+export function collateralForShares(shares: Micro, collateral: Micro, shareSupply: Micro): Micro {
+  if (shares > shareSupply) throw new WaterfallError('ParameterOutOfRange')
+  if (shareSupply === 0n) return 0n
+  if (collateral === 0n) throw new WaterfallError('CollateralWipedOut')
+  return mulDiv(shares, collateral, shareSupply)
+}
+
+// Premium is the same pro rata as yield: notional × annual rate × term / year, the term
+// in model seconds. Zero is a value here, not an error — `buy_protection` refuses it only
+// when the rate is non-zero.
+export function premium(notional: Micro, rateBps: number, term: bigint): Micro {
+  return proRata(notional, rateBps, term)
+}
+
+// The protocol fee, taken from the premium before the rest goes to the sellers.
+export function premiumFee(premiumAmount: Micro, feeBps: number): Micro {
+  return mulBps(premiumAmount, feeBps)
+}
+
+// notional × the pool's loss share; at most the notional, which is reserved in the collateral.
+export function payout(notional: Micro, lossBps: number): Micro {
+  if (lossBps > 10_000) throw new WaterfallError('ParameterOutOfRange')
+  return mulBps(notional, lossBps)
 }
 
 export function lossAmount(assets: Micro, lossBps: number): Micro {

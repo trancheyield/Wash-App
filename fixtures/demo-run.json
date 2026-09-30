@@ -1,94 +1,194 @@
 {
-  "comment": "Таймінги демо-сценарію M1 на devnet (tools/demo scenario): підпис → confirmed → зміна Pool в RPC на кожному кроці (SC-001 ≤ 10 с), waterfall збитку звірено з подією на ланцюзі (SC-003), загальний час (SC-007 ≤ 180 с). Суми — мікро-одиниці рядками.",
-  "ranAt": "2026-09-16T16:39:27.026Z",
+  "comment": "Timings of the M2 demo scenario on devnet (tools/demo scenario): signature → confirmed → change visible in RPC for every step (SC-001 ≤ 10 s); the loss waterfall checked against the on-chain event (SC-003); premiums, the payout of notional × loss (SC-004), the expiry and the seller result checked against the mirror; total time (SC-007 ≤ 180 s). Sums are micro-units as strings.",
+  "ranAt": "2026-09-30T17:18:22.836Z",
   "programId": "2Yq39tVgTH5e8be8YdssyhvM6339f2WG6QweNmxGpBbf",
   "poolId": 0,
-  "wallet": "41HEjqGFmkVQbjQDsixdSyW929w1ZvWZRzPXw2ssa16h",
+  "wallet": "Gs8AgwfB5dExaThQjPGTfrjWxKMHryu7We85kijJd7f4",
+  "seller": "4HMjonwmGENtwwzHDEzDHoLfZ9BjRENTPaEH1d9cwTkk",
   "steps": [
     {
       "name": "fund",
-      "signature": "5RZou2iQvD8v4jngGfbHVC8dwjVJN6qEdyTT8HXu32kBJiLsWG4FWxo6rnE7z7kEmMU9cnA8DVZy9uQw9U2AgmDN",
-      "confirmedMs": 2065.1868999999997,
-      "visibleMs": 2208.2389,
-      "note": "0.02 SOL від deployer"
+      "signature": "3j6eJgFunKMDf4RaSUbx16s5gWUGtdQc7SG4ywV36q27WaZ2kqePxsTfLG4pH5ddEdDPQFFtnFaP433kEGNYTybQ",
+      "confirmedMs": 2723.8282,
+      "visibleMs": 2928.1912,
+      "note": "0.02 SOL each from the deployer"
     },
     {
-      "name": "faucet",
-      "signature": "4wyThKdHkyrv48Qq7SrR9z2B4SzYLLr6j1uHG9re9NTidcqp2o2BZs61JiNX5ZQRSoMVeioViBYNMskxgjNck2bb",
-      "confirmedMs": 1548.5986999999996,
-      "visibleMs": 1684.9660999999996,
-      "note": "3,000.00 WUSD у гаманці"
+      "name": "catch-up accrue",
+      "signature": "5MEvYrCV2W4E9zNdnGXzfzongUrHsAAjw6GfDBkGe1Hx4dV8G1RRKwchTizMz9YeexkdjuxcpL1KXtXPnnPUi4Jk",
+      "confirmedMs": 2361.8109999999997,
+      "visibleMs": 2498.5743,
+      "note": "idle 0.0 h: 1,051,581.77 → 1,057,908.54 WUSD"
+    },
+    {
+      "name": "faucet buyer",
+      "signature": "4J4HjSUsMjCKqMxXaeLb4hNwRkAVScrEjFwpso1hpLgv3Yqn3jWuxnRzSgDYJrd8Wuae7arLmss66whrDgfc3aLH",
+      "confirmedMs": 1239.7788999999993,
+      "visibleMs": 1554.330899999999,
+      "note": "3,100.00 WUSD in the wallet"
+    },
+    {
+      "name": "faucet seller",
+      "signature": "21QqctqAaYY5sb6Yy4bTNHX4S8mxJYz2Mnout8Xe5SoQJxKv6d9xyCMwrLbw64mAdeH8ZA4Nn5wwgZGXgWrihp1w",
+      "confirmedMs": 1151.8889999999992,
+      "visibleMs": 1450.7217,
+      "note": "2,000.00 WUSD in the wallet"
     },
     {
       "name": "deposit junior",
-      "signature": "3mBEVjLDZfXvTSysb7AuMmuWVHtGbGrZX6rMK9XtKWVACNTd5VLGmmJRTbRD812PEFVuAsyXcAvZ8VVVdghz95gK",
-      "confirmedMs": 1087.2978000000003,
-      "visibleMs": 1229.317,
-      "note": "junior 2,296.87 WUSD, NAV 1.296870"
+      "signature": "2vZ5CUDMhDSL2okYbVpznjKNwVAdpQCzvTea4fHh7mgKjXvNCxwuoTAdPEdsbtiKzQHifAfN2geHLtE55tstXaRM",
+      "confirmedMs": 1180.5149999999994,
+      "visibleMs": 1330.5825000000004,
+      "note": "junior 1,059,430.25 WUSD, NAV 1,058.430253"
     },
     {
       "name": "deposit senior",
-      "signature": "3gWkTxJCgSMCJTvEcEy3FE5sFUSLgDPHgKiSMENmkEY5ykYwwpyYHnneJApnpX6eGf54QXG1JNwXR9aiksFtCQPb",
-      "confirmedMs": 1280.8808,
-      "visibleMs": 1418.9573,
+      "signature": "5kBmh7MiTeWT2C4tHvrLFrJaFq4Ln7Vexsc9bQeUt6KKFWWWR65m9kztjR97uCzyzX7F5kGCr9RVamhHsCfZCC26",
+      "confirmedMs": 2149.2595,
+      "visibleMs": 2298.5160000000014,
       "note": "senior 2,000.00 WUSD, NAV 1.000000"
+    },
+    {
+      "name": "provide",
+      "signature": "55F2m4iAuQMCXEE2MRM389PPKBSCuXoF3kaDRaYNGvwgcHGU9qD8aeC7xCYHD8x3gbNpxqrgC74RCGh5ooGBGCab",
+      "confirmedMs": 1205.8711999999996,
+      "visibleMs": 1339.2505999999994,
+      "note": "collateral 0.00 → 2,000.00 WUSD, free 2,000.00"
+    },
+    {
+      "name": "buy cover",
+      "signature": "5FWUGfJ1hzZNXz6iTWAvBBBN7Vf6uGLatvDmZgMcoFVFZWnNkZnetvZM1MbVFVUYtFqAHPKTCSqGyM8fmvpqCW3i",
+      "confirmedMs": 1935.863800000001,
+      "visibleMs": 2279.029200000001,
+      "note": "#4: 1,000.00 WUSD for 90 model days, premium 4.93"
+    },
+    {
+      "name": "buy short",
+      "signature": "2ge9NuMgMe6sUX3e7r4oNL2xq1c8cLPgUtBtPcBKvYFeRP8fqn6q8uqRh9emf4BLw6VPWoyeuNUgkraGp2EHtY4n",
+      "confirmedMs": 1281.8732999999993,
+      "visibleMs": 1565.5121999999974,
+      "note": "#5: 500.00 WUSD for 1 model day, premium 0.03"
     },
     {
       "name": "wait",
       "signature": null,
-      "confirmedMs": 60009.44069999999,
+      "confirmedMs": 60011.7084,
       "visibleMs": null,
-      "note": "60 с = 30 модельних днів"
+      "note": "60 s = 30 model days"
     },
     {
       "name": "accrue",
-      "signature": "bqsnd6S66cFyGemGc8dc9XkPZBFKM5srxMoUYjuWrCwk8PZPbDszREVRefuAsKbo6ZyEPedPNPKk8jLCDg8tY2i",
-      "confirmedMs": 947.2037999999884,
-      "visibleMs": 1102.392200000002,
-      "note": "NAV senior 1.000000 → 1.004178, junior 1.297125 → 1.307005"
+      "signature": "emEgthBS4c7wGv8sVci92GHzmgNodBGWKPfwTX7VASiPd7uqZ1GntqdBMc6TMNaF29Y9HBBaeGJVc8hSRo63Ph1",
+      "confirmedMs": 1326.923999999999,
+      "visibleMs": 1478.5933000000077,
+      "note": "NAV senior 1.000000 → 1.004659, junior 1,058.639039 → 1,065.747184"
     },
     {
       "name": "record_loss",
-      "signature": "3jJK4BtqKtkcVLhhMoFBYkF6L36Y66pFM4bmPFYuHHFk9dfAMr5THXsYdY91gGWekm8WfA5QqupFQZ6DHKctttnb",
-      "confirmedMs": 1654.8435000000027,
-      "visibleMs": 1795.5144,
-      "note": "подія #2: −648.54 WUSD, junior −648.54, senior −0.00"
+      "signature": "2F7S1j8jcNxb9G6u7ajUmbyjuBKDeqwsQJyxveLKG2usNABnDKFooRaCYLsjXACZSrqpP21DQQyq6Xd2BfCVBtEu",
+      "confirmedMs": 1970.9407999999967,
+      "visibleMs": 2258.175000000003,
+      "note": "event #5: −160,330.32 WUSD, junior −160,330.32, senior −0.00"
+    },
+    {
+      "name": "settle",
+      "signature": "26j2F2GwvBUS3DSe4b2CLrjKTqeUKdpd2thihQYTEMejkDdzLPWo1RJE1KGZkQ1cXFz6WHHJKLiCUCaFiQMZEezi",
+      "confirmedMs": 2809.027000000002,
+      "visibleMs": 4056.7045999999973,
+      "note": "#4 pays 150.00: buyer 95.04 → 245.04 WUSD"
+    },
+    {
+      "name": "expire",
+      "signature": "2jfQbns4ivHXSMgLiG8MKMQ5pqNo3abUWcu4fP3tVSTT5S1ASvZ5P68ct13BSXwyj2u1ZTvQb8XzM8TTLXApZ7or",
+      "confirmedMs": 1914.1412999999884,
+      "visibleMs": 3188.2176000000036,
+      "note": "#5 over: reserved 500.00 → 0.00, collateral 1,854.46 kept"
     },
     {
       "name": "redeem senior",
-      "signature": "5KAEgoVAtdTyWt5novzwkXoxCB7vLq8F2JsqwixMzaEvN2UTrDzA8vf3JiGQNy3ASuKpx1LgnTid9aJjVmUT9WP",
-      "confirmedMs": 1715.9131000000052,
-      "visibleMs": 1854.0151000000042,
-      "note": "2,000.00 sWUSD → 2,008.49 WUSD; senior лишилось 0.00"
+      "signature": "5ziu7izfwZf1zRaesw2WcWdF1zg2VGofbERyBaMkPXXYK4fnJFQ2dP7ruyK3JFLxV9Sw49DQswxEA6hScFPDFxes",
+      "confirmedMs": 1217.7406999999948,
+      "visibleMs": 1536.9551999999967,
+      "note": "2,000.00 sWUSD → 2,010.83 WUSD; senior left 0.00"
     },
     {
       "name": "redeem junior",
-      "signature": "4efTvATcw13P4v8rum8izEDUdsfSUqTuu1U9SD3F7icFHzDJ4ezEnCA1fFL8GJ8D6Q4UKWDrCVtxUySZd4EEWLUE",
-      "confirmedMs": 1685.7857000000076,
-      "visibleMs": 1831.817200000005,
-      "note": "771.09 jWUSD → 725.58 WUSD; junior лишилось 941.43"
+      "signature": "5DFdtSNedcwwZ55udazLiYWBHUtnHRnUKSPCxGdDFvwBpB6SaHkiypxYJzU66K6uVLVLb5vU6BuNWQA7Nz8uu87m",
+      "confirmedMs": 1532.6398000000045,
+      "visibleMs": 1861.3770000000077,
+      "note": "0.94 jWUSD → 856.60 WUSD; junior left 906,656.84"
+    },
+    {
+      "name": "withdraw",
+      "signature": "22rR5LRHRrGXyXppS7P14JCUawpEEGbD5LEXPHcDwz3FjTyBfhYDtpRcuzW7TnXqrehMGG9KPXaKUSG2iU5vcnAb",
+      "confirmedMs": 3930.703099999999,
+      "visibleMs": 4217.565499999997,
+      "note": "2,000.00 shares → 1,854.46 WUSD (provided 2,000.00)"
     }
   ],
+  "catchUp": {
+    "idleSeconds": 61,
+    "assetsBefore": "1051581767708",
+    "assetsAfter": "1057908544589"
+  },
   "waterfall": {
     "lossBps": 1500,
-    "amount": "648540625",
-    "juniorLoss": "648540625",
+    "amount": "160330324206",
+    "juniorLoss": "160330324206",
     "seniorLoss": "0",
-    "assetsBefore": "4323604173",
-    "assetsAfter": "3675063548",
-    "seniorBefore": "2008493722",
-    "seniorAfter": "2008493722",
-    "juniorBefore": "2315110451",
-    "juniorAfter": "1666569826",
+    "assetsBefore": "1068868828046",
+    "assetsAfter": "908538503840",
+    "seniorBefore": "2009456257",
+    "seniorAfter": "2009456257",
+    "juniorBefore": "1066859371789",
+    "juniorAfter": "906529047583",
     "seniorUnchanged": true,
     "mismatches": []
   },
   "nav": {
     "seniorBefore": "1000000",
-    "seniorAfterAccrue": "1004178",
-    "juniorBefore": "1297125",
-    "juniorAfterAccrue": "1307005"
+    "seniorAfterAccrue": "1004659",
+    "juniorBefore": "1058639039",
+    "juniorAfterAccrue": "1065747184"
   },
-  "totalMs": 73560.3677,
-  "sc001MaxMs": 2208.2389
+  "protection": {
+    "covered": {
+      "nonce": "4",
+      "notional": "1000000000",
+      "term": "7776000",
+      "premium": "4931506",
+      "fee": "493150",
+      "mismatches": []
+    },
+    "expiring": {
+      "nonce": "5",
+      "notional": "500000000",
+      "term": "86400",
+      "premium": "27397",
+      "fee": "2739",
+      "mismatches": []
+    },
+    "settle": {
+      "lossIndex": 5,
+      "lossBps": 1500,
+      "payout": "150000000",
+      "buyerBefore": "95041097",
+      "buyerAfter": "245041097",
+      "mismatches": []
+    },
+    "expire": {
+      "notional": "500000000",
+      "reservedBefore": "500000000",
+      "reservedAfter": "0",
+      "mismatches": []
+    },
+    "seller": {
+      "provided": "2000000000",
+      "withdrawn": "1854463014",
+      "expected": "1854463014",
+      "mismatches": []
+    }
+  },
+  "totalMs": 97443.3532,
+  "sc001MaxMs": 4217.565499999997
 }

@@ -81,7 +81,8 @@ pnpm gate            # biome + tsc + vitest across the workspace
 pnpm dev             # web on :5173
 pnpm codama          # IDL → packages/chain/src/generated (after wsl-build.sh idl)
 pnpm demo:init       # devnet: config, demo mint, treasury and pool 0 (idempotent)
-pnpm demo:scenario   # devnet: fresh wallet → faucet → deposits → 60 s → accrue → loss → redeem
+pnpm demo:scenario   # devnet: fresh buyer and seller → deposits → cover sold and bought → 60 s →
+                     # loss → settle → expire → redeem → withdraw
 ```
 
 On-chain, from PowerShell into WSL:
@@ -114,10 +115,14 @@ the program rather than against itself:
 - `accounts/m0.json` — raw account bytes from the SVM before and after a 15 % loss; the readers
   decode them in vitest.
 - `demo-run.json` — the last `demo:scenario` run on devnet: per-step timings (signature →
-  confirmed → change visible in RPC) and the loss waterfall checked against the on-chain event.
+  confirmed → change visible in RPC), the loss waterfall checked against the on-chain event, and
+  the protection checks — premiums against the mirror, the buyer's balance after `settle`
+  (+notional × loss), the expired contract's released reservation, the seller's result.
 
 Guard tests fail `cargo test` when a fixture is stale, and vitest fails when a fixture breaks a
-budget (scenario ≤ 180 s, each step ≤ 10 s). The last run: 73.6 s end to end, slowest step 2.2 s.
+budget (scenario ≤ 180 s, each step ≤ 10 s) or records a failed check. The last run: 97.4 s end
+to end over 16 transactions, slowest step 4.2 s; `settle` paid 150.00 on a 1,000 WUSD notional for a
+15 % loss, to the unit.
 
 CI (`.github/workflows/ci.yml`) runs the Rust gate on the SBPFv0 artifact, the Node gate, and a
 sweep for keys and machine-specific traces over the whole history.

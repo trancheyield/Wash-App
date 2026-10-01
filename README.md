@@ -121,8 +121,10 @@ One-time setup in the repository:
    | `VITE_SOLANA_CHAIN` | `solana:devnet` (wallet-standard chain id) |
 
    These are variables, not secrets: every `VITE_*` value is readable in the published
-   bundle. Put an RPC URL with a key here only if the provider can lock that key to the site
-   origin (Helius: allowed domains on the key). Re-run the workflow after changing one.
+   bundle. An RPC URL with a key is public once it is here. Helius Free (October 2026) cannot
+   lock a key to a domain, so use a key from a separate account that serves nothing else, and
+   test any provider's origin lock with `curl -H "Origin: https://example.com"` before relying
+   on it. Re-run the workflow after changing a variable.
 
 Notes:
 

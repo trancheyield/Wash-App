@@ -27,6 +27,21 @@ describe('readConfig', () => {
     expect(config.defaultPool).toBe(3)
   })
 
+  it('treats blank values from unset repository variables as absent', () => {
+    const config = readConfig({
+      VITE_SOLANA_RPC_URL: '',
+      VITE_WASH_PROGRAM_ID: '',
+      VITE_WASH_DEFAULT_POOL: ' ',
+      VITE_SOLANA_CHAIN: '',
+    })
+    expect(config).toEqual({
+      rpcUrl: 'https://api.devnet.solana.com',
+      programId: PROGRAM,
+      defaultPool: 0,
+      chain: 'solana:devnet',
+    })
+  })
+
   it('refuses a malformed program id and defaults to declare_id when absent', () => {
     expect(() => readConfig({ VITE_WASH_PROGRAM_ID: 'nope' })).toThrow()
     expect(readConfig({}).programId).toBe(PROGRAM)

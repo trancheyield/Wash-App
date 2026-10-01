@@ -65,7 +65,8 @@ export function PositionScreen() {
       <div className="flex max-w-[900px] flex-col gap-[22px]">
         {wallet.address ? (
           <>
-            <div>POSITION · {wallet.address}</div>
+            {/* A 44-character address has no break points and pushes a 375 px sheet sideways. */}
+            <div className="break-all">POSITION · {wallet.address}</div>
             <div className="flex flex-col gap-2">
               <div className="flex items-baseline justify-between">
                 <span className="lbl">If the pool loses</span>

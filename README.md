@@ -39,6 +39,7 @@ through `u128`; everything is checked arithmetic.
 
 | | |
 |---|---|
+| Web app | https://trancheyield.github.io/Wash-App/ (GitHub Pages, built from `main`) |
 | Program | `2Yq39tVgTH5e8be8YdssyhvM6339f2WG6QweNmxGpBbf` (SBPFv0, upgradeable) |
 | Pool 0 | yield 8 %/yr · senior 5 %/yr · junior floor 20 % · fee 10 % · clock 43 200× |
 | Faucet | 1 000 WUSD per request from the pool page (cap per call in `Config`) |
@@ -98,6 +99,71 @@ wsl.exe -e bash <repo>/scripts/wsl-deploy.sh verify   # bytecode on chain == loc
 The network artifact is built with `cargo-build-sbf` (SBPFv0 — Agave 3.1.10 on devnet does not
 execute v3 bytecode). `anchor build` is used only to emit the IDL and overwrites the `.so` with a
 v3 build, so `build-sbf` always follows it.
+
+## Deployment
+
+### Web app — GitHub Pages
+
+The site is static: there is no server, every number on it is read from chain in the browser.
+`.github/workflows/pages.yml` builds `apps/web` on every push to `main` (or by hand from
+Actions → Pages → Run workflow) and publishes it to `https://<owner>.github.io/<repo>/`.
+
+One-time setup in the repository:
+
+1. Settings → Pages → Source: **GitHub Actions** (not "Deploy from a branch" — the branch root
+   has no `index.html`).
+2. Optionally, Settings → Secrets and variables → Actions → **Variables**:
+
+   | Variable | Unset means |
+   |---|---|
+   | `VITE_SOLANA_RPC_URL` | public `https://api.devnet.solana.com` |
+   | `VITE_WASH_DEFAULT_POOL` | pool `0` |
+   | `VITE_SOLANA_CHAIN` | `solana:devnet` (wallet-standard chain id) |
+
+   These are variables, not secrets: every `VITE_*` value is readable in the published
+   bundle. Put an RPC URL with a key here only if the provider can lock that key to the site
+   origin (Helius: allowed domains on the key). Re-run the workflow after changing one.
+
+Notes:
+
+- Do not publish a local `pnpm build`: it reads the repo-root `.env` and would bake its RPC key
+  into the bundle. CI has no `.env`.
+- The base path (`/Wash-App/`) comes from `actions/configure-pages`, so a custom domain needs no
+  code change. Set the domain in Settings → Pages only — a `CNAME` file in the repository is
+  ignored when Pages deploys from a workflow.
+- Deep links: the workflow copies `index.html` into every route of the default pool
+  (`/pool/<id>/…`, `/me`, `/operator`), so a direct link or a reload answers 200. Any other path
+  — another pool id — renders through `404.html` with status 404.
+- Pages has no response headers (no CSP) and no place to hide a key. It covers the devnet demo;
+  a mainnet deployment with real funds needs a host with headers (Vercel, Cloudflare Pages) or
+  IPFS.
+
+### Program — devnet
+
+Run from PowerShell into WSL, with `SOLANA_RPC_URL` and `WASH_KEYS_DIR` set in `.env`:
+
+```
+wsl.exe -e bash <repo>/scripts/wsl-build.sh build-sbf   # SBPFv0 artifact in target/deploy
+wsl.exe -e bash <repo>/scripts/wsl-deploy.sh deploy     # first deploy or upgrade, then verify
+wsl.exe -e bash <repo>/scripts/wsl-deploy.sh status     # program account and deployer balance
+pnpm demo:init                                          # Config, mint, treasury, pool 0, its cover market
+```
+
+- The program keypair (`washapp-keypair.json`) fixes the address and must match `declare_id!`;
+  the deployer keypair is the upgrade authority. Both live in `WASH_KEYS_DIR`; the deploy
+  script creates the deployer if it is missing.
+- `deploy` refuses to start until the deployer can pay: a first deploy needs rent for
+  ProgramData (`.so` × 1.5, room for upgrades) plus a buffer of the `.so` size; an upgrade needs
+  only the buffer. The buffer is refunded after the write. The script prints the exact amounts.
+- `deploy` ends with `verify`: the bytecode on chain must equal `target/deploy/washapp.so` byte
+  for byte and be SBPFv0.
+- An upgrade that keeps the instruction and account layout needs no site rebuild. If the IDL
+  changed, regenerate the client (`wsl-build.sh idl`, then `build-sbf`, then `pnpm codama`) and
+  push — Pages rebuilds from `main`.
+- A program under a different address is a rebuild, not a setting: the address sits in
+  `declare_id!` (bytecode) and in the generated client (`pnpm codama`), which the site and the
+  tools both use. Set the new keypair, update `declare_id!` and `WASH_PROGRAM_ID` in `.env`,
+  then `idl` → `build-sbf` → `pnpm codama` → `deploy`, and push.
 
 ## Tests and evidence
 

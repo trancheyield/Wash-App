@@ -27,8 +27,16 @@ export type AppConfig = {
   chain: SolanaChain
 }
 
+// The Pages build passes every repository variable, set or not, and an unset one arrives as
+// ''. Blank must mean "use the default", otherwise an empty program id fails the address check.
+function dropBlank(env: Record<string, unknown>): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(env).filter(([, value]) => !(typeof value === 'string' && value.trim() === '')),
+  )
+}
+
 export function readConfig(env: Record<string, unknown>): AppConfig {
-  const parsed = envSchema.parse(env)
+  const parsed = envSchema.parse(dropBlank(env))
   return {
     rpcUrl: parsed.VITE_SOLANA_RPC_URL,
     programId: parsed.VITE_WASH_PROGRAM_ID,

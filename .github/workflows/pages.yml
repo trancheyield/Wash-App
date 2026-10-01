@@ -1,12 +1,12 @@
 name: Pages
 
-# Сайт збирається ТУТ, а не локальним `pnpm build`: локальна збірка читає `.env`
-# з кореня (`envDir: '../..'`) і вшила б у публічний бандл ключ RPC. У CI `.env`
-# немає, тож `VITE_SOLANA_RPC_URL` порожній і клієнт бере публічний devnet
-# (`apps/web/src/config.ts`). Ключів у бандлі не буває взагалі.
+# The site is built HERE, not by a local `pnpm build`: a local build reads `.env` from the
+# repo root (`envDir: '../..'`) and would bake whatever RPC key it holds into the public
+# bundle. CI has no `.env`; the only inputs are the repository variables below, and an
+# unset one arrives as '' and means the default (`apps/web/src/config.ts`).
 #
-# Джерело в налаштуваннях репозиторію має бути **GitHub Actions**, не «Deploy from
-# a branch»: у корені гілки немає `index.html` — застосунок це Vite SPA у `apps/web`.
+# Settings → Pages → Source must be **GitHub Actions**, not "Deploy from a branch": the
+# branch root has no `index.html` — the app is a Vite SPA in `apps/web`.
 
 on:
   push:
@@ -18,7 +18,8 @@ permissions:
   pages: write
   id-token: write
 
-# Один деплой за раз; чергу не скасовуємо, щоб не лишити сайт на половині викату.
+# One deployment at a time; queued runs are not cancelled so the site is never left half
+# rolled out.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -29,9 +30,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # `base_path` — підшлях сайту: `/Wash-App` для project page, порожньо для
-      # користувацької сторінки або власного домену. Береться звідси, щоб
-      # перемикання домену не вимагало правок у коді.
+      # `base_path` is the site subpath: `/Wash-App` for a project page, empty for a user
+      # page or a custom domain. Taken from here so switching domains needs no code change.
       - id: pages
         uses: actions/configure-pages@v5
 
@@ -46,14 +46,32 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Збірка
+      # Variables, not secrets: everything `VITE_*` ends up readable in the bundle. An RPC
+      # URL with a key belongs here only if the provider locks that key to the site origin.
+      - name: Build
+        env:
+          VITE_SOLANA_RPC_URL: ${{ vars.VITE_SOLANA_RPC_URL }}
+          VITE_WASH_DEFAULT_POOL: ${{ vars.VITE_WASH_DEFAULT_POOL }}
+          VITE_SOLANA_CHAIN: ${{ vars.VITE_SOLANA_CHAIN }}
         run: pnpm --filter @washapp/web exec vite build --base="${{ steps.pages.outputs.base_path }}/"
 
-      # Pages віддає статику: `/pool/0/loss` файлом не існує і отримує 404. Та сама
-      # сторінка під іменем 404.html повертає застосунок, і маршрут розбирає роутер —
-      # інакше пряме посилання на аркуш збитку відкривалося б порожнім.
-      - name: SPA-fallback
-        run: cp apps/web/dist/index.html apps/web/dist/404.html
+      # Pages serves static files, so `/pool/0/loss` exists only as a copy of the app shell.
+      # Every route the app links to gets one: a direct link or a reload answers 200 (Pages
+      # adds the trailing slash with a 301, the router accepts it). A 404 would still render
+      # through 404.html but leaves an error in the console. 404.html stays as the fallback
+      # for pools other than the default one.
+      - name: SPA routes
+        env:
+          VITE_WASH_DEFAULT_POOL: ${{ vars.VITE_WASH_DEFAULT_POOL }}
+        run: |
+          cd apps/web/dist
+          pool_id="${VITE_WASH_DEFAULT_POOL//[[:space:]]/}"
+          pool="pool/${pool_id:-0}"
+          for route in "$pool" "$pool/deposit" "$pool/redeem" "$pool/loss" "$pool/protection" me operator; do
+            mkdir -p "$route"
+            cp index.html "$route/index.html"
+          done
+          cp index.html 404.html
 
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -6,7 +6,7 @@ import { readConfig } from './config.ts'
 import './index.css'
 
 const { pathname, search, hash } = window.location
-const canonical = canonicalPath(pathname)
+const canonical = canonicalPath(pathname, import.meta.env.BASE_URL)
 if (canonical !== pathname)
   window.history.replaceState(window.history.state, '', canonical + search + hash)
 

@@ -6,7 +6,8 @@ name: Pages
 # unset one arrives as '' and means the default (`apps/web/src/config.ts`).
 #
 # Settings → Pages → Source must be **GitHub Actions**, not "Deploy from a branch": the
-# branch root has no `index.html` — the app is a Vite SPA in `apps/web`.
+# branch root has no `index.html`. The site is one artifact of two folders: the static
+# landing page (`apps/landing`, copied as is) at the root, the Vite SPA (`apps/web`) in `app/`.
 
 on:
   push:
@@ -53,13 +54,12 @@ jobs:
           VITE_SOLANA_RPC_URL: ${{ vars.VITE_SOLANA_RPC_URL }}
           VITE_WASH_DEFAULT_POOL: ${{ vars.VITE_WASH_DEFAULT_POOL }}
           VITE_SOLANA_CHAIN: ${{ vars.VITE_SOLANA_CHAIN }}
-        run: pnpm --filter @washapp/web exec vite build --base="${{ steps.pages.outputs.base_path }}/"
+        run: pnpm --filter @washapp/web exec vite build --base="${{ steps.pages.outputs.base_path }}/app/"
 
-      # Pages serves static files, so `/pool/0/loss` exists only as a copy of the app shell.
-      # Every route the app links to gets one: a direct link or a reload answers 200 (Pages
-      # adds the trailing slash with a 301, the router accepts it). A 404 would still render
-      # through 404.html but leaves an error in the console. 404.html stays as the fallback
-      # for pools other than the default one.
+      # Pages serves static files, so `/app/pool/0/loss` exists only as a copy of the app
+      # shell. Every route the app links to gets one: a direct link or a reload answers 200
+      # (Pages adds the trailing slash with a 301, the router accepts it). A 404 would still
+      # render through 404.html but leaves an error in the console.
       - name: SPA routes
         env:
           VITE_WASH_DEFAULT_POOL: ${{ vars.VITE_WASH_DEFAULT_POOL }}
@@ -71,11 +71,21 @@ jobs:
             mkdir -p "$route"
             cp index.html "$route/index.html"
           done
-          cp index.html 404.html
+
+      # Pages reads only the root 404.html, so the fallback is the app shell placed there:
+      # it serves pools other than the default one and links from before the app moved under
+      # app/ (`canonicalPath` moves those below the base). Its asset URLs are absolute, so
+      # it renders from any depth.
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp -r apps/landing/. _site/
+          cp -r apps/web/dist _site/app
+          cp _site/app/index.html _site/404.html
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: apps/web/dist
+          path: _site
 
   deploy:
     needs: build

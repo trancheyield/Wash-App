@@ -6,8 +6,9 @@ import { TrancheScreen } from './screens/Pool/TrancheScreen.tsx'
 import { PositionScreen } from './screens/Position/PositionScreen.tsx'
 import { ProtectionScreen } from './screens/Protection/ProtectionScreen.tsx'
 
-// Підшлях, на якому стоїть застосунок: на GitHub Pages це `/Wash-App/`, локально `/`.
-// Vite підставляє його у `BASE_URL` при збірці; react-router хоче без хвостової скісної.
+// The subpath the app is served from: `/Wash-App/app/` on GitHub Pages (the landing page
+// owns the site root), `/` locally. Vite puts it in `BASE_URL`; react-router wants no
+// trailing slash.
 function basename(): string {
   const base = import.meta.env.BASE_URL
   return base.length > 1 && base.endsWith('/') ? base.slice(0, -1) : base

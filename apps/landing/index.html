@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wash App — senior and junior tranches on Solana</title>
+<meta name="description" content="A lending-pool deposit sliced into a senior tranche with a capped yield and a junior tranche that absorbs losses first, plus cover against a pool loss. Devnet demo.">
+<link rel="canonical" href="https://trancheyield.github.io/Wash-App/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Wash App">
+<meta property="og:title" content="Wash App — senior and junior tranches on Solana">
+<meta property="og:description" content="One deposit, two risks. A loss hits junior first; cover against the pool's loss is settled on chain. Devnet demo.">
+<meta property="og:url" content="https://trancheyield.github.io/Wash-App/">
+<meta property="og:image" content="https://trancheyield.github.io/Wash-App/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Wash App: two hands mark on blue, with the line: one deposit, two risks.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1a5e8a">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&amp;display=swap">
+<link rel="stylesheet" href="styles.css">
+<script>
+  // The level drop is the only motion on the page; skip its "before" state entirely when
+  // the reader asked for less motion, so the drawing simply shows the result.
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+    document.documentElement.classList.add('motion')
+</script>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="sheet-head">
+    <a class="brand" href="#top" aria-label="Wash App, top of the page">
+      <img src="assets/mark.png" alt="" width="32" height="32">
+      <span class="cap">Wash App · Structured credit on Solana</span>
+    </a>
+    <span class="cap">Devnet · Sheet 1 of 1 · Rev A</span>
+  </header>
+
+  <p class="status note">Devnet demo. Simulated lending pool, test token from a faucet. Not on mainnet, not audited.</p>
+
+  <main>
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-top">
+        <h1 id="hero-title">One deposit, two risks. A loss hits junior first.</h1>
+        <div class="hero-side">
+          <p class="prose">Wash App slices a deposit into a lending pool into a senior tranche with a capped yield and a junior tranche that takes the rest of the yield and absorbs losses first. A separate market lets anyone buy or sell cover against a loss in that pool, settled on chain.</p>
+          <div class="actions">
+            <a class="button" href="app/">Open the app →</a>
+            <a href="https://github.com/trancheyield/Wash-App">Source on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="diptych">
+        <figure>
+          <figcaption class="cap">A · Before</figcaption>
+          <svg viewBox="0 0 600 400" role="img" aria-labelledby="before-desc">
+            <desc id="before-desc">Before the loss: the senior vessel is full to its level, the junior vessel below it holds its level, and the cover pool holds a reservation for the buyer.</desc>
+            <rect x="24" y="56" width="200" height="94" fill="rgba(255,255,255,.85)"/>
+            <path d="M24 30V150H224V30" fill="none" stroke="#fff" stroke-width="1.5"/>
+            <text class="on-liquid" x="34" y="144">SENIOR</text>
+            <path d="M224 70H254V200" fill="none" stroke="#fff" stroke-width="1.5"/>
+            <rect x="104" y="236" width="200" height="94" fill="rgba(255,255,255,.45)"/>
+            <path d="M104 200V330H304V200" fill="none" stroke="#fff" stroke-width="1.5"/>
+            <text x="114" y="324">JUNIOR</text>
+            <rect x="24" y="230" width="60" height="100" fill="rgba(255,255,255,.45)"/>
+            <path d="M24 200V330H84V200" fill="none" stroke="#fff" stroke-width="1.5"/>
+            <text x="24" y="352">COVER</text>
+            <path d="M54 330V372" fill="none" stroke="#fff" stroke-dasharray="3 4"/>
+            <text class="dim" x="64" y="372">RESERVED FOR THE BUYER</text>
+            <path d="M224 56H576M576 50V62" stroke="#fff"/>
+            <text x="576" y="46" text-anchor="end">SENIOR LEVEL</text>
+            <path d="M304 236H576M576 230V242" stroke="#fff"/>
+            <text x="576" y="226" text-anchor="end">JUNIOR LEVEL</text>
+          </svg>
+        </figure>
+        <figure class="after">
+          <figcaption class="cap">B · After a 15 % loss</figcaption>
+          <svg viewBox="0 0 600 400" role="img" aria-labelledby="after-desc">
+            <desc id="after-desc">After the loss: the senior vessel is at the same level, the junior level is lower with the lost part hatched, and the cover pool pays the buyer.</desc>
+            <defs>
+              <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2="6" stroke="rgba(255,255,255,.4)"/>
+              </pattern>
+            </defs>
+            <rect x="24" y="56" width="200" height="94" fill="rgba(255,255,255,.85)"/>
+            <path d="M24 30V150H224V30" fill="none" stroke="#fff" stroke-width="1.5"/>
+            <text class="on-liquid" x="34" y="144">SENIOR</text>
+            <path d="M224 70H254V200" fill="none" stroke="#fff" stroke-width="1.5"/>
+            <rect class="lost" x="104" y="236" width="200" height="44" fill="url(#hatch)"/>
+            <rect class="j-liquid" x="104" y="280" width="200" height="50" fill="rgba(255,255,255,.45)"/>
+            <path d="M104 200V330H304V200" fill="none" stroke="#fff" stroke-width="1.5"/>
+            <text x="114" y="324">JUNIOR</text>
+            <path d="M204 330V372M198 364L204 372L210 364" fill="none" stroke="#fff"/>
+            <text x="214" y="372">LOSS, BURNED FROM THE VAULT</text>
+            <rect x="24" y="262" width="60" height="68" fill="rgba(255,255,255,.45)"/>
+            <path d="M24 200V330H84V200" fill="none" stroke="#fff" stroke-width="1.5"/>
+            <text x="24" y="352">COVER</text>
+            <path d="M54 330V392M48 384L54 392L60 384" fill="none" stroke="#fff"/>
+            <text x="64" y="392">PAYS 15 % OF NOTIONAL</text>
+            <path d="M224 56H576M576 50V62" stroke="#fff"/>
+            <text x="576" y="46" text-anchor="end">SENIOR · UNCHANGED</text>
+            <path d="M304 236H576M576 230V242" stroke="rgba(255,255,255,.4)" stroke-dasharray="3 4"/>
+            <path class="j-lead" d="M304 280H576M576 274V286" stroke="#fff"/>
+            <g class="j-note">
+              <path d="M590 242V274M586 266L590 274L594 266" fill="none" stroke="#fff"/>
+              <text x="580" y="270" text-anchor="end">JUNIOR · ABSORBS THE LOSS</text>
+            </g>
+          </svg>
+        </figure>
+      </div>
+      <p class="note">Schematic, not to scale. When the loss is smaller than junior, senior keeps its value to the micro-unit.</p>
+    </section>
+
+    <section class="section" aria-labelledby="does-title">
+      <div class="section-head">
+        <span class="cap">Detail A</span>
+        <h2 id="does-title">What it does</h2>
+      </div>
+      <div class="notes">
+        <div>
+          <span class="cap">A1</span>
+          <h3>Choose your risk at deposit</h3>
+          <p class="prose">Senior earns up to its target rate and is first in line; junior earns everything left and is last. Each tranche is a token — sWUSD, jWUSD — priced at its own NAV.</p>
+        </div>
+        <div>
+          <span class="cap">A2</span>
+          <h3>Losses fall in order</h3>
+          <p class="prose">A loss of L hits junior first. Senior loses only L − junior, and only once junior is wiped out. Every loss is an account on chain anyone can read.</p>
+        </div>
+        <div>
+          <span class="cap">A3</span>
+          <h3>Cover against the pool’s loss</h3>
+          <p class="prose">Sellers fund a cover pool and earn premiums. Buyers pay a premium up front for a notional and a term. When a loss above the trigger is recorded, anyone can settle: the buyer receives notional × loss.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="how-title">
+      <div class="section-head">
+        <span class="cap">Detail B</span>
+        <h2 id="how-title">How it works</h2>
+      </div>
+      <div class="how">
+        <ol class="steps">
+          <li>
+            <span class="balloon fig" aria-hidden="true">1</span>
+            <div><h3>Deposit</h3><p class="prose">Base token in, tranche token out, one signature.</p></div>
+          </li>
+          <li>
+            <span class="balloon fig" aria-hidden="true">2</span>
+            <div><h3>Accrue</h3><p class="prose">Yield accrues on a model clock: on the demo pool one minute on chain is 30 model days (43,200×). Every instruction accrues first.</p></div>
+          </li>
+          <li>
+            <span class="balloon fig" aria-hidden="true">3</span>
+            <div><h3>Record a loss</h3><p class="prose">The pool operator records a loss in basis points; the program splits it junior → senior and writes a <code>LossEvent</code> account.</p></div>
+          </li>
+          <li>
+            <span class="balloon fig" aria-hidden="true">4</span>
+            <div><h3>Settle</h3><p class="prose">Anyone calls settle on an active cover contract; the payout is <code>notional × loss_bps / 10,000</code>, once. An unclaimed contract expires and its reservation returns to the sellers.</p></div>
+          </li>
+        </ol>
+        <div class="params">
+          <span class="cap">Pool 0 · Parameters</span>
+          <dl class="param-list fig">
+            <div class="param-row"><dt>Pool yield</dt><dd>8 %/yr</dd></div>
+            <div class="param-row"><dt>Senior target</dt><dd>5 %/yr</dd></div>
+            <div class="param-row"><dt>Junior floor</dt><dd>20 %</dd></div>
+            <div class="param-row"><dt>Performance fee</dt><dd>10 %</dd></div>
+            <div class="param-row"><dt>Cover premium</dt><dd>2 %/yr</dd></div>
+            <div class="param-row"><dt>Cover trigger</dt><dd>1 %</dd></div>
+            <div class="param-row"><dt>Model clock</dt><dd>43,200×</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="measured-title">
+      <div class="section-head">
+        <span class="cap">Detail C</span>
+        <h2 id="measured-title">Measured</h2>
+      </div>
+      <dl class="measured">
+        <div class="m-row"><dt class="fig">97.4 s</dt><dd class="prose">Full scenario on devnet from two fresh wallets — deposit, cover sold and bought, a 15 % loss, settle, expiry, redeem, withdraw — 16 transactions. Budget 180 s.</dd></div>
+        <div class="m-row"><dt class="fig">4.2 s</dt><dd class="prose">Slowest single step, from signature to the change visible over RPC. Budget 10 s.</dd></div>
+        <div class="m-row"><dt class="fig">+150.00</dt><dd class="prose">WUSD paid by one settle on a 1,000 WUSD notional for a 15 % loss, to the micro-unit: the buyer went from 95.04 to 245.04.</dd></div>
+        <div class="m-row"><dt class="fig">3 of 3</dt><dd class="prose">Second settles of the same contract refused in the program tests. A contract pays once.</dd></div>
+        <div class="m-row"><dt class="fig">0</dt><dd class="prose">Deviations of assets = senior + junior = vault over 100 random sequences of 24 steps with losses, checked after every step.</dd></div>
+        <div class="m-row"><dt class="fig">40,713</dt><dd class="prose">Compute units of the heaviest instruction, <code>record_loss</code>, against a 200,000 ceiling enforced in the test suite.</dd></div>
+        <div class="m-row"><dt class="fig">152</dt><dd class="prose">Waterfall cases generated from the on-chain program and reproduced exactly by the TypeScript mirror the app uses.</dd></div>
+      </dl>
+      <p class="note">Measured on devnet on 30 September 2026 and in tests run on the program’s real bytecode. The demo token has no value.</p>
+    </section>
+
+    <section class="section limits" aria-labelledby="limits-title">
+      <div class="section-head">
+        <span class="cap">Limits</span>
+        <h2 id="limits-title">Not in this demo</h2>
+      </div>
+      <ul>
+        <li><span class="cap fig">N1</span><p class="prose">The lending pool is a simulation. Yield accrues at a configured rate; it is not Kamino, MarginFi or any external protocol.</p></li>
+        <li><span class="cap fig">N2</span><p class="prose">Losses are recorded by the pool operator, not derived from prices or an oracle.</p></li>
+        <li><span class="cap fig">N3</span><p class="prose">The cover premium is a fixed rate set for the pool, not a market price. Sellers share one cover pool; there are no individual offers.</p></li>
+        <li><span class="cap fig">N4</span><p class="prose">No secondary market for tranche tokens or cover contracts.</p></li>
+        <li><span class="cap fig">N5</span><p class="prose">Devnet only. No mainnet deployment, no audit, no protocol insurance.</p></li>
+        <li><span class="cap fig">N6</span><p class="prose">The position view with a “what if the pool loses X %” forecast is the next release, not this one.</p></li>
+        <li><span class="cap fig">N7</span><p class="prose">Time is a model clock, sped up 43,200×. A 90-day contract in the demo lasts three minutes.</p></li>
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="faq-title">
+      <div class="section-head">
+        <span class="cap">Detail D</span>
+        <h2 id="faq-title">Questions</h2>
+      </div>
+      <div class="faq">
+        <details open>
+          <summary>Is any of this real money?</summary>
+          <p class="prose">No. The base token WUSD is a devnet mint handed out by a faucet on the pool page, 1,000 per request.</p>
+        </details>
+        <details>
+          <summary>Who decides that a loss happened?</summary>
+          <p class="prose">In this demo, the pool operator. Deriving a loss from an external pool’s state is out of scope.</p>
+        </details>
+        <details>
+          <summary>What if the loss is larger than junior?</summary>
+          <p class="prose">Junior goes to zero and senior loses exactly the excess, L − junior.</p>
+        </details>
+        <details>
+          <summary>Do I have to file a claim?</summary>
+          <p class="prose">No. Once a loss at or above the contract’s trigger is on chain, anyone can call settle; the payout goes to the buyer.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="title-block">
+    <div class="tb-name">
+      <img src="assets/mark.png" alt="" width="48" height="48">
+      <div class="tb-label">
+        <span>Wash App</span>
+        <span class="cap">Structured credit · Devnet</span>
+      </div>
+    </div>
+    <div class="tb-col">
+      <div class="tb-cell"><span class="cap">Program</span><a class="fig break" href="https://explorer.solana.com/address/2Yq39tVgTH5e8be8YdssyhvM6339f2WG6QweNmxGpBbf?cluster=devnet">2Yq39tVgTH5e8be8YdssyhvM6339f2WG6QweNmxGpBbf</a></div>
+      <div class="tb-cell"><span class="cap">Source</span><a href="https://github.com/trancheyield/Wash-App">github.com/trancheyield/Wash-App</a></div>
+    </div>
+    <div class="tb-col">
+      <div class="tb-cell"><span class="cap">App</span><a href="app/">Open the app →</a></div>
+      <div class="tb-cell"><span class="cap">Sheet</span><span class="fig">1 of 1 · Rev A · Oct 2026</span></div>
+    </div>
+  </footer>
+
+</div>
+<script>
+  // Drop the junior level once, when the AFTER drawing is on screen.
+  ;(() => {
+    const after = document.querySelector('.after')
+    if (!after || !document.documentElement.classList.contains('motion')) return
+    if (!('IntersectionObserver' in window)) return after.classList.add('run')
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return
+      io.disconnect()
+      setTimeout(() => after.classList.add('run'), 400)
+    }, { threshold: 0.6 })
+    io.observe(after)
+  })()
+</script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { demoParamsSchema, loadDemoParams, poolParamsView } from './params.ts'
+import { demoParamsSchema, loadDemoParams, poolParamsView, withPoolId } from './params.ts'
 
 describe('demo params', () => {
   it('loads fixtures/params.json — the same numbers the program tests use', () => {
@@ -23,5 +23,15 @@ describe('demo params', () => {
     expect(demoParamsSchema.safeParse({ ...raw, yield_rate_bps: 10_001 }).success).toBe(false)
     expect(demoParamsSchema.safeParse({ ...raw, time_scale: 0 }).success).toBe(false)
     expect(demoParamsSchema.safeParse({ ...raw, faucet_cap: 0 }).success).toBe(false)
+  })
+
+  it('takes another pool id from WASH_POOL_ID and keeps every other parameter', () => {
+    const base = loadDemoParams()
+    expect(withPoolId(base, undefined)).toBe(base)
+    expect(withPoolId(base, '  ')).toBe(base)
+    expect(withPoolId(base, '7')).toEqual({ ...base, pool_id: 7 })
+    expect(() => withPoolId(base, '-1')).toThrow()
+    expect(() => withPoolId(base, '1.5')).toThrow()
+    expect(() => withPoolId(base, '65536')).toThrow()
   })
 })

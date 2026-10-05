@@ -39,3 +39,19 @@ export function poolParamsView(params: DemoParams) {
     timeScale: params.time_scale,
   }
 }
+
+// `WASH_POOL_ID` points `demo:init` at another pool with the same parameters. The demo clock
+// runs 43,200× faster, so a pool left idle for days accrues centuries of yield on its first
+// instruction; a recording starts on a fresh pool instead of pool 0. Unset or blank = the id
+// from params.json.
+const poolIdSchema = z
+  .string()
+  .trim()
+  .regex(/^\d{1,5}$/, 'WASH_POOL_ID must be a whole number')
+  .transform(Number)
+  .pipe(z.number().int().max(65_535))
+
+export function withPoolId(params: DemoParams, raw: string | undefined): DemoParams {
+  if (raw === undefined || raw.trim() === '') return params
+  return { ...params, pool_id: poolIdSchema.parse(raw) }
+}

@@ -1,6 +1,6 @@
-// `pnpm demo:init` — Config + demo mint + treasury, pool 0 and its protection market on
-// devnet. Idempotent: what is already on the chain is skipped, so a rerun only prints the
-// addresses. Run: `node --env-file=../../.env src/init.ts`.
+// `pnpm demo:init` — Config + demo mint + treasury, pool 0 (or `WASH_POOL_ID`) and its
+// protection market on devnet. Idempotent: what is already on the chain is skipped, so a
+// rerun only prints the addresses. Run: `node --env-file=../../.env src/init.ts`.
 
 import {
   buildCreatePool,
@@ -18,7 +18,7 @@ import {
 } from '@washapp/chain'
 import { demoEnvSchema } from './env.ts'
 import { loadKeypair } from './keys.ts'
-import { loadDemoParams, poolParamsView } from './params.ts'
+import { loadDemoParams, poolParamsView, withPoolId } from './params.ts'
 import { createDemoRpc, sendInstructions } from './rpc.ts'
 
 const env = demoEnvSchema.parse(process.env)
@@ -28,7 +28,7 @@ if (env.WASH_PROGRAM_ID !== WASHAPP_PROGRAM_ADDRESS) {
   )
 }
 
-const params = loadDemoParams()
+const params = withPoolId(loadDemoParams(), process.env.WASH_POOL_ID)
 const client = createDemoRpc(env.SOLANA_RPC_URL)
 const operator = await loadKeypair(env.WASH_KEYS_DIR, 'operator')
 

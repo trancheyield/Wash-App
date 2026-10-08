@@ -1,18 +1,12 @@
-import { NavLink } from 'react-router'
+import { NavLink, useLocation } from 'react-router'
 import { useAppConfig } from '../providers.tsx'
+import { navLinks } from './nav-links.ts'
 import { WalletRow } from './Wallet.tsx'
 
-// Навігація веде до пулу з конфігу; `:id` у маршрутах лишається для інших пулів.
 export function Nav() {
   const { defaultPool } = useAppConfig()
-  const base = `/pool/${defaultPool}`
-  const links: Array<[string, string]> = [
-    [base, `POOL ${defaultPool}`],
-    [`${base}/deposit`, 'DEPOSIT'],
-    [`${base}/loss`, 'LOSS EVENTS'],
-    [`${base}/protection`, 'PROTECTION'],
-    ['/me', 'POSITION'],
-  ]
+  const { pathname } = useLocation()
+  const links = navLinks(pathname, defaultPool)
   return (
     <div className="mb-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
       <nav className="flex flex-wrap text-lbl uppercase text-sec">

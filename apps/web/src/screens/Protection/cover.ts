@@ -82,6 +82,12 @@ export type BuyInput = {
   wallet: Holdings
 }
 
+// A blank notional is not a request yet: after a purchase the desk clears the notional and
+// keeps the term, and that form should show the hint, not "amount must be a positive number".
+export function buyRequested(notional: string): boolean {
+  return notional.trim() !== ''
+}
+
 export function premiumPreview({ protection, modelTime, form, wallet }: BuyInput): BuyPreview {
   const { notional, termDays } = form
   const term = termDays * DAY_SECONDS

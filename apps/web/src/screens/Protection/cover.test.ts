@@ -9,6 +9,7 @@ import { describe, expect, it } from 'vitest'
 import {
   type BuyPreview,
   buyFormSchema,
+  buyRequested,
   contractState,
   maxWithdrawShares,
   premiumPreview,
@@ -293,5 +294,17 @@ describe('contractState', () => {
     expect(contractState(contract({ status: ContractStatus.Expired }), [], 0n)).toEqual({
       kind: 'expired',
     })
+  })
+})
+
+describe('buyRequested', () => {
+  it('treats a blank notional as no request, whatever the term', () => {
+    expect(buyRequested('')).toBe(false)
+    expect(buyRequested('   ')).toBe(false)
+  })
+
+  it('treats anything typed as a request, to be validated', () => {
+    expect(buyRequested('1,000.00')).toBe(true)
+    expect(buyRequested('abc')).toBe(true)
   })
 })

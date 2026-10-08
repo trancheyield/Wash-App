@@ -43,6 +43,7 @@ import {
   type BuyForm,
   type BuyPreview,
   buyFormSchema,
+  buyRequested,
   type ContractState,
   type CoverState,
   contractState,
@@ -349,12 +350,11 @@ function derive(
         ? sellPreview({ protection, mode: sell.mode, value: sellValue.data, wallet: holdings })
         : { kind: 'refused', reason: sellValue.error.issues[0]?.message ?? 'enter an amount' }
   const buyForm = buyFormSchema.safeParse({ notional: buy.notional, termDays: buy.term })
-  const buyResult: BuyPreview | null =
-    buy.notional.trim() === '' && buy.term.trim() === ''
-      ? null
-      : buyForm.success
-        ? premiumPreview({ protection, modelTime, form: buyForm.data, wallet: holdings })
-        : { kind: 'refused', reason: buyForm.error.issues[0]?.message ?? 'enter a notional' }
+  const buyResult: BuyPreview | null = !buyRequested(buy.notional)
+    ? null
+    : buyForm.success
+      ? premiumPreview({ protection, modelTime, form: buyForm.data, wallet: holdings })
+      : { kind: 'refused', reason: buyForm.error.issues[0]?.message ?? 'enter a notional' }
   const current: CoverState = { collateral: protection.collateral, reserved: protection.reserved }
   const pick = draft === 'sell' ? sellResult : draft === 'buy' ? buyResult : null
   return {

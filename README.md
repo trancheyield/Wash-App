@@ -217,3 +217,7 @@ sweep for keys and machine-specific traces over the whole history.
   recorded.
 - `v0.3.0` — position cabinet with a "what if the pool loses X %" forecast that must match the
   program to one micro-unit.
+
+## License
+
+Licensed under the [Apache License, Version 2.0](LICENSE).

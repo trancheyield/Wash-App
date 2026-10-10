@@ -5,7 +5,7 @@ members = ["programs/*"]
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
-license = "UNLICENSED"
+license = "Apache-2.0"
 repository = "https://github.com/trancheyield/Wash-App"
 
 # Версії тут — єдине місце правди для воркспейсу. Cargo.lock комітиться і є

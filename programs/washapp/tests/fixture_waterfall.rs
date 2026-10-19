@@ -3,9 +3,26 @@
 // збитку. Генерується з Rust і комітиться; `waterfall.test.ts` проганяє ті самі
 // входи через TS і звіряє кожне число байт у байт (PLAN, ризик #9). Сторож
 // нижче валить `cargo test`, коли формула змінилась, а фікстура — ні.
+//
+// The `scenarios` section is differential (SC-006): random pool states and
+// contracts run through the real `record_loss` and `settle_protection` on the
+// same `.so` that is deployed, so the handler's checks are covered too, not only
+// the formulas of `math.rs`.
+mod common;
+
 use std::path::PathBuf;
+use std::sync::OnceLock;
 
 use anchor_lang::error::Error;
+use anchor_lang::AccountSerialize;
+use common::{
+    assert_pool_invariant, assert_protection_invariant, ata, buy_protection, contract_state,
+    fund_user, loss_event_state, mint_supply, pda, pool_state, protection_session,
+    protection_state, provide_protection, record_loss, seed_pool_state, seed_protection_rates,
+    seed_protection_state, settle_protection, token_amount, ConfigSetup, PoolSetup,
+    ProtectionSetup, Session, GENESIS_TS, OPERATOR, USER_A, USER_B,
+};
+use mollusk_svm::result::Check;
 use serde_json::{json, Value};
 use washapp::errors::WashError;
 use washapp::math::{
@@ -15,6 +32,8 @@ use washapp::math::{
 
 const DAY: u64 = 86_400;
 const DEMO_SCALE: u64 = 43_200;
+const SCENARIOS: u64 = 60;
+const BUYER_FUNDS: u64 = 1_000_000_000_000;
 
 // Фікстура живе в корені репо: `cargo test` запускається з теки пакета.
 fn fixture_path() -> PathBuf {
@@ -353,21 +372,309 @@ fn loss_cases() -> Vec<Value> {
     cases
 }
 
-fn fixture() -> Value {
+// `init_protection` and `create_pool` give only the demo rates; rewriting them is
+// cheaper than a pool per scenario, and the real `accrue` then runs on them.
+fn seed_pool_rates(session: &mut Session, p: &PoolSetup, rates: &Rates) {
+    let mut account = session.get(&p.pool);
+    let mut pool = pool_state(&[(p.pool, account.clone())], &p.pool);
+    pool.yield_rate_bps = rates.yield_bps;
+    pool.senior_rate_bps = rates.senior_bps;
+    pool.perf_fee_bps = rates.fee_bps;
+    let mut data = Vec::new();
+    pool.try_serialize(&mut data).unwrap();
+    account.data = data;
+    session.set(p.pool, account);
+}
+
+fn pool_balances(session: &Session, p: &PoolSetup) -> PoolBalances {
+    let snapshot = session.snapshot();
+    let pool = pool_state(&snapshot, &p.pool);
+    PoolBalances {
+        assets: pool.assets,
+        senior_assets: pool.senior_assets,
+        junior_assets: pool.junior_assets,
+        senior_supply: mint_supply(&snapshot, &p.senior_mint),
+        junior_supply: mint_supply(&snapshot, &p.junior_mint),
+    }
+}
+
+// A pool with assets: `record_loss` refuses an empty one with `ZeroAmount`, and that
+// refusal is not a forecast. One in eight has no junior at all.
+fn scenario_pool(rng: &mut Rng) -> PoolBalances {
+    loop {
+        let junior_supply = if rng.below(8) == 0 {
+            0
+        } else {
+            1 + rng.below(80_000_000_000)
+        };
+        let junior_assets = rng.below(junior_supply + junior_supply / 2 + 1);
+        let senior_supply = rng.below(200_000_000_000);
+        let senior_assets = if senior_supply == 0 {
+            0
+        } else {
+            senior_supply + rng.below(senior_supply / 4 + 1)
+        };
+        let pool = PoolBalances {
+            assets: senior_assets + junior_assets,
+            senior_assets,
+            junior_assets,
+            senior_supply,
+            junior_supply,
+        };
+        if pool.assets >= 1_000_000 {
+            return pool;
+        }
+    }
+}
+
+// Exactly on a bought contract's trigger now and then: the trigger is inclusive, and
+// a random loss would never land on it.
+fn scenario_loss_bps(rng: &mut Rng, triggers: &[u16]) -> u16 {
+    match rng.below(5) {
+        0 if !triggers.is_empty() => triggers[rng.below(triggers.len() as u64) as usize].max(1),
+        1 => 10_000,
+        _ => 1 + rng.below(10_000) as u16,
+    }
+}
+
+struct Market {
+    session: Session,
+    cfg: ConfigSetup,
+    p: PoolSetup,
+    pr: ProtectionSetup,
+    slot: u64,
+    ts: i64,
+    nonce: u64,
+}
+
+impl Market {
+    fn advance(&mut self, seconds: u64) {
+        self.slot += 1;
+        self.ts += seconds as i64;
+        self.session.harness.warp(self.slot, self.ts);
+    }
+
+    // A buy with its own trigger, rate and fee. A premium that rounds to zero at a
+    // non-zero rate is refused by the program; such a contract simply is not part
+    // of the scenario.
+    fn try_buy(&mut self, rng: &mut Rng) -> Option<u64> {
+        let micro = rng.below(6) == 0;
+        let rate = if micro || rng.below(4) == 0 {
+            0
+        } else {
+            1 + rng.below(2_000) as u16
+        };
+        seed_protection_rates(
+            &mut self.session,
+            &self.pr,
+            rate,
+            rng.below(3_001) as u16,
+            rng.below(2_001) as u16,
+        );
+        let protection = protection_state(&self.session.snapshot(), &self.pr.protection);
+        let free = protection.collateral - protection.reserved;
+        if free == 0 {
+            return None;
+        }
+        // A notional of a few micro-units pays out zero on most losses.
+        let notional = if micro {
+            1 + rng.below(10)
+        } else {
+            1 + rng.below(free)
+        }
+        .min(free);
+        let term = DAY + rng.below(120 * DAY);
+        let nonce = self.nonce;
+        let result = self.session.run(
+            &buy_protection(&self.cfg, &self.p, &self.pr, USER_B, notional, term, nonce),
+            &[],
+        );
+        if result.raw_result.is_err() {
+            return None;
+        }
+        self.nonce += 1;
+        Some(nonce)
+    }
+}
+
+// The refusal by the name the TS mirror throws; anything else is a broken scenario.
+fn refusal(session: &Session) -> &'static str {
+    let logs = session.logs();
+    for name in [
+        "ContractNotActive",
+        "LossOutsideTerm",
+        "LossBelowTrigger",
+        "ZeroAmount",
+    ] {
+        let needle = format!("Error Code: {name}.");
+        if logs.iter().any(|l| l.contains(&needle)) {
+            return name;
+        }
+    }
+    panic!("unexpected settle refusal: {logs:?}")
+}
+
+fn protection_json(session: &Session, pr: &ProtectionSetup) -> Value {
+    let protection = protection_state(&session.snapshot(), &pr.protection);
+    json!({ "collateral": s(protection.collateral), "reserved": s(protection.reserved) })
+}
+
+fn scenario(n: u64) -> Value {
+    let mut rng = Rng(0x5343_454e_4152_494f ^ (n + 1).wrapping_mul(0x9e37_79b9_7f4a_7c15));
+    let (mut session, cfg, p, pr) = protection_session();
+    let rates = random_rates(&mut rng);
+    seed_pool_rates(&mut session, &p, &rates);
+    seed_pool_state(&mut session, &p, &scenario_pool(&mut rng));
+
+    let collateral = 1_000_000_000 + rng.below(50_000_000_000);
+    fund_user(&mut session, &cfg, USER_A, collateral);
+    session.run(
+        &provide_protection(&cfg, &p, &pr, USER_A, collateral),
+        &[Check::success()],
+    );
+    // Premiums of earlier contracts already in the collateral: a share worth more than 1.
+    let grown = collateral + rng.below(collateral / 5 + 1);
+    seed_protection_state(&mut session, &pr, grown, 0, collateral);
+    fund_user(&mut session, &cfg, USER_B, BUYER_FUNDS);
+
+    let mut m = Market {
+        session,
+        cfg,
+        p,
+        pr,
+        slot: 1,
+        ts: GENESIS_TS,
+        nonce: 0,
+    };
+    let mut nonces = Vec::new();
+    for _ in 0..1 + rng.below(4) {
+        let wait = rng.below(30);
+        m.advance(wait);
+        nonces.extend(m.try_buy(&mut rng));
+    }
+    // Up to 40 model days at the demo scale: some terms run out before the loss.
+    let wait = rng.below(80);
+    m.advance(wait);
+
+    let before = pool_balances(&m.session, &m.p);
+    let model_before = pool_state(&m.session.snapshot(), &m.p.pool).model_time;
+    let triggers: Vec<u16> = nonces
+        .iter()
+        .map(|&nonce| {
+            contract_state(
+                &m.session.snapshot(),
+                &pda::contract(&m.p.pool, &USER_B, nonce).0,
+            )
+            .trigger_bps
+        })
+        .collect();
+    let loss_bps = scenario_loss_bps(&mut rng, &triggers);
+    let ix = record_loss(&m.session, &m.cfg, &m.p, OPERATOR, loss_bps);
+    m.session.run(&ix, &[Check::success()]);
+    let index = pool_state(&m.session.snapshot(), &m.p.pool).loss_count - 1;
+    let event = loss_event_state(&m.session.snapshot(), &pda::loss_event(&m.p.pool, index).0);
+    let after = pool_balances(&m.session, &m.p);
+    assert_pool_invariant(&m.session.snapshot(), &m.p.pool);
+
+    // A contract bought after the event: its `loss_index_from` is past it.
+    if rng.below(4) == 0 {
+        nonces.extend(m.try_buy(&mut rng));
+    }
+    let contracts: Vec<Value> = nonces
+        .iter()
+        .map(|&nonce| {
+            let c = contract_state(
+                &m.session.snapshot(),
+                &pda::contract(&m.p.pool, &USER_B, nonce).0,
+            );
+            json!({
+                "notional": s(c.notional),
+                "triggerBps": c.trigger_bps,
+                "lossIndexFrom": c.loss_index_from,
+                "expiryModelTime": s(c.expiry_model_time),
+            })
+        })
+        .collect();
+    let protection = protection_json(&m.session, &m.pr);
+
+    let mut order: Vec<usize> = (0..nonces.len()).collect();
+    for i in (1..order.len()).rev() {
+        order.swap(i, rng.below(i as u64 + 1) as usize);
+    }
+    // A second claim on one of them: refused, whatever the first one did.
+    if !order.is_empty() && rng.below(2) == 0 {
+        order.push(order[rng.below(order.len() as u64) as usize]);
+    }
+    let wallet = ata(&USER_B, &m.cfg.mint);
+    let settlements: Vec<Value> = order
+        .iter()
+        .map(|&i| {
+            let paid_before = token_amount(&m.session.snapshot(), &wallet);
+            let result = m.session.run(
+                &settle_protection(&m.cfg, &m.p, &m.pr, USER_B, nonces[i], index),
+                &[],
+            );
+            if result.raw_result.is_err() {
+                return json!({ "contract": i, "error": refusal(&m.session) });
+            }
+            let paid = token_amount(&m.session.snapshot(), &wallet) - paid_before;
+            let contract = contract_state(
+                &m.session.snapshot(),
+                &pda::contract(&m.p.pool, &USER_B, nonces[i]).0,
+            );
+            assert_eq!(
+                contract.payout, paid,
+                "the payout field is what was transferred"
+            );
+            json!({ "contract": i, "payout": s(paid) })
+        })
+        .collect();
+    assert_protection_invariant(&m.session.snapshot(), &m.pr.protection);
+
     json!({
-        "comment": "Згенеровано `cargo test --workspace -- --ignored gen_waterfall_fixture` (wsl-build.sh fixtures). Не правити руками: waterfall.test.ts проганяє кожен вхід через packages/shared/src/waterfall.ts і звіряє результат. Усі u64 — рядками.",
-        "accrue": accrue_cases(),
-        "deposit": deposit_cases(),
-        "redeem": redeem_cases(),
-        "subordination": subordination_cases(),
-        "loss": loss_cases(),
+        "pool": pool_json(&before),
+        "rates": rates_json(&rates),
+        "dtModel": s(event.model_time - model_before),
+        "lossBps": loss_bps,
+        "event": {
+            "index": event.index,
+            "modelTime": s(event.model_time),
+            "amount": s(event.amount),
+            "juniorLoss": s(event.junior_loss),
+            "seniorLoss": s(event.senior_loss),
+        },
+        "after": pool_json(&after),
+        "protection": protection,
+        "contracts": contracts,
+        "settlements": settlements,
+        "protectionAfter": protection_json(&m.session, &m.pr),
+    })
+}
+
+fn scenario_cases() -> Vec<Value> {
+    (0..SCENARIOS).map(scenario).collect()
+}
+
+// The scenarios run on the SVM: built once per test binary, not once per test.
+fn fixture() -> &'static Value {
+    static FIXTURE: OnceLock<Value> = OnceLock::new();
+    FIXTURE.get_or_init(|| {
+        json!({
+            "comment": "Згенеровано `cargo test --workspace -- --ignored gen_waterfall_fixture` (wsl-build.sh fixtures). Не правити руками: waterfall.test.ts проганяє кожен вхід через packages/shared/src/waterfall.ts і звіряє результат. Усі u64 — рядками. `scenarios` — справжні record_loss і settle_protection у mollusk.",
+            "accrue": accrue_cases(),
+            "deposit": deposit_cases(),
+            "redeem": redeem_cases(),
+            "subordination": subordination_cases(),
+            "loss": loss_cases(),
+            "scenarios": scenario_cases(),
+        })
     })
 }
 
 #[test]
 #[ignore = "генератор фікстури: wsl-build.sh fixtures"]
 fn gen_waterfall_fixture() {
-    let text = serde_json::to_string_pretty(&fixture()).unwrap() + "\n";
+    let text = serde_json::to_string_pretty(fixture()).unwrap() + "\n";
     std::fs::write(fixture_path(), text).unwrap();
 }
 
@@ -380,7 +687,7 @@ fn waterfall_fixture_matches_math() {
         .unwrap_or_else(|e| panic!("{}: {e} — wsl-build.sh fixtures", path.display()));
     let stored: Value = serde_json::from_str(&text).unwrap();
     assert_eq!(
-        stored,
+        &stored,
         fixture(),
         "fixtures/waterfall.json застаріла — wsl-build.sh fixtures"
     );
@@ -408,4 +715,58 @@ fn fixture_covers_every_branch() {
         && c["accrual"]["seniorGain"] != "0"));
     assert!(has("accrue", &|c| c["accrual"]["seniorGain"] == "0"
         && c["accrual"]["juniorGain"] != "0"));
+
+    assert!(has("scenarios", &|c| c["event"]["seniorLoss"] != "0"));
+    assert!(has("scenarios", &|c| c["event"]["seniorLoss"] == "0"));
+    assert!(has("scenarios", &|c| c["dtModel"] != "0"));
+    let steps: Vec<&Value> = f["scenarios"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .flat_map(|c| c["settlements"].as_array().unwrap())
+        .collect();
+    let refused = |name: &str| steps.iter().filter(|s| s["error"] == name).count();
+    for name in [
+        "ContractNotActive",
+        "LossOutsideTerm",
+        "LossBelowTrigger",
+        "ZeroAmount",
+    ] {
+        assert!(refused(name) > 0, "no scenario refuses with {name}");
+    }
+    // Both bounds of the term: the late buy and an expiry before the event.
+    let scenarios = f["scenarios"].as_array().unwrap();
+    assert!(scenarios.iter().any(|c| c["contracts"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .any(|k| k["lossIndexFrom"] != 0)));
+    assert!(scenarios.iter().any(|c| {
+        let event_time: u64 = c["event"]["modelTime"].as_str().unwrap().parse().unwrap();
+        c["contracts"].as_array().unwrap().iter().any(|k| {
+            k["expiryModelTime"]
+                .as_str()
+                .unwrap()
+                .parse::<u64>()
+                .unwrap()
+                < event_time
+        })
+    }));
+    assert!(
+        scenarios.iter().any(|c| c["settlements"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|s| s["payout"].is_string()
+                && c["contracts"][s["contract"].as_u64().unwrap() as usize]["triggerBps"]
+                    == c["lossBps"])),
+        "no payout lands exactly on the trigger"
+    );
+    // The forecast is about payouts: a fixture of refusals alone would be green and empty.
+    let paid = steps.iter().filter(|s| s["payout"].is_string()).count();
+    assert!(
+        paid * 3 >= steps.len(),
+        "only {paid} of {} settlements paid out",
+        steps.len()
+    );
 }

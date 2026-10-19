@@ -5,13 +5,16 @@ import {
   accrue,
   afterAccrual,
   afterLoss,
+  afterSettle,
   amountForRedeem,
   applyLoss,
+  type ContractTerms,
   collateralForShares,
   lossAmount,
   payout,
   premium,
   premiumFee,
+  settleContract,
   sharesForCollateral,
   sharesForDeposit,
   subordinationOk,
@@ -34,12 +37,55 @@ const poolSchema = z.object({
   seniorSupply: u64,
   juniorSupply: u64,
 })
+const ratesSchema = z.object({ yieldBps: bps, seniorBps: bps, feeBps: bps })
+const protectionSchema = z.object({ collateral: u64, reserved: u64 })
+const settleError = z.enum([
+  'ContractNotActive',
+  'LossOutsideTerm',
+  'LossBelowTrigger',
+  'ZeroAmount',
+])
+
+// One scenario is a pool state, a loss and the contracts on it, run on the SVM through
+// the real `record_loss` and `settle_protection`; the pool is taken before the loss's
+// own accrual, so the mirror replays that accrual too.
+const scenarioSchema = z.object({
+  pool: poolSchema,
+  rates: ratesSchema,
+  dtModel: u64,
+  lossBps: bps,
+  event: z.object({
+    index: z.number().int().min(0),
+    modelTime: u64,
+    amount: u64,
+    juniorLoss: u64,
+    seniorLoss: u64,
+  }),
+  after: poolSchema,
+  protection: protectionSchema,
+  contracts: z.array(
+    z.object({
+      notional: u64,
+      triggerBps: bps,
+      lossIndexFrom: z.number().int().min(0),
+      expiryModelTime: u64,
+    }),
+  ),
+  settlements: z.array(
+    z.object({
+      contract: z.number().int().min(0),
+      payout: u64.optional(),
+      error: settleError.optional(),
+    }),
+  ),
+  protectionAfter: protectionSchema,
+})
 
 const fixtureSchema = z.object({
   accrue: z.array(
     z.object({
       pool: poolSchema,
-      rates: z.object({ yieldBps: bps, seniorBps: bps, feeBps: bps }),
+      rates: ratesSchema,
       dtModel: u64,
       accrual: z.object({ yieldAmount: u64, fee: u64, seniorGain: u64, juniorGain: u64 }),
       after: poolSchema,
@@ -77,6 +123,7 @@ const fixtureSchema = z.object({
       error: errorName.optional(),
     }),
   ),
+  scenarios: z.array(scenarioSchema),
 })
 
 const fixture = fixtureSchema.parse(
@@ -100,6 +147,38 @@ describe('fixtures/waterfall.json', () => {
     expect(fixture.redeem.length).toBeGreaterThanOrEqual(20)
     expect(fixture.subordination.length).toBeGreaterThanOrEqual(20)
     expect(fixture.loss.length).toBeGreaterThanOrEqual(20)
+    expect(fixture.scenarios.length).toBeGreaterThanOrEqual(50)
+  })
+
+  // SC-006: the forecast is the mirror, the fact is what the program wrote. Exact
+  // equality is stricter than the one-unit tolerance the criterion allows.
+  it('the real record_loss and settle_protection agree with the mirror on every scenario', () => {
+    for (const c of fixture.scenarios) {
+      const accrued = afterAccrual(c.pool, accrue(c.pool, c.rates, c.dtModel))
+      const loss = lossAmount(accrued.assets, c.lossBps)
+      expect(loss).toBe(c.event.amount)
+      const split = applyLoss(loss, accrued.seniorAssets, accrued.juniorAssets)
+      expect(split).toEqual({ juniorLoss: c.event.juniorLoss, seniorLoss: c.event.seniorLoss })
+      expect(afterLoss(accrued, split)).toEqual(c.after)
+
+      const event = { index: c.event.index, modelTime: c.event.modelTime, lossBps: c.lossBps }
+      const active = c.contracts.map(() => true)
+      let protection = c.protection
+      for (const step of c.settlements) {
+        const terms = c.contracts[step.contract]
+        if (!terms) throw new Error(`no contract #${step.contract} in the scenario`)
+        const contract: ContractTerms = { ...terms, active: active[step.contract] === true }
+        if (step.error) {
+          expect(errorCode(() => settleContract(contract, event))).toBe(step.error)
+          continue
+        }
+        const paid = settleContract(contract, event)
+        expect(paid).toBe(step.payout)
+        protection = afterSettle(protection, contract.notional, paid)
+        active[step.contract] = false
+      }
+      expect(protection).toEqual(c.protectionAfter)
+    }
   })
 
   it('accrue matches math.rs on every case, including the state after', () => {
@@ -219,5 +298,56 @@ describe('protection math mirrors math.rs', () => {
     expect(payout(notional, 0)).toBe(0n)
     expect(payout(6n, 1_500)).toBe(0n)
     expect(errorCode(() => payout(notional, 10_001))).toBe('ParameterOutOfRange')
+  })
+})
+
+// The demo contract of `tests/settle.rs`: 1,000 tokens for 30 model days, trigger 1 %.
+describe('settleContract mirrors settle_protection', () => {
+  const contract: ContractTerms = {
+    active: true,
+    notional: 1_000_000_000n,
+    triggerBps: 100,
+    lossIndexFrom: 0,
+    expiryModelTime: 5_184_000n,
+  }
+  const event = { index: 0, modelTime: 2_592_000n, lossBps: 1_500 }
+
+  it('pays the loss share of the notional and frees the whole reserve', () => {
+    const paid = settleContract(contract, event)
+    expect(paid).toBe(150_000_000n)
+    const protection = { collateral: 5_001_479_452n, reserved: 1_000_000_000n }
+    expect(afterSettle(protection, contract.notional, paid)).toEqual({
+      collateral: 4_851_479_452n,
+      reserved: 0n,
+    })
+  })
+
+  it('takes both ends of the term and the trigger inclusively', () => {
+    expect(settleContract(contract, { ...event, modelTime: contract.expiryModelTime })).toBe(
+      150_000_000n,
+    )
+    expect(settleContract(contract, { ...event, lossBps: 100 })).toBe(10_000_000n)
+    expect(settleContract(contract, { ...event, lossBps: 10_000 })).toBe(contract.notional)
+  })
+
+  it('refuses in the order the program checks', () => {
+    const closed = { ...contract, active: false }
+    expect(errorCode(() => settleContract(closed, { ...event, lossBps: 0 }))).toBe(
+      'ContractNotActive',
+    )
+    expect(errorCode(() => settleContract({ ...contract, lossIndexFrom: 1 }, event))).toBe(
+      'LossOutsideTerm',
+    )
+    expect(
+      errorCode(() => settleContract(contract, { ...event, modelTime: 5_184_001n, lossBps: 0 })),
+    ).toBe('LossOutsideTerm')
+    expect(errorCode(() => settleContract(contract, { ...event, lossBps: 50 }))).toBe(
+      'LossBelowTrigger',
+    )
+    expect(errorCode(() => settleContract({ ...contract, notional: 6n }, event))).toBe('ZeroAmount')
+  })
+
+  it('a reserve smaller than the notional is an overflow, not a negative balance', () => {
+    expect(errorCode(() => afterSettle({ collateral: 10n, reserved: 5n }, 6n, 1n))).toBe('Overflow')
   })
 })

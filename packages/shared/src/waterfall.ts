@@ -44,6 +44,30 @@ export type WaterfallErrorCode =
   | 'ParameterOutOfRange'
   | 'Overflow'
   | 'CollateralWipedOut'
+  | 'ContractNotActive'
+  | 'LossOutsideTerm'
+  | 'LossBelowTrigger'
+  | 'ZeroAmount'
+
+// What `settle_protection` reads from a contract: the snapshots taken at purchase.
+export type ContractTerms = {
+  active: boolean
+  notional: Micro
+  triggerBps: number
+  lossIndexFrom: number
+  expiryModelTime: bigint
+}
+
+export type LossEventTerms = {
+  index: number
+  modelTime: bigint
+  lossBps: number
+}
+
+export type ProtectionBalances = {
+  collateral: Micro
+  reserved: Micro
+}
 
 // Без параметра-властивості в конструкторі: Node зі strip-only типами його не терпить.
 export class WaterfallError extends Error {
@@ -138,6 +162,31 @@ export function premiumFee(premiumAmount: Micro, feeBps: number): Micro {
 export function payout(notional: Micro, lossBps: number): Micro {
   if (lossBps > 10_000) throw new WaterfallError('ParameterOutOfRange')
   return mulBps(notional, lossBps)
+}
+
+// `settle_protection`, check for check and in its order, so a refusal carries the
+// same name the program would return. The term is inclusive at both ends; the event
+// index guards the start because indexes grow together with model time.
+export function settleContract(contract: ContractTerms, event: LossEventTerms): Micro {
+  if (!contract.active) throw new WaterfallError('ContractNotActive')
+  if (event.index < contract.lossIndexFrom) throw new WaterfallError('LossOutsideTerm')
+  if (event.modelTime > contract.expiryModelTime) throw new WaterfallError('LossOutsideTerm')
+  if (event.lossBps < contract.triggerBps) throw new WaterfallError('LossBelowTrigger')
+  const amount = payout(contract.notional, event.lossBps)
+  if (amount === 0n) throw new WaterfallError('ZeroAmount')
+  return amount
+}
+
+// The reserve is released in full: what was not paid out stays with the sellers.
+export function afterSettle(
+  protection: ProtectionBalances,
+  notional: Micro,
+  paid: Micro,
+): ProtectionBalances {
+  return {
+    collateral: toU64(protection.collateral - paid),
+    reserved: toU64(protection.reserved - notional),
+  }
 }
 
 export function lossAmount(assets: Micro, lossBps: number): Micro {

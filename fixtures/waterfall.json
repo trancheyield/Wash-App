@@ -1121,7 +1121,7 @@
       }
     }
   ],
-  "comment": "Згенеровано `cargo test --workspace -- --ignored gen_waterfall_fixture` (wsl-build.sh fixtures). Не правити руками: waterfall.test.ts проганяє кожен вхід через packages/shared/src/waterfall.ts і звіряє результат. Усі u64 — рядками.",
+  "comment": "Згенеровано `cargo test --workspace -- --ignored gen_waterfall_fixture` (wsl-build.sh fixtures). Не правити руками: waterfall.test.ts проганяє кожен вхід через packages/shared/src/waterfall.ts і звіряє результат. Усі u64 — рядками. `scenarios` — справжні record_loss і settle_protection у mollusk.",
   "deposit": [
     {
       "amount": "1000",
@@ -2002,6 +2002,4420 @@
       "shares": "2413104274",
       "supply": "127443233465",
       "trancheAssets": "149806215043"
+    }
+  ],
+  "scenarios": [
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "74420673489",
+        "seniorAssets": "0",
+        "seniorSupply": "52962829607"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "8296173",
+          "lossIndexFrom": 0,
+          "notional": "34792332252",
+          "triggerBps": 1728
+        },
+        {
+          "expiryModelTime": "8736304",
+          "lossIndexFrom": 0,
+          "notional": "4",
+          "triggerBps": 1369
+        }
+      ],
+      "dtModel": "1684800",
+      "event": {
+        "amount": "75027146146",
+        "index": 0,
+        "juniorLoss": "14869216542",
+        "modelTime": "2160000",
+        "seniorLoss": "60157929604"
+      },
+      "lossBps": 10000,
+      "pool": {
+        "assets": "74422808227",
+        "juniorAssets": "14430900065",
+        "juniorSupply": "74420673489",
+        "seniorAssets": "59991908162",
+        "seniorSupply": "52962829607"
+      },
+      "protection": {
+        "collateral": "38951848358",
+        "reserved": "34792332256"
+      },
+      "protectionAfter": {
+        "collateral": "4159516102",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 294,
+        "seniorBps": 518,
+        "yieldBps": 1566
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "34792332252"
+        },
+        {
+          "contract": 1,
+          "payout": "4"
+        },
+        {
+          "contract": 1,
+          "error": "ContractNotActive"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "88989269968",
+        "juniorAssets": "0",
+        "juniorSupply": "28159800708",
+        "seniorAssets": "88989269968",
+        "seniorSupply": "107066964061"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "4355298",
+          "lossIndexFrom": 0,
+          "notional": "2000197431",
+          "triggerBps": 392
+        }
+      ],
+      "dtModel": "2462400",
+      "event": {
+        "amount": "78220932903",
+        "index": 0,
+        "juniorLoss": "33877940433",
+        "modelTime": "3628800",
+        "seniorLoss": "44342992470"
+      },
+      "lossBps": 4678,
+      "pool": {
+        "assets": "166795110748",
+        "juniorAssets": "33877940433",
+        "juniorSupply": "28159800708",
+        "seniorAssets": "132917170315",
+        "seniorSupply": "107066964061"
+      },
+      "protection": {
+        "collateral": "14050723517",
+        "reserved": "2000197431"
+      },
+      "protectionAfter": {
+        "collateral": "13115031159",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 371,
+        "seniorBps": 524,
+        "yieldBps": 331
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "935692358"
+        },
+        {
+          "contract": 0,
+          "error": "ContractNotActive"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "165098747701",
+        "juniorAssets": "38637192166",
+        "juniorSupply": "72655393037",
+        "seniorAssets": "126461555535",
+        "seniorSupply": "100988012266"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "5011875",
+          "lossIndexFrom": 0,
+          "notional": "3479105026",
+          "triggerBps": 2066
+        },
+        {
+          "expiryModelTime": "5880814",
+          "lossIndexFrom": 0,
+          "notional": "128571614",
+          "triggerBps": 59
+        },
+        {
+          "expiryModelTime": "7579988",
+          "lossIndexFrom": 0,
+          "notional": "146364001",
+          "triggerBps": 2075
+        },
+        {
+          "expiryModelTime": "3945382",
+          "lossIndexFrom": 0,
+          "notional": "30027857",
+          "triggerBps": 1626
+        }
+      ],
+      "dtModel": "345600",
+      "event": {
+        "amount": "52939746357",
+        "index": 0,
+        "juniorLoss": "52939746357",
+        "modelTime": "2332800",
+        "seniorLoss": "0"
+      },
+      "lossBps": 2428,
+      "pool": {
+        "assets": "217938866428",
+        "juniorAssets": "91513472019",
+        "juniorSupply": "72655393037",
+        "seniorAssets": "126425394409",
+        "seniorSupply": "100988012266"
+      },
+      "protection": {
+        "collateral": "3811640097",
+        "reserved": "3784068498"
+      },
+      "protectionAfter": {
+        "collateral": "2892868268",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 231,
+        "seniorBps": 261,
+        "yieldBps": 427
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "payout": "31217187"
+        },
+        {
+          "contract": 3,
+          "payout": "7290763"
+        },
+        {
+          "contract": 0,
+          "payout": "844726700"
+        },
+        {
+          "contract": 2,
+          "payout": "35537179"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "8132049093",
+        "juniorAssets": "0",
+        "juniorSupply": "66636002210",
+        "seniorAssets": "8132049093",
+        "seniorSupply": "16978312388"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "6984167",
+          "lossIndexFrom": 0,
+          "notional": "9",
+          "triggerBps": 485
+        },
+        {
+          "expiryModelTime": "10098941",
+          "lossIndexFrom": 0,
+          "notional": "15572043721",
+          "triggerBps": 1323
+        },
+        {
+          "expiryModelTime": "5278633",
+          "lossIndexFrom": 1,
+          "notional": "10025142804",
+          "triggerBps": 1300
+        }
+      ],
+      "dtModel": "3024000",
+      "event": {
+        "amount": "43271548204",
+        "index": 0,
+        "juniorLoss": "32566647642",
+        "modelTime": "4924800",
+        "seniorLoss": "10704900562"
+      },
+      "lossBps": 8418,
+      "pool": {
+        "assets": "50757903799",
+        "juniorAssets": "31934130785",
+        "juniorSupply": "66636002210",
+        "seniorAssets": "18823773014",
+        "seniorSupply": "16978312388"
+      },
+      "protection": {
+        "collateral": "27896746908",
+        "reserved": "25597186534"
+      },
+      "protectionAfter": {
+        "collateral": "14788200497",
+        "reserved": "10025142804"
+      },
+      "rates": {
+        "feeBps": 651,
+        "seniorBps": 73,
+        "yieldBps": 1419
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "payout": "13108546404"
+        },
+        {
+          "contract": 0,
+          "payout": "7"
+        },
+        {
+          "contract": 2,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "error": "ContractNotActive"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "78311215309",
+        "juniorAssets": "0",
+        "juniorSupply": "32281934303",
+        "seniorAssets": "78311215309",
+        "seniorSupply": "98153400361"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "7113923",
+          "lossIndexFrom": 0,
+          "notional": "31871080836",
+          "triggerBps": 916
+        },
+        {
+          "expiryModelTime": "2120329",
+          "lossIndexFrom": 0,
+          "notional": "3073197578",
+          "triggerBps": 568
+        },
+        {
+          "expiryModelTime": "5862328",
+          "lossIndexFrom": 0,
+          "notional": "2437444251",
+          "triggerBps": 2537
+        },
+        {
+          "expiryModelTime": "5465388",
+          "lossIndexFrom": 0,
+          "notional": "416578984",
+          "triggerBps": 1097
+        }
+      ],
+      "dtModel": "1512000",
+      "event": {
+        "amount": "82327175067",
+        "index": 0,
+        "juniorLoss": "37486713928",
+        "modelTime": "4276800",
+        "seniorLoss": "44840461139"
+      },
+      "lossBps": 5125,
+      "pool": {
+        "assets": "159954433599",
+        "juniorAssets": "37486713928",
+        "juniorSupply": "32281934303",
+        "seniorAssets": "122467719671",
+        "seniorSupply": "98153400361"
+      },
+      "protection": {
+        "collateral": "37851261177",
+        "reserved": "37798301649"
+      },
+      "protectionAfter": {
+        "collateral": "20054645342",
+        "reserved": "3073197578"
+      },
+      "rates": {
+        "feeBps": 2211,
+        "seniorBps": 1254,
+        "yieldBps": 1145
+      },
+      "settlements": [
+        {
+          "contract": 3,
+          "payout": "213496729"
+        },
+        {
+          "contract": 0,
+          "payout": "16333928928"
+        },
+        {
+          "contract": 2,
+          "payout": "1249190178"
+        },
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 3,
+          "error": "ContractNotActive"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "119970188474",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "119970188474",
+        "seniorSupply": "140943696332"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "4935471",
+          "lossIndexFrom": 0,
+          "notional": "5293871190",
+          "triggerBps": 2775
+        },
+        {
+          "expiryModelTime": "7556445",
+          "lossIndexFrom": 0,
+          "notional": "10107491771",
+          "triggerBps": 446
+        },
+        {
+          "expiryModelTime": "12303483",
+          "lossIndexFrom": 0,
+          "notional": "12995785556",
+          "triggerBps": 653
+        },
+        {
+          "expiryModelTime": "6325811",
+          "lossIndexFrom": 0,
+          "notional": "170565498",
+          "triggerBps": 2170
+        }
+      ],
+      "dtModel": "820800",
+      "event": {
+        "amount": "33248443038",
+        "index": 0,
+        "juniorLoss": "0",
+        "modelTime": "4536000",
+        "seniorLoss": "33248443038"
+      },
+      "lossBps": 2170,
+      "pool": {
+        "assets": "152447970205",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "152447970205",
+        "seniorSupply": "140943696332"
+      },
+      "protection": {
+        "collateral": "29196080839",
+        "reserved": "28567714015"
+      },
+      "protectionAfter": {
+        "collateral": "24145656947",
+        "reserved": "5293871190"
+      },
+      "rates": {
+        "feeBps": 14,
+        "seniorBps": 1334,
+        "yieldBps": 1945
+      },
+      "settlements": [
+        {
+          "contract": 3,
+          "payout": "37012713"
+        },
+        {
+          "contract": 1,
+          "payout": "2193325714"
+        },
+        {
+          "contract": 2,
+          "payout": "2820085465"
+        },
+        {
+          "contract": 0,
+          "error": "LossBelowTrigger"
+        },
+        {
+          "contract": 2,
+          "error": "ContractNotActive"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "163156831794",
+        "juniorAssets": "0",
+        "juniorSupply": "31844171682",
+        "seniorAssets": "163156831794",
+        "seniorSupply": "148828786742"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "2300064",
+          "lossIndexFrom": 0,
+          "notional": "17183326825",
+          "triggerBps": 2581
+        },
+        {
+          "expiryModelTime": "10662909",
+          "lossIndexFrom": 0,
+          "notional": "2712458351",
+          "triggerBps": 291
+        },
+        {
+          "expiryModelTime": "13249321",
+          "lossIndexFrom": 1,
+          "notional": "1972688092",
+          "triggerBps": 2139
+        }
+      ],
+      "dtModel": "1771200",
+      "event": {
+        "amount": "36398980087",
+        "index": 0,
+        "juniorLoss": "25766116954",
+        "modelTime": "3499200",
+        "seniorLoss": "10632863133"
+      },
+      "lossBps": 1824,
+      "pool": {
+        "assets": "199138576294",
+        "juniorAssets": "25766116954",
+        "juniorSupply": "31844171682",
+        "seniorAssets": "173372459340",
+        "seniorSupply": "148828786742"
+      },
+      "protection": {
+        "collateral": "34010156829",
+        "reserved": "21868473268"
+      },
+      "protectionAfter": {
+        "collateral": "33515404426",
+        "reserved": "19156014917"
+      },
+      "rates": {
+        "feeBps": 2494,
+        "seniorBps": 1137,
+        "yieldBps": 497
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "payout": "494752403"
+        },
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 2,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "46500326203",
+        "seniorAssets": "0",
+        "seniorSupply": "93173355779"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "10869067",
+          "lossIndexFrom": 0,
+          "notional": "9587520883",
+          "triggerBps": 1476
+        },
+        {
+          "expiryModelTime": "9938835",
+          "lossIndexFrom": 0,
+          "notional": "1941270619",
+          "triggerBps": 2810
+        }
+      ],
+      "dtModel": "2116800",
+      "event": {
+        "amount": "131366037680",
+        "index": 0,
+        "juniorLoss": "23021285261",
+        "modelTime": "3024000",
+        "seniorLoss": "108344752419"
+      },
+      "lossBps": 10000,
+      "pool": {
+        "assets": "129976662914",
+        "juniorAssets": "22621300456",
+        "juniorSupply": "46500326203",
+        "seniorAssets": "107355362458",
+        "seniorSupply": "93173355779"
+      },
+      "protection": {
+        "collateral": "14008215578",
+        "reserved": "11528791502"
+      },
+      "protectionAfter": {
+        "collateral": "2479424076",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 1770,
+        "seniorBps": 1373,
+        "yieldBps": 1935
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "9587520883"
+        },
+        {
+          "contract": 1,
+          "payout": "1941270619"
+        },
+        {
+          "contract": 0,
+          "error": "ContractNotActive"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "29191118550",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "29191118550",
+        "seniorSupply": "90949784921"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "10340869",
+          "lossIndexFrom": 0,
+          "notional": "43374328848",
+          "triggerBps": 1253
+        },
+        {
+          "expiryModelTime": "4810252",
+          "lossIndexFrom": 0,
+          "notional": "9",
+          "triggerBps": 2053
+        },
+        {
+          "expiryModelTime": "6858333",
+          "lossIndexFrom": 0,
+          "notional": "1907502728",
+          "triggerBps": 727
+        }
+      ],
+      "dtModel": "1166400",
+      "event": {
+        "amount": "69360935972",
+        "index": 0,
+        "juniorLoss": "0",
+        "modelTime": "3240000",
+        "seniorLoss": "69360935972"
+      },
+      "lossBps": 7038,
+      "pool": {
+        "assets": "98261363810",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "98261363810",
+        "seniorSupply": "90949784921"
+      },
+      "protection": {
+        "collateral": "48756090791",
+        "reserved": "45281831585"
+      },
+      "protectionAfter": {
+        "collateral": "16886737723",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 2755,
+        "seniorBps": 17,
+        "yieldBps": 1104
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "30526852643"
+        },
+        {
+          "contract": 1,
+          "payout": "6"
+        },
+        {
+          "contract": 2,
+          "payout": "1342500419"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "47448086476",
+        "seniorAssets": "0",
+        "seniorSupply": "177553461483"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "7329000",
+          "lossIndexFrom": 0,
+          "notional": "1728427024",
+          "triggerBps": 570
+        },
+        {
+          "expiryModelTime": "3638641",
+          "lossIndexFrom": 0,
+          "notional": "709345818",
+          "triggerBps": 1775
+        },
+        {
+          "expiryModelTime": "6946527",
+          "lossIndexFrom": 0,
+          "notional": "17167294175",
+          "triggerBps": 655
+        }
+      ],
+      "dtModel": "1771200",
+      "event": {
+        "amount": "251094889414",
+        "index": 0,
+        "juniorLoss": "50723796473",
+        "modelTime": "3456000",
+        "seniorLoss": "200371092941"
+      },
+      "lossBps": 10000,
+      "pool": {
+        "assets": "250105961841",
+        "juniorAssets": "50723796473",
+        "juniorSupply": "47448086476",
+        "seniorAssets": "199382165368",
+        "seniorSupply": "177553461483"
+      },
+      "protection": {
+        "collateral": "24913906112",
+        "reserved": "19605067017"
+      },
+      "protectionAfter": {
+        "collateral": "5308839095",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 857,
+        "seniorBps": 955,
+        "yieldBps": 770
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "1728427024"
+        },
+        {
+          "contract": 2,
+          "payout": "17167294175"
+        },
+        {
+          "contract": 1,
+          "payout": "709345818"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "0",
+        "seniorSupply": "24303316508"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "11249008",
+          "lossIndexFrom": 0,
+          "notional": "3259001330",
+          "triggerBps": 2180
+        },
+        {
+          "expiryModelTime": "8356805",
+          "lossIndexFrom": 1,
+          "notional": "7414722214",
+          "triggerBps": 1168
+        }
+      ],
+      "dtModel": "1900800",
+      "event": {
+        "amount": "26573677981",
+        "index": 0,
+        "juniorLoss": "0",
+        "modelTime": "3024000",
+        "seniorLoss": "26573677981"
+      },
+      "lossBps": 10000,
+      "pool": {
+        "assets": "26299362115",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "26299362115",
+        "seniorSupply": "24303316508"
+      },
+      "protection": {
+        "collateral": "31746656010",
+        "reserved": "10673723544"
+      },
+      "protectionAfter": {
+        "collateral": "28487654680",
+        "reserved": "7414722214"
+      },
+      "rates": {
+        "feeBps": 1121,
+        "seniorBps": 666,
+        "yieldBps": 1949
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "3259001330"
+        },
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "36343043558",
+        "juniorAssets": "0",
+        "juniorSupply": "11671268651",
+        "seniorAssets": "36343043558",
+        "seniorSupply": "34790954358"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "10662557",
+          "lossIndexFrom": 0,
+          "notional": "25746239533",
+          "triggerBps": 1052
+        },
+        {
+          "expiryModelTime": "3825591",
+          "lossIndexFrom": 0,
+          "notional": "6",
+          "triggerBps": 1520
+        },
+        {
+          "expiryModelTime": "2211318",
+          "lossIndexFrom": 0,
+          "notional": "6556658410",
+          "triggerBps": 1392
+        },
+        {
+          "expiryModelTime": "11098889",
+          "lossIndexFrom": 1,
+          "notional": "560153951",
+          "triggerBps": 1295
+        }
+      ],
+      "dtModel": "2030400",
+      "event": {
+        "amount": "2501594704",
+        "index": 0,
+        "juniorLoss": "2237614932",
+        "modelTime": "3888000",
+        "seniorLoss": "263979772"
+      },
+      "lossBps": 644,
+      "pool": {
+        "assets": "38695731627",
+        "juniorAssets": "2102608670",
+        "juniorSupply": "11671268651",
+        "seniorAssets": "36593122957",
+        "seniorSupply": "34790954358"
+      },
+      "protection": {
+        "collateral": "38726632310",
+        "reserved": "32863051900"
+      },
+      "protectionAfter": {
+        "collateral": "38726632310",
+        "reserved": "32863051900"
+      },
+      "rates": {
+        "feeBps": 1756,
+        "seniorBps": 59,
+        "yieldBps": 725
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 3,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "error": "LossBelowTrigger"
+        },
+        {
+          "contract": 2,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "230382849886",
+        "juniorAssets": "19152448641",
+        "juniorSupply": "30265559555",
+        "seniorAssets": "211230401245",
+        "seniorSupply": "180444715462"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "9868211",
+          "lossIndexFrom": 0,
+          "notional": "2089916271",
+          "triggerBps": 100
+        },
+        {
+          "expiryModelTime": "11180705",
+          "lossIndexFrom": 0,
+          "notional": "11286535574",
+          "triggerBps": 141
+        },
+        {
+          "expiryModelTime": "6182224",
+          "lossIndexFrom": 0,
+          "notional": "20063031669",
+          "triggerBps": 1935
+        }
+      ],
+      "dtModel": "2592000",
+      "event": {
+        "amount": "3294855648",
+        "index": 0,
+        "juniorLoss": "3294855648",
+        "modelTime": "4406400",
+        "seniorLoss": "0"
+      },
+      "lossBps": 141,
+      "pool": {
+        "assets": "233457197280",
+        "juniorAssets": "22447304289",
+        "juniorSupply": "30265559555",
+        "seniorAssets": "211009892991",
+        "seniorSupply": "180444715462"
+      },
+      "protection": {
+        "collateral": "55674957902",
+        "reserved": "33439483514"
+      },
+      "protectionAfter": {
+        "collateral": "55486349932",
+        "reserved": "20063031669"
+      },
+      "rates": {
+        "feeBps": 343,
+        "seniorBps": 951,
+        "yieldBps": 119
+      },
+      "settlements": [
+        {
+          "contract": 2,
+          "error": "LossBelowTrigger"
+        },
+        {
+          "contract": 0,
+          "payout": "29467819"
+        },
+        {
+          "contract": 1,
+          "payout": "159140151"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "26695393661",
+        "juniorAssets": "4220836886",
+        "juniorSupply": "20677924737",
+        "seniorAssets": "22474556775",
+        "seniorSupply": "19849063159"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "4233285",
+          "lossIndexFrom": 0,
+          "notional": "7950340304",
+          "triggerBps": 1247
+        },
+        {
+          "expiryModelTime": "3738385",
+          "lossIndexFrom": 0,
+          "notional": "3523560182",
+          "triggerBps": 2801
+        },
+        {
+          "expiryModelTime": "5571553",
+          "lossIndexFrom": 0,
+          "notional": "971803988",
+          "triggerBps": 320
+        }
+      ],
+      "dtModel": "1641600",
+      "event": {
+        "amount": "15173166033",
+        "index": 0,
+        "juniorLoss": "15173166033",
+        "modelTime": "4665600",
+        "seniorLoss": "0"
+      },
+      "lossBps": 3624,
+      "pool": {
+        "assets": "41644461271",
+        "juniorAssets": "19246273112",
+        "juniorSupply": "20677924737",
+        "seniorAssets": "22398188159",
+        "seniorSupply": "19849063159"
+      },
+      "protection": {
+        "collateral": "13310848104",
+        "reserved": "12445704474"
+      },
+      "protectionAfter": {
+        "collateral": "12958666339",
+        "reserved": "11473900486"
+      },
+      "rates": {
+        "feeBps": 2382,
+        "seniorBps": 655,
+        "yieldBps": 1357
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 2,
+          "payout": "352181765"
+        },
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 2,
+          "error": "ContractNotActive"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "8337345538",
+        "seniorAssets": "0",
+        "seniorSupply": "90736631407"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "7072522",
+          "lossIndexFrom": 0,
+          "notional": "16751308249",
+          "triggerBps": 2505
+        }
+      ],
+      "dtModel": "302400",
+      "event": {
+        "amount": "107160246203",
+        "index": 0,
+        "juniorLoss": "11409623905",
+        "modelTime": "907200",
+        "seniorLoss": "95750622298"
+      },
+      "lossBps": 10000,
+      "pool": {
+        "assets": "107093483852",
+        "juniorAssets": "11409623905",
+        "juniorSupply": "8337345538",
+        "seniorAssets": "95683859947",
+        "seniorSupply": "90736631407"
+      },
+      "protection": {
+        "collateral": "23101110728",
+        "reserved": "16751308249"
+      },
+      "protectionAfter": {
+        "collateral": "6349802479",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 958,
+        "seniorBps": 1353,
+        "yieldBps": 719
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "16751308249"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "34218325548",
+        "juniorAssets": "0",
+        "juniorSupply": "3389598419",
+        "seniorAssets": "34218325548",
+        "seniorSupply": "57036216929"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "7899073",
+          "lossIndexFrom": 0,
+          "notional": "9",
+          "triggerBps": 2420
+        },
+        {
+          "expiryModelTime": "8832380",
+          "lossIndexFrom": 0,
+          "notional": "7553546862",
+          "triggerBps": 1962
+        },
+        {
+          "expiryModelTime": "3722955",
+          "lossIndexFrom": 0,
+          "notional": "4456860605",
+          "triggerBps": 1722
+        },
+        {
+          "expiryModelTime": "12090862",
+          "lossIndexFrom": 1,
+          "notional": "417494072",
+          "triggerBps": 2172
+        }
+      ],
+      "dtModel": "259200",
+      "event": {
+        "amount": "35700606916",
+        "index": 0,
+        "juniorLoss": "1079511527",
+        "modelTime": "2203200",
+        "seniorLoss": "34621095389"
+      },
+      "lossBps": 5106,
+      "pool": {
+        "assets": "69887940504",
+        "juniorAssets": "1079511527",
+        "juniorSupply": "3389598419",
+        "seniorAssets": "68808428977",
+        "seniorSupply": "57036216929"
+      },
+      "protection": {
+        "collateral": "12888518857",
+        "reserved": "12427901548"
+      },
+      "protectionAfter": {
+        "collateral": "6756004802",
+        "reserved": "417494072"
+      },
+      "rates": {
+        "feeBps": 1395,
+        "seniorBps": 767,
+        "yieldBps": 627
+      },
+      "settlements": [
+        {
+          "contract": 2,
+          "payout": "2275673024"
+        },
+        {
+          "contract": 0,
+          "payout": "4"
+        },
+        {
+          "contract": 1,
+          "payout": "3856841027"
+        },
+        {
+          "contract": 3,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "27902127506",
+        "juniorAssets": "6499335681",
+        "juniorSupply": "22790542885",
+        "seniorAssets": "21402791825",
+        "seniorSupply": "19087386040"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "3047650",
+          "lossIndexFrom": 0,
+          "notional": "1",
+          "triggerBps": 735
+        },
+        {
+          "expiryModelTime": "1144004",
+          "lossIndexFrom": 0,
+          "notional": "30922331380",
+          "triggerBps": 2302
+        }
+      ],
+      "dtModel": "2376000",
+      "event": {
+        "amount": "7737325177",
+        "index": 0,
+        "juniorLoss": "7737325177",
+        "modelTime": "3412800",
+        "seniorLoss": "0"
+      },
+      "lossBps": 2171,
+      "pool": {
+        "assets": "35568271132",
+        "juniorAssets": "14236660858",
+        "juniorSupply": "22790542885",
+        "seniorAssets": "21331610274",
+        "seniorSupply": "19087386040"
+      },
+      "protection": {
+        "collateral": "54562231780",
+        "reserved": "30922331381"
+      },
+      "protectionAfter": {
+        "collateral": "54562231780",
+        "reserved": "30922331381"
+      },
+      "rates": {
+        "feeBps": 1827,
+        "seniorBps": 464,
+        "yieldBps": 325
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "79667515483",
+        "seniorAssets": "0",
+        "seniorSupply": "143015499258"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "7638674",
+          "lossIndexFrom": 0,
+          "notional": "15522028404",
+          "triggerBps": 932
+        },
+        {
+          "expiryModelTime": "10126736",
+          "lossIndexFrom": 0,
+          "notional": "5957970050",
+          "triggerBps": 2019
+        },
+        {
+          "expiryModelTime": "9411476",
+          "lossIndexFrom": 0,
+          "notional": "5225923928",
+          "triggerBps": 1120
+        },
+        {
+          "expiryModelTime": "10351057",
+          "lossIndexFrom": 0,
+          "notional": "16567074006",
+          "triggerBps": 1651
+        }
+      ],
+      "dtModel": "2246400",
+      "event": {
+        "amount": "254419437633",
+        "index": 0,
+        "juniorLoss": "105654448166",
+        "modelTime": "6048000",
+        "seniorLoss": "148764989467"
+      },
+      "lossBps": 10000,
+      "pool": {
+        "assets": "253804893461",
+        "juniorAssets": "105214548536",
+        "juniorSupply": "79667515483",
+        "seniorAssets": "148590344925",
+        "seniorSupply": "143015499258"
+      },
+      "protection": {
+        "collateral": "46772659429",
+        "reserved": "43272996388"
+      },
+      "protectionAfter": {
+        "collateral": "3499663041",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 1148,
+        "seniorBps": 165,
+        "yieldBps": 384
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "15522028404"
+        },
+        {
+          "contract": 1,
+          "payout": "5957970050"
+        },
+        {
+          "contract": 3,
+          "payout": "16567074006"
+        },
+        {
+          "contract": 2,
+          "payout": "5225923928"
+        },
+        {
+          "contract": 3,
+          "error": "ContractNotActive"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "3162867982",
+        "juniorAssets": "0",
+        "juniorSupply": "21666390652",
+        "seniorAssets": "3162867982",
+        "seniorSupply": "50234394132"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "446377",
+          "lossIndexFrom": 0,
+          "notional": "34923168627",
+          "triggerBps": 225
+        },
+        {
+          "expiryModelTime": "7542557",
+          "lossIndexFrom": 0,
+          "notional": "2550201250",
+          "triggerBps": 844
+        },
+        {
+          "expiryModelTime": "7427845",
+          "lossIndexFrom": 0,
+          "notional": "394259397",
+          "triggerBps": 1318
+        }
+      ],
+      "dtModel": "2246400",
+      "event": {
+        "amount": "77936311024",
+        "index": 0,
+        "juniorLoss": "28374657180",
+        "modelTime": "3758400",
+        "seniorLoss": "49561653844"
+      },
+      "lossBps": 9610,
+      "pool": {
+        "assets": "80935927417",
+        "juniorAssets": "28374657180",
+        "juniorSupply": "21666390652",
+        "seniorAssets": "52561270237",
+        "seniorSupply": "50234394132"
+      },
+      "protection": {
+        "collateral": "38030107892",
+        "reserved": "37867629274"
+      },
+      "protectionAfter": {
+        "collateral": "35200481211",
+        "reserved": "34923168627"
+      },
+      "rates": {
+        "feeBps": 2046,
+        "seniorBps": 1343,
+        "yieldBps": 356
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 2,
+          "payout": "378883280"
+        },
+        {
+          "contract": 1,
+          "payout": "2450743401"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "123566839756",
+        "juniorAssets": "0",
+        "juniorSupply": "4454131983",
+        "seniorAssets": "123566839756",
+        "seniorSupply": "105461650875"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "5978979",
+          "lossIndexFrom": 0,
+          "notional": "10",
+          "triggerBps": 359
+        },
+        {
+          "expiryModelTime": "9827701",
+          "lossIndexFrom": 0,
+          "notional": "27997091377",
+          "triggerBps": 1500
+        }
+      ],
+      "dtModel": "2073600",
+      "event": {
+        "amount": "4601233842",
+        "index": 0,
+        "juniorLoss": "2703490127",
+        "modelTime": "2592000",
+        "seniorLoss": "1897743715"
+      },
+      "lossBps": 359,
+      "pool": {
+        "assets": "128107438024",
+        "juniorAssets": "2703490127",
+        "juniorSupply": "4454131983",
+        "seniorAssets": "125403947897",
+        "seniorSupply": "105461650875"
+      },
+      "protection": {
+        "collateral": "44612980577",
+        "reserved": "27997091387"
+      },
+      "protectionAfter": {
+        "collateral": "44612980577",
+        "reserved": "27997091387"
+      },
+      "rates": {
+        "feeBps": 1726,
+        "seniorBps": 790,
+        "yieldBps": 87
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "error": "ZeroAmount"
+        },
+        {
+          "contract": 1,
+          "error": "LossBelowTrigger"
+        },
+        {
+          "contract": 1,
+          "error": "LossBelowTrigger"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "174080773053",
+        "juniorAssets": "0",
+        "juniorSupply": "26902216696",
+        "seniorAssets": "174080773053",
+        "seniorSupply": "167075102099"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "2349021",
+          "lossIndexFrom": 0,
+          "notional": "22156795319",
+          "triggerBps": 2038
+        },
+        {
+          "expiryModelTime": "10296509",
+          "lossIndexFrom": 0,
+          "notional": "12205779333",
+          "triggerBps": 205
+        },
+        {
+          "expiryModelTime": "8873134",
+          "lossIndexFrom": 1,
+          "notional": "3",
+          "triggerBps": 1903
+        }
+      ],
+      "dtModel": "3024000",
+      "event": {
+        "amount": "7121239076",
+        "index": 0,
+        "juniorLoss": "6855577935",
+        "modelTime": "4449600",
+        "seniorLoss": "265661141"
+      },
+      "lossBps": 393,
+      "pool": {
+        "assets": "180725830166",
+        "juniorAssets": "6436219160",
+        "juniorSupply": "26902216696",
+        "seniorAssets": "174289611006",
+        "seniorSupply": "167075102099"
+      },
+      "protection": {
+        "collateral": "48687038224",
+        "reserved": "34362574655"
+      },
+      "protectionAfter": {
+        "collateral": "48207351097",
+        "reserved": "22156795322"
+      },
+      "rates": {
+        "feeBps": 2216,
+        "seniorBps": 34,
+        "yieldBps": 353
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 1,
+          "payout": "479687127"
+        },
+        {
+          "contract": 2,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "50357324400",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "50357324400",
+        "seniorSupply": "164589036376"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "6257771",
+          "lossIndexFrom": 0,
+          "notional": "482772671",
+          "triggerBps": 945
+        }
+      ],
+      "dtModel": "1512000",
+      "event": {
+        "amount": "131438070545",
+        "index": 0,
+        "juniorLoss": "0",
+        "modelTime": "2030400",
+        "seniorLoss": "131438070545"
+      },
+      "lossBps": 7230,
+      "pool": {
+        "assets": "180513249885",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "180513249885",
+        "seniorSupply": "164589036376"
+      },
+      "protection": {
+        "collateral": "1284561425",
+        "reserved": "482772671"
+      },
+      "protectionAfter": {
+        "collateral": "935516784",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 430,
+        "seniorBps": 102,
+        "yieldBps": 1548
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "349044641"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "107186742048",
+        "juniorAssets": "8991858847",
+        "juniorSupply": "71591822812",
+        "seniorAssets": "98194883201",
+        "seniorSupply": "78542950728"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "1960536",
+          "lossIndexFrom": 0,
+          "notional": "8",
+          "triggerBps": 918
+        }
+      ],
+      "dtModel": "1728000",
+      "event": {
+        "amount": "4164537868",
+        "index": 0,
+        "juniorLoss": "4164537868",
+        "modelTime": "2808000",
+        "seniorLoss": "0"
+      },
+      "lossBps": 374,
+      "pool": {
+        "assets": "110730795143",
+        "juniorAssets": "12700280913",
+        "juniorSupply": "71591822812",
+        "seniorAssets": "98030514230",
+        "seniorSupply": "78542950728"
+      },
+      "protection": {
+        "collateral": "16791176275",
+        "reserved": "8"
+      },
+      "protectionAfter": {
+        "collateral": "16791176275",
+        "reserved": "8"
+      },
+      "rates": {
+        "feeBps": 762,
+        "seniorBps": 306,
+        "yieldBps": 1107
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "101389528154",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "101389528154",
+        "seniorSupply": "105503976175"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "4485428",
+          "lossIndexFrom": 0,
+          "notional": "12724963669",
+          "triggerBps": 1406
+        },
+        {
+          "expiryModelTime": "8055527",
+          "lossIndexFrom": 0,
+          "notional": "4921712392",
+          "triggerBps": 283
+        },
+        {
+          "expiryModelTime": "4152862",
+          "lossIndexFrom": 0,
+          "notional": "7233951732",
+          "triggerBps": 862
+        },
+        {
+          "expiryModelTime": "7697968",
+          "lossIndexFrom": 0,
+          "notional": "3757706490",
+          "triggerBps": 1223
+        },
+        {
+          "expiryModelTime": "12998461",
+          "lossIndexFrom": 1,
+          "notional": "124912191",
+          "triggerBps": 1012
+        }
+      ],
+      "dtModel": "3067200",
+      "event": {
+        "amount": "14127764946",
+        "index": 0,
+        "juniorLoss": "0",
+        "modelTime": "5788800",
+        "seniorLoss": "14127764946"
+      },
+      "lossBps": 1223,
+      "pool": {
+        "assets": "114290459974",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "114290459974",
+        "seniorSupply": "105503976175"
+      },
+      "protection": {
+        "collateral": "28787718277",
+        "reserved": "28763246474"
+      },
+      "protectionAfter": {
+        "collateral": "27726225349",
+        "reserved": "20083827592"
+      },
+      "rates": {
+        "feeBps": 1944,
+        "seniorBps": 774,
+        "yieldBps": 1370
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 1,
+          "payout": "601925425"
+        },
+        {
+          "contract": 3,
+          "payout": "459567503"
+        },
+        {
+          "contract": 2,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 4,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "56714969135",
+        "juniorAssets": "0",
+        "juniorSupply": "44725290344",
+        "seniorAssets": "56714969135",
+        "seniorSupply": "193225644515"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "4155710",
+          "lossIndexFrom": 0,
+          "notional": "6033327432",
+          "triggerBps": 9
+        },
+        {
+          "expiryModelTime": "10455072",
+          "lossIndexFrom": 1,
+          "notional": "420511189",
+          "triggerBps": 187
+        }
+      ],
+      "dtModel": "1641600",
+      "event": {
+        "amount": "200262688930",
+        "index": 0,
+        "juniorLoss": "60584347830",
+        "modelTime": "1814400",
+        "seniorLoss": "139678341100"
+      },
+      "lossBps": 7793,
+      "pool": {
+        "assets": "255302116972",
+        "juniorAssets": "59553810813",
+        "juniorSupply": "44725290344",
+        "seniorAssets": "195748306159",
+        "seniorSupply": "193225644515"
+      },
+      "protection": {
+        "collateral": "8313306788",
+        "reserved": "6453838621"
+      },
+      "protectionAfter": {
+        "collateral": "3611534721",
+        "reserved": "420511189"
+      },
+      "rates": {
+        "feeBps": 2893,
+        "seniorBps": 633,
+        "yieldBps": 1774
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "4701772067"
+        },
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "0",
+        "seniorSupply": "36523034578"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "3865415",
+          "lossIndexFrom": 0,
+          "notional": "11825515585",
+          "triggerBps": 1358
+        },
+        {
+          "expiryModelTime": "2206114",
+          "lossIndexFrom": 0,
+          "notional": "1340394615",
+          "triggerBps": 1792
+        },
+        {
+          "expiryModelTime": "7709448",
+          "lossIndexFrom": 0,
+          "notional": "6231476354",
+          "triggerBps": 1539
+        }
+      ],
+      "dtModel": "2073600",
+      "event": {
+        "amount": "38841609616",
+        "index": 0,
+        "juniorLoss": "0",
+        "modelTime": "3672000",
+        "seniorLoss": "38841609616"
+      },
+      "lossBps": 10000,
+      "pool": {
+        "assets": "38776982796",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "38776982796",
+        "seniorSupply": "36523034578"
+      },
+      "protection": {
+        "collateral": "39672710834",
+        "reserved": "19397386554"
+      },
+      "protectionAfter": {
+        "collateral": "21615718895",
+        "reserved": "1340394615"
+      },
+      "rates": {
+        "feeBps": 399,
+        "seniorBps": 990,
+        "yieldBps": 264
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "payout": "11825515585"
+        },
+        {
+          "contract": 2,
+          "payout": "6231476354"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "48193559703",
+        "juniorAssets": "0",
+        "juniorSupply": "5208739631",
+        "seniorAssets": "48193559703",
+        "seniorSupply": "57085422231"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "2442730",
+          "lossIndexFrom": 0,
+          "notional": "9256650482",
+          "triggerBps": 341
+        },
+        {
+          "expiryModelTime": "1996832",
+          "lossIndexFrom": 0,
+          "notional": "25520504100",
+          "triggerBps": 2304
+        }
+      ],
+      "dtModel": "1555200",
+      "event": {
+        "amount": "20399608106",
+        "index": 0,
+        "juniorLoss": "7113804646",
+        "modelTime": "3153600",
+        "seniorLoss": "13285803460"
+      },
+      "lossBps": 2974,
+      "pool": {
+        "assets": "68459362353",
+        "juniorAssets": "7000911901",
+        "juniorSupply": "5208739631",
+        "seniorAssets": "61458450452",
+        "seniorSupply": "57085422231"
+      },
+      "protection": {
+        "collateral": "37745110412",
+        "reserved": "34777154582"
+      },
+      "protectionAfter": {
+        "collateral": "37745110412",
+        "reserved": "34777154582"
+      },
+      "rates": {
+        "feeBps": 2522,
+        "seniorBps": 69,
+        "yieldBps": 530
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "69047885214",
+        "juniorAssets": "24258785841",
+        "juniorSupply": "72680548836",
+        "seniorAssets": "44789099373",
+        "seniorSupply": "36430328464"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "8566103",
+          "lossIndexFrom": 0,
+          "notional": "6",
+          "triggerBps": 96
+        }
+      ],
+      "dtModel": "820800",
+      "event": {
+        "amount": "669284832",
+        "index": 0,
+        "juniorLoss": "669284832",
+        "modelTime": "1512000",
+        "seniorLoss": "0"
+      },
+      "lossBps": 96,
+      "pool": {
+        "assets": "69398908507",
+        "juniorAssets": "24711579933",
+        "juniorSupply": "72680548836",
+        "seniorAssets": "44687328574",
+        "seniorSupply": "36430328464"
+      },
+      "protection": {
+        "collateral": "29992237732",
+        "reserved": "6"
+      },
+      "protectionAfter": {
+        "collateral": "29992237732",
+        "reserved": "6"
+      },
+      "rates": {
+        "feeBps": 1128,
+        "seniorBps": 875,
+        "yieldBps": 1986
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "error": "ZeroAmount"
+        },
+        {
+          "contract": 0,
+          "error": "ZeroAmount"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "76733371911",
+        "juniorAssets": "0",
+        "juniorSupply": "20277621265",
+        "seniorAssets": "76733371911",
+        "seniorSupply": "103973961158"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "1768458",
+          "lossIndexFrom": 0,
+          "notional": "6",
+          "triggerBps": 1368
+        },
+        {
+          "expiryModelTime": "9333503",
+          "lossIndexFrom": 0,
+          "notional": "2768065322",
+          "triggerBps": 417
+        },
+        {
+          "expiryModelTime": "10982537",
+          "lossIndexFrom": 0,
+          "notional": "23476746468",
+          "triggerBps": 1832
+        },
+        {
+          "expiryModelTime": "4422986",
+          "lossIndexFrom": 0,
+          "notional": "4047335164",
+          "triggerBps": 2997
+        }
+      ],
+      "dtModel": "2160000",
+      "event": {
+        "amount": "53477678336",
+        "index": 0,
+        "juniorLoss": "8817735219",
+        "modelTime": "5227200",
+        "seniorLoss": "44659943117"
+      },
+      "lossBps": 4107,
+      "pool": {
+        "assets": "129807664661",
+        "juniorAssets": "8817735219",
+        "juniorSupply": "20277621265",
+        "seniorAssets": "120989929442",
+        "seniorSupply": "103973961158"
+      },
+      "protection": {
+        "collateral": "31475556020",
+        "reserved": "30292146960"
+      },
+      "protectionAfter": {
+        "collateral": "20696811819",
+        "reserved": "4047335170"
+      },
+      "rates": {
+        "feeBps": 2349,
+        "seniorBps": 1201,
+        "yieldBps": 593
+      },
+      "settlements": [
+        {
+          "contract": 2,
+          "payout": "9641899774"
+        },
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 3,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 1,
+          "payout": "1136844427"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "74191809439",
+        "juniorAssets": "0",
+        "juniorSupply": "74376387608",
+        "seniorAssets": "74191809439",
+        "seniorSupply": "102208034132"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "985140",
+          "lossIndexFrom": 0,
+          "notional": "5",
+          "triggerBps": 1021
+        },
+        {
+          "expiryModelTime": "4038775",
+          "lossIndexFrom": 0,
+          "notional": "27473655380",
+          "triggerBps": 353
+        },
+        {
+          "expiryModelTime": "3597033",
+          "lossIndexFrom": 0,
+          "notional": "295548183",
+          "triggerBps": 2291
+        }
+      ],
+      "dtModel": "2073600",
+      "event": {
+        "amount": "130588233173",
+        "index": 0,
+        "juniorLoss": "88068006520",
+        "modelTime": "3283200",
+        "seniorLoss": "42520226653"
+      },
+      "lossBps": 6377,
+      "pool": {
+        "assets": "204622589196",
+        "juniorAssets": "88068006520",
+        "juniorSupply": "74376387608",
+        "seniorAssets": "116554582676",
+        "seniorSupply": "102208034132"
+      },
+      "protection": {
+        "collateral": "39193896825",
+        "reserved": "27769203568"
+      },
+      "protectionAfter": {
+        "collateral": "21485475714",
+        "reserved": "5"
+      },
+      "rates": {
+        "feeBps": 1458,
+        "seniorBps": 1020,
+        "yieldBps": 137
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "payout": "17519950035"
+        },
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 2,
+          "payout": "188471076"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "192548599032",
+        "juniorAssets": "68158091800",
+        "juniorSupply": "71063876024",
+        "seniorAssets": "124390507232",
+        "seniorSupply": "99947367064"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "6008969",
+          "lossIndexFrom": 0,
+          "notional": "4298780161",
+          "triggerBps": 489
+        },
+        {
+          "expiryModelTime": "2287186",
+          "lossIndexFrom": 0,
+          "notional": "1834265347",
+          "triggerBps": 1575
+        },
+        {
+          "expiryModelTime": "2132491",
+          "lossIndexFrom": 0,
+          "notional": "1394321565",
+          "triggerBps": 2358
+        },
+        {
+          "expiryModelTime": "5295647",
+          "lossIndexFrom": 0,
+          "notional": "664622351",
+          "triggerBps": 1893
+        },
+        {
+          "expiryModelTime": "10878496",
+          "lossIndexFrom": 1,
+          "notional": "151092467",
+          "triggerBps": 1865
+        }
+      ],
+      "dtModel": "345600",
+      "event": {
+        "amount": "35995732163",
+        "index": 0,
+        "juniorLoss": "35995732163",
+        "modelTime": "1944000",
+        "seniorLoss": "0"
+      },
+      "lossBps": 1575,
+      "pool": {
+        "assets": "228418641165",
+        "juniorAssets": "104153823963",
+        "juniorSupply": "71063876024",
+        "seniorAssets": "124264817202",
+        "seniorSupply": "99947367064"
+      },
+      "protection": {
+        "collateral": "8673530704",
+        "reserved": "8343081891"
+      },
+      "protectionAfter": {
+        "collateral": "7707576037",
+        "reserved": "2210036383"
+      },
+      "rates": {
+        "feeBps": 2918,
+        "seniorBps": 1067,
+        "yieldBps": 709
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "payout": "288896792"
+        },
+        {
+          "contract": 3,
+          "error": "LossBelowTrigger"
+        },
+        {
+          "contract": 4,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "payout": "677057875"
+        },
+        {
+          "contract": 2,
+          "error": "LossBelowTrigger"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "27386404120",
+        "juniorAssets": "0",
+        "juniorSupply": "3913539520",
+        "seniorAssets": "27386404120",
+        "seniorSupply": "68030213405"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "8347446",
+          "lossIndexFrom": 0,
+          "notional": "2237583571",
+          "triggerBps": 1705
+        },
+        {
+          "expiryModelTime": "9558856",
+          "lossIndexFrom": 0,
+          "notional": "678282705",
+          "triggerBps": 2543
+        },
+        {
+          "expiryModelTime": "7318983",
+          "lossIndexFrom": 1,
+          "notional": "146112351",
+          "triggerBps": 2577
+        }
+      ],
+      "dtModel": "2635200",
+      "event": {
+        "amount": "55028293801",
+        "index": 0,
+        "juniorLoss": "1020904347",
+        "modelTime": "3931200",
+        "seniorLoss": "54007389454"
+      },
+      "lossBps": 6677,
+      "pool": {
+        "assets": "81421244975",
+        "juniorAssets": "806170929",
+        "juniorSupply": "3913539520",
+        "seniorAssets": "80615074046",
+        "seniorSupply": "68030213405"
+      },
+      "protection": {
+        "collateral": "3072127592",
+        "reserved": "3061978627"
+      },
+      "protectionAfter": {
+        "collateral": "1125203680",
+        "reserved": "146112351"
+      },
+      "rates": {
+        "feeBps": 1246,
+        "seniorBps": 1156,
+        "yieldBps": 1668
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "1494034550"
+        },
+        {
+          "contract": 2,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 1,
+          "payout": "452889362"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "207281582248",
+        "juniorAssets": "3404149960",
+        "juniorSupply": "77065513288",
+        "seniorAssets": "203877432288",
+        "seniorSupply": "194909347675"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "10153544",
+          "lossIndexFrom": 0,
+          "notional": "12433702383",
+          "triggerBps": 901
+        },
+        {
+          "expiryModelTime": "2464547",
+          "lossIndexFrom": 0,
+          "notional": "20594250171",
+          "triggerBps": 1816
+        },
+        {
+          "expiryModelTime": "9644678",
+          "lossIndexFrom": 0,
+          "notional": "12925416683",
+          "triggerBps": 1425
+        },
+        {
+          "expiryModelTime": "7939104",
+          "lossIndexFrom": 0,
+          "notional": "2097454976",
+          "triggerBps": 871
+        }
+      ],
+      "dtModel": "2462400",
+      "event": {
+        "amount": "78308914098",
+        "index": 0,
+        "juniorLoss": "78308914098",
+        "modelTime": "4881600",
+        "seniorLoss": "0"
+      },
+      "lossBps": 2742,
+      "pool": {
+        "assets": "285198397299",
+        "juniorAssets": "81713064058",
+        "juniorSupply": "77065513288",
+        "seniorAssets": "203485333241",
+        "seniorSupply": "194909347675"
+      },
+      "protection": {
+        "collateral": "48430768248",
+        "reserved": "48050824213"
+      },
+      "protectionAfter": {
+        "collateral": "40902175647",
+        "reserved": "20594250171"
+      },
+      "rates": {
+        "feeBps": 2694,
+        "seniorBps": 1164,
+        "yieldBps": 241
+      },
+      "settlements": [
+        {
+          "contract": 2,
+          "payout": "3544149254"
+        },
+        {
+          "contract": 3,
+          "payout": "575122154"
+        },
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "payout": "3409321193"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "20226009180",
+        "seniorAssets": "0",
+        "seniorSupply": "53014556999"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "4831076",
+          "lossIndexFrom": 0,
+          "notional": "3923015721",
+          "triggerBps": 1200
+        },
+        {
+          "expiryModelTime": "9894995",
+          "lossIndexFrom": 0,
+          "notional": "23185229088",
+          "triggerBps": 1856
+        },
+        {
+          "expiryModelTime": "3476056",
+          "lossIndexFrom": 0,
+          "notional": "161899063",
+          "triggerBps": 1272
+        }
+      ],
+      "dtModel": "2548800",
+      "event": {
+        "amount": "86303691836",
+        "index": 0,
+        "juniorLoss": "21986325263",
+        "modelTime": "3844800",
+        "seniorLoss": "64317366573"
+      },
+      "lossBps": 10000,
+      "pool": {
+        "assets": "85983435111",
+        "juniorAssets": "21986325263",
+        "juniorSupply": "20226009180",
+        "seniorAssets": "63997109848",
+        "seniorSupply": "53014556999"
+      },
+      "protection": {
+        "collateral": "29598620707",
+        "reserved": "27270143872"
+      },
+      "protectionAfter": {
+        "collateral": "2490375898",
+        "reserved": "161899063"
+      },
+      "rates": {
+        "feeBps": 1829,
+        "seniorBps": 1064,
+        "yieldBps": 564
+      },
+      "settlements": [
+        {
+          "contract": 2,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 1,
+          "payout": "23185229088"
+        },
+        {
+          "contract": 0,
+          "payout": "3923015721"
+        },
+        {
+          "contract": 2,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "14646622316",
+        "juniorAssets": "0",
+        "juniorSupply": "6049466422",
+        "seniorAssets": "14646622316",
+        "seniorSupply": "50784242703"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "8062142",
+          "lossIndexFrom": 0,
+          "notional": "23885078395",
+          "triggerBps": 1857
+        },
+        {
+          "expiryModelTime": "9130295",
+          "lossIndexFrom": 0,
+          "notional": "2284282289",
+          "triggerBps": 419
+        },
+        {
+          "expiryModelTime": "6234319",
+          "lossIndexFrom": 0,
+          "notional": "8",
+          "triggerBps": 1264
+        },
+        {
+          "expiryModelTime": "5540161",
+          "lossIndexFrom": 0,
+          "notional": "574843261",
+          "triggerBps": 1240
+        }
+      ],
+      "dtModel": "2808000",
+      "event": {
+        "amount": "44892492786",
+        "index": 0,
+        "juniorLoss": "549178954",
+        "modelTime": "4795200",
+        "seniorLoss": "44343313832"
+      },
+      "lossBps": 7540,
+      "pool": {
+        "assets": "59343412875",
+        "juniorAssets": "549178954",
+        "juniorSupply": "6049466422",
+        "seniorAssets": "58794233921",
+        "seniorSupply": "50784242703"
+      },
+      "protection": {
+        "collateral": "31222386196",
+        "reserved": "26744203953"
+      },
+      "protectionAfter": {
+        "collateral": "11057256418",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 1966,
+        "seniorBps": 432,
+        "yieldBps": 461
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "18009349109"
+        },
+        {
+          "contract": 1,
+          "payout": "1722348845"
+        },
+        {
+          "contract": 2,
+          "payout": "6"
+        },
+        {
+          "contract": 3,
+          "payout": "433431818"
+        },
+        {
+          "contract": 3,
+          "error": "ContractNotActive"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "88805203846",
+        "juniorAssets": "26531209908",
+        "juniorSupply": "34371901012",
+        "seniorAssets": "62273993938",
+        "seniorSupply": "56490395003"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "5991938",
+          "lossIndexFrom": 0,
+          "notional": "3",
+          "triggerBps": 1165
+        },
+        {
+          "expiryModelTime": "7279013",
+          "lossIndexFrom": 0,
+          "notional": "3",
+          "triggerBps": 1843
+        },
+        {
+          "expiryModelTime": "10943522",
+          "lossIndexFrom": 0,
+          "notional": "8",
+          "triggerBps": 2276
+        }
+      ],
+      "dtModel": "345600",
+      "event": {
+        "amount": "19072837754",
+        "index": 0,
+        "juniorLoss": "19072837754",
+        "modelTime": "1944000",
+        "seniorLoss": "0"
+      },
+      "lossBps": 1768,
+      "pool": {
+        "assets": "107818377639",
+        "juniorAssets": "45557825157",
+        "juniorSupply": "34371901012",
+        "seniorAssets": "62260552482",
+        "seniorSupply": "56490395003"
+      },
+      "protection": {
+        "collateral": "46525357127",
+        "reserved": "14"
+      },
+      "protectionAfter": {
+        "collateral": "46525357127",
+        "reserved": "14"
+      },
+      "rates": {
+        "feeBps": 2724,
+        "seniorBps": 197,
+        "yieldBps": 694
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "error": "LossBelowTrigger"
+        },
+        {
+          "contract": 2,
+          "error": "LossBelowTrigger"
+        },
+        {
+          "contract": 0,
+          "error": "ZeroAmount"
+        },
+        {
+          "contract": 0,
+          "error": "ZeroAmount"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "125684576838",
+        "juniorAssets": "31594529216",
+        "juniorSupply": "78151449236",
+        "seniorAssets": "94090047622",
+        "seniorSupply": "84325432128"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "2400147",
+          "lossIndexFrom": 0,
+          "notional": "15052779797",
+          "triggerBps": 1168
+        }
+      ],
+      "dtModel": "1425600",
+      "event": {
+        "amount": "29347588991",
+        "index": 0,
+        "juniorLoss": "29347588991",
+        "modelTime": "2246400",
+        "seniorLoss": "0"
+      },
+      "lossBps": 1893,
+      "pool": {
+        "assets": "154016179828",
+        "juniorAssets": "59964397109",
+        "juniorSupply": "78151449236",
+        "seniorAssets": "94051782719",
+        "seniorSupply": "84325432128"
+      },
+      "protection": {
+        "collateral": "17849004360",
+        "reserved": "15052779797"
+      },
+      "protectionAfter": {
+        "collateral": "14999513145",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 180,
+        "seniorBps": 90,
+        "yieldBps": 1486
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "2849491215"
+        },
+        {
+          "contract": 0,
+          "error": "ContractNotActive"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "61517896168",
+        "seniorAssets": "0",
+        "seniorSupply": "20624460940"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "2647917",
+          "lossIndexFrom": 0,
+          "notional": "2679312399",
+          "triggerBps": 2447
+        },
+        {
+          "expiryModelTime": "2156642",
+          "lossIndexFrom": 0,
+          "notional": "5601264866",
+          "triggerBps": 1885
+        },
+        {
+          "expiryModelTime": "10525122",
+          "lossIndexFrom": 0,
+          "notional": "2",
+          "triggerBps": 712
+        }
+      ],
+      "dtModel": "216000",
+      "event": {
+        "amount": "37073649572",
+        "index": 0,
+        "juniorLoss": "16079152130",
+        "modelTime": "2937600",
+        "seniorLoss": "20994497442"
+      },
+      "lossBps": 10000,
+      "pool": {
+        "assets": "37047523265",
+        "juniorAssets": "16067395773",
+        "juniorSupply": "61517896168",
+        "seniorAssets": "20980127492",
+        "seniorSupply": "20624460940"
+      },
+      "protection": {
+        "collateral": "13939831132",
+        "reserved": "8280577267"
+      },
+      "protectionAfter": {
+        "collateral": "13939831130",
+        "reserved": "8280577265"
+      },
+      "rates": {
+        "feeBps": 1975,
+        "seniorBps": 1000,
+        "yieldBps": 1283
+      },
+      "settlements": [
+        {
+          "contract": 2,
+          "payout": "2"
+        },
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "15153807510",
+        "juniorAssets": "8290648888",
+        "juniorSupply": "15326258638",
+        "seniorAssets": "6863158622",
+        "seniorSupply": "5726901498"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "9531921",
+          "lossIndexFrom": 0,
+          "notional": "13859106205",
+          "triggerBps": 1065
+        },
+        {
+          "expiryModelTime": "9335898",
+          "lossIndexFrom": 0,
+          "notional": "5374849262",
+          "triggerBps": 260
+        },
+        {
+          "expiryModelTime": "2232856",
+          "lossIndexFrom": 0,
+          "notional": "2641952969",
+          "triggerBps": 848
+        }
+      ],
+      "dtModel": "604800",
+      "event": {
+        "amount": "6043293497",
+        "index": 0,
+        "juniorLoss": "6043293497",
+        "modelTime": "2548800",
+        "seniorLoss": "0"
+      },
+      "lossBps": 2851,
+      "pool": {
+        "assets": "21190607429",
+        "juniorAssets": "14333942385",
+        "juniorSupply": "15326258638",
+        "seniorAssets": "6856665044",
+        "seniorSupply": "5726901498"
+      },
+      "protection": {
+        "collateral": "38089864885",
+        "reserved": "21875908436"
+      },
+      "protectionAfter": {
+        "collateral": "32606264182",
+        "reserved": "2641952969"
+      },
+      "rates": {
+        "feeBps": 489,
+        "seniorBps": 1222,
+        "yieldBps": 168
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "payout": "1532369524"
+        },
+        {
+          "contract": 0,
+          "payout": "3951231179"
+        },
+        {
+          "contract": 2,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "162864935057",
+        "juniorAssets": "39831515021",
+        "juniorSupply": "52983620949",
+        "seniorAssets": "123033420036",
+        "seniorSupply": "119517157461"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "2112495",
+          "lossIndexFrom": 0,
+          "notional": "19579587128",
+          "triggerBps": 850
+        },
+        {
+          "expiryModelTime": "11898253",
+          "lossIndexFrom": 0,
+          "notional": "4008787918",
+          "triggerBps": 1144
+        },
+        {
+          "expiryModelTime": "9342154",
+          "lossIndexFrom": 1,
+          "notional": "9",
+          "triggerBps": 809
+        }
+      ],
+      "dtModel": "734400",
+      "event": {
+        "amount": "21038559813",
+        "index": 0,
+        "juniorLoss": "21038559813",
+        "modelTime": "3024000",
+        "seniorLoss": "0"
+      },
+      "lossBps": 1144,
+      "pool": {
+        "assets": "183142711717",
+        "juniorAssets": "60348353792",
+        "juniorSupply": "52983620949",
+        "seniorAssets": "122794357925",
+        "seniorSupply": "119517157461"
+      },
+      "protection": {
+        "collateral": "24657851367",
+        "reserved": "23588375055"
+      },
+      "protectionAfter": {
+        "collateral": "24199246030",
+        "reserved": "19579587137"
+      },
+      "rates": {
+        "feeBps": 899,
+        "seniorBps": 836,
+        "yieldBps": 1960
+      },
+      "settlements": [
+        {
+          "contract": 2,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 1,
+          "payout": "458605337"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "152739547759",
+        "juniorAssets": "82270938216",
+        "juniorSupply": "63657872534",
+        "seniorAssets": "70468609543",
+        "seniorSupply": "58353573359"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "4666328",
+          "lossIndexFrom": 0,
+          "notional": "28588720585",
+          "triggerBps": 594
+        },
+        {
+          "expiryModelTime": "1721309",
+          "lossIndexFrom": 0,
+          "notional": "3211239372",
+          "triggerBps": 1237
+        }
+      ],
+      "dtModel": "3067200",
+      "event": {
+        "amount": "9645682688",
+        "index": 0,
+        "juniorLoss": "9645682688",
+        "modelTime": "3283200",
+        "seniorLoss": "0"
+      },
+      "lossBps": 594,
+      "pool": {
+        "assets": "160931113133",
+        "juniorAssets": "90846948833",
+        "juniorSupply": "63657872534",
+        "seniorAssets": "70084164300",
+        "seniorSupply": "58353573359"
+      },
+      "protection": {
+        "collateral": "33359973969",
+        "reserved": "31799959957"
+      },
+      "protectionAfter": {
+        "collateral": "31661803967",
+        "reserved": "3211239372"
+      },
+      "rates": {
+        "feeBps": 32,
+        "seniorBps": 564,
+        "yieldBps": 932
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "payout": "1698170002"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "21227715318",
+        "seniorAssets": "0",
+        "seniorSupply": "181592954073"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "3545606",
+          "lossIndexFrom": 0,
+          "notional": "26958578232",
+          "triggerBps": 445
+        },
+        {
+          "expiryModelTime": "5576568",
+          "lossIndexFrom": 0,
+          "notional": "8",
+          "triggerBps": 1085
+        },
+        {
+          "expiryModelTime": "7460213",
+          "lossIndexFrom": 0,
+          "notional": "2574871148",
+          "triggerBps": 255
+        }
+      ],
+      "dtModel": "2851200",
+      "event": {
+        "amount": "207198864970",
+        "index": 0,
+        "juniorLoss": "20068644666",
+        "modelTime": "5572800",
+        "seniorLoss": "187130220304"
+      },
+      "lossBps": 10000,
+      "pool": {
+        "assets": "206829907365",
+        "juniorAssets": "20068644666",
+        "juniorSupply": "21227715318",
+        "seniorAssets": "186761262699",
+        "seniorSupply": "181592954073"
+      },
+      "protection": {
+        "collateral": "37199987085",
+        "reserved": "29533449388"
+      },
+      "protectionAfter": {
+        "collateral": "34625115929",
+        "reserved": "26958578232"
+      },
+      "rates": {
+        "feeBps": 422,
+        "seniorBps": 299,
+        "yieldBps": 206
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "payout": "8"
+        },
+        {
+          "contract": 2,
+          "payout": "2574871148"
+        },
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "23306844967",
+        "juniorAssets": "14192258481",
+        "juniorSupply": "61492442229",
+        "seniorAssets": "9114586486",
+        "seniorSupply": "8638095721"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "7965573",
+          "lossIndexFrom": 0,
+          "notional": "9",
+          "triggerBps": 2939
+        },
+        {
+          "expiryModelTime": "7000950",
+          "lossIndexFrom": 0,
+          "notional": "2458505684",
+          "triggerBps": 1054
+        },
+        {
+          "expiryModelTime": "10070596",
+          "lossIndexFrom": 0,
+          "notional": "8768825451",
+          "triggerBps": 1218
+        }
+      ],
+      "dtModel": "1900800",
+      "event": {
+        "amount": "1144314251",
+        "index": 0,
+        "juniorLoss": "1144314251",
+        "modelTime": "3067200",
+        "seniorLoss": "0"
+      },
+      "lossBps": 468,
+      "pool": {
+        "assets": "24436165484",
+        "juniorAssets": "15336572732",
+        "juniorSupply": "61492442229",
+        "seniorAssets": "9099592752",
+        "seniorSupply": "8638095721"
+      },
+      "protection": {
+        "collateral": "42613678340",
+        "reserved": "11227331144"
+      },
+      "protectionAfter": {
+        "collateral": "42613678340",
+        "reserved": "11227331144"
+      },
+      "rates": {
+        "feeBps": 2831,
+        "seniorBps": 604,
+        "yieldBps": 142
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "error": "LossBelowTrigger"
+        },
+        {
+          "contract": 2,
+          "error": "LossBelowTrigger"
+        },
+        {
+          "contract": 1,
+          "error": "LossBelowTrigger"
+        },
+        {
+          "contract": 1,
+          "error": "LossBelowTrigger"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "0",
+        "seniorSupply": "173554425026"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "1927780",
+          "lossIndexFrom": 0,
+          "notional": "4225532818",
+          "triggerBps": 2779
+        },
+        {
+          "expiryModelTime": "4035763",
+          "lossIndexFrom": 0,
+          "notional": "21772393887",
+          "triggerBps": 296
+        },
+        {
+          "expiryModelTime": "11721445",
+          "lossIndexFrom": 0,
+          "notional": "2",
+          "triggerBps": 852
+        },
+        {
+          "expiryModelTime": "3416716",
+          "lossIndexFrom": 0,
+          "notional": "4",
+          "triggerBps": 2818
+        }
+      ],
+      "dtModel": "2073600",
+      "event": {
+        "amount": "177585923271",
+        "index": 0,
+        "juniorLoss": "0",
+        "modelTime": "4320000",
+        "seniorLoss": "177585923271"
+      },
+      "lossBps": 10000,
+      "pool": {
+        "assets": "176145360187",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "176145360187",
+        "seniorSupply": "173554425026"
+      },
+      "protection": {
+        "collateral": "42923699907",
+        "reserved": "25997926711"
+      },
+      "protectionAfter": {
+        "collateral": "42923699905",
+        "reserved": "25997926709"
+      },
+      "rates": {
+        "feeBps": 2103,
+        "seniorBps": 1044,
+        "yieldBps": 1575
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 2,
+          "payout": "2"
+        },
+        {
+          "contract": 3,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "169857002690",
+        "juniorAssets": "50654488810",
+        "juniorSupply": "74913153963",
+        "seniorAssets": "119202513880",
+        "seniorSupply": "104391172445"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "581999",
+          "lossIndexFrom": 0,
+          "notional": "13409150722",
+          "triggerBps": 2986
+        },
+        {
+          "expiryModelTime": "6057221",
+          "lossIndexFrom": 1,
+          "notional": "7707036262",
+          "triggerBps": 1533
+        }
+      ],
+      "dtModel": "1684800",
+      "event": {
+        "amount": "1162935580",
+        "index": 0,
+        "juniorLoss": "1162935580",
+        "modelTime": "2116800",
+        "seniorLoss": "0"
+      },
+      "lossBps": 68,
+      "pool": {
+        "assets": "170501514052",
+        "juniorAssets": "51817424390",
+        "juniorSupply": "74913153963",
+        "seniorAssets": "118684089662",
+        "seniorSupply": "104391172445"
+      },
+      "protection": {
+        "collateral": "47005521537",
+        "reserved": "21116186984"
+      },
+      "protectionAfter": {
+        "collateral": "47005521537",
+        "reserved": "21116186984"
+      },
+      "rates": {
+        "feeBps": 102,
+        "seniorBps": 1094,
+        "yieldBps": 575
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "102814590902",
+        "juniorAssets": "0",
+        "juniorSupply": "75757882572",
+        "seniorAssets": "102814590902",
+        "seniorSupply": "104818063019"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "7654529",
+          "lossIndexFrom": 0,
+          "notional": "2037306462",
+          "triggerBps": 2388
+        },
+        {
+          "expiryModelTime": "5531313",
+          "lossIndexFrom": 0,
+          "notional": "5880736312",
+          "triggerBps": 2424
+        }
+      ],
+      "dtModel": "1814400",
+      "event": {
+        "amount": "30884486993",
+        "index": 0,
+        "juniorLoss": "13701807153",
+        "modelTime": "2419200",
+        "seniorLoss": "17182679840"
+      },
+      "lossBps": 2310,
+      "pool": {
+        "assets": "132309015971",
+        "juniorAssets": "12359363597",
+        "juniorSupply": "75757882572",
+        "seniorAssets": "119949652374",
+        "seniorSupply": "104818063019"
+      },
+      "protection": {
+        "collateral": "19337706850",
+        "reserved": "7918042774"
+      },
+      "protectionAfter": {
+        "collateral": "19337706850",
+        "reserved": "7918042774"
+      },
+      "rates": {
+        "feeBps": 328,
+        "seniorBps": 69,
+        "yieldBps": 1888
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "error": "LossBelowTrigger"
+        },
+        {
+          "contract": 1,
+          "error": "LossBelowTrigger"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "32683217089",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "32683217089",
+        "seniorSupply": "42938647629"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "7808903",
+          "lossIndexFrom": 0,
+          "notional": "2521562649",
+          "triggerBps": 289
+        },
+        {
+          "expiryModelTime": "2755788",
+          "lossIndexFrom": 0,
+          "notional": "5687042058",
+          "triggerBps": 2361
+        },
+        {
+          "expiryModelTime": "4074730",
+          "lossIndexFrom": 0,
+          "notional": "333206053",
+          "triggerBps": 2547
+        },
+        {
+          "expiryModelTime": "9707315",
+          "lossIndexFrom": 0,
+          "notional": "136795960",
+          "triggerBps": 2413
+        }
+      ],
+      "dtModel": "432000",
+      "event": {
+        "amount": "11169214265",
+        "index": 0,
+        "juniorLoss": "0",
+        "modelTime": "3067200",
+        "seniorLoss": "11169214265"
+      },
+      "lossBps": 2547,
+      "pool": {
+        "assets": "43837422382",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "43837422382",
+        "seniorSupply": "42938647629"
+      },
+      "protection": {
+        "collateral": "8743942147",
+        "reserved": "8678606720"
+      },
+      "protectionAfter": {
+        "collateral": "7981990629",
+        "reserved": "5687042058"
+      },
+      "rates": {
+        "feeBps": 160,
+        "seniorBps": 31,
+        "yieldBps": 254
+      },
+      "settlements": [
+        {
+          "contract": 2,
+          "payout": "84867581"
+        },
+        {
+          "contract": 3,
+          "payout": "34841931"
+        },
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "payout": "642242006"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "54345252672",
+        "juniorAssets": "3295026390",
+        "juniorSupply": "57358815596",
+        "seniorAssets": "51050226282",
+        "seniorSupply": "49497675295"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "7891277",
+          "lossIndexFrom": 0,
+          "notional": "6",
+          "triggerBps": 354
+        },
+        {
+          "expiryModelTime": "9748690",
+          "lossIndexFrom": 0,
+          "notional": "14039284421",
+          "triggerBps": 1395
+        },
+        {
+          "expiryModelTime": "11177222",
+          "lossIndexFrom": 0,
+          "notional": "7462528739",
+          "triggerBps": 572
+        }
+      ],
+      "dtModel": "3412800",
+      "event": {
+        "amount": "8810183321",
+        "index": 0,
+        "juniorLoss": "8810183321",
+        "modelTime": "5616000",
+        "seniorLoss": "0"
+      },
+      "lossBps": 1395,
+      "pool": {
+        "assets": "62442206269",
+        "juniorAssets": "11636647032",
+        "juniorSupply": "57358815596",
+        "seniorAssets": "50805559237",
+        "seniorSupply": "49497675295"
+      },
+      "protection": {
+        "collateral": "22059924124",
+        "reserved": "21501813166"
+      },
+      "protectionAfter": {
+        "collateral": "19060421189",
+        "reserved": "6"
+      },
+      "rates": {
+        "feeBps": 1078,
+        "seniorBps": 445,
+        "yieldBps": 1183
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "payout": "1958480176"
+        },
+        {
+          "contract": 0,
+          "error": "ZeroAmount"
+        },
+        {
+          "contract": 2,
+          "payout": "1041022759"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "8240097167",
+        "juniorAssets": "6583828556",
+        "juniorSupply": "7341914735",
+        "seniorAssets": "1656268611",
+        "seniorSupply": "1502442786"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "4293911",
+          "lossIndexFrom": 0,
+          "notional": "735111914",
+          "triggerBps": 1446
+        },
+        {
+          "expiryModelTime": "8969290",
+          "lossIndexFrom": 0,
+          "notional": "25863605820",
+          "triggerBps": 960
+        }
+      ],
+      "dtModel": "2332800",
+      "event": {
+        "amount": "1392936696",
+        "index": 0,
+        "juniorLoss": "1392936696",
+        "modelTime": "3542400",
+        "seniorLoss": "0"
+      },
+      "lossBps": 1446,
+      "pool": {
+        "assets": "9613333458",
+        "juniorAssets": "7974209633",
+        "juniorSupply": "7341914735",
+        "seniorAssets": "1639123825",
+        "seniorSupply": "1502442786"
+      },
+      "protection": {
+        "collateral": "39422705835",
+        "reserved": "26598717734"
+      },
+      "protectionAfter": {
+        "collateral": "35576531252",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 2823,
+        "seniorBps": 1414,
+        "yieldBps": 386
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "payout": "3739877401"
+        },
+        {
+          "contract": 0,
+          "payout": "106297182"
+        },
+        {
+          "contract": 0,
+          "error": "ContractNotActive"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "160532966796",
+        "juniorAssets": "2077302858",
+        "juniorSupply": "15533542301",
+        "seniorAssets": "158455663938",
+        "seniorSupply": "140501105489"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "4121242",
+          "lossIndexFrom": 0,
+          "notional": "43033384149",
+          "triggerBps": 412
+        },
+        {
+          "expiryModelTime": "3273148",
+          "lossIndexFrom": 0,
+          "notional": "4",
+          "triggerBps": 41
+        },
+        {
+          "expiryModelTime": "8756614",
+          "lossIndexFrom": 0,
+          "notional": "739511090",
+          "triggerBps": 2079
+        }
+      ],
+      "dtModel": "3283200",
+      "event": {
+        "amount": "22015323852",
+        "index": 0,
+        "juniorLoss": "22015323852",
+        "modelTime": "5184000",
+        "seniorLoss": "0"
+      },
+      "lossBps": 1206,
+      "pool": {
+        "assets": "179903258893",
+        "juniorAssets": "21581106074",
+        "juniorSupply": "15533542301",
+        "seniorAssets": "158322152819",
+        "seniorSupply": "140501105489"
+      },
+      "protection": {
+        "collateral": "44275901782",
+        "reserved": "43772895243"
+      },
+      "protectionAfter": {
+        "collateral": "44275901782",
+        "reserved": "43772895243"
+      },
+      "rates": {
+        "feeBps": 2304,
+        "seniorBps": 81,
+        "yieldBps": 1835
+      },
+      "settlements": [
+        {
+          "contract": 2,
+          "error": "LossBelowTrigger"
+        },
+        {
+          "contract": 1,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "169503885943",
+        "juniorAssets": "0",
+        "juniorSupply": "51509171580",
+        "seniorAssets": "169503885943",
+        "seniorSupply": "159801801071"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "9714146",
+          "lossIndexFrom": 0,
+          "notional": "11396961758",
+          "triggerBps": 2195
+        },
+        {
+          "expiryModelTime": "9265753",
+          "lossIndexFrom": 0,
+          "notional": "3866972605",
+          "triggerBps": 2945
+        },
+        {
+          "expiryModelTime": "5285647",
+          "lossIndexFrom": 0,
+          "notional": "384714597",
+          "triggerBps": 2414
+        },
+        {
+          "expiryModelTime": "3558106",
+          "lossIndexFrom": 0,
+          "notional": "657698370",
+          "triggerBps": 2853
+        },
+        {
+          "expiryModelTime": "11257572",
+          "lossIndexFrom": 1,
+          "notional": "2",
+          "triggerBps": 825
+        }
+      ],
+      "dtModel": "1987200",
+      "event": {
+        "amount": "53939148519",
+        "index": 0,
+        "juniorLoss": "28088456343",
+        "modelTime": "5356800",
+        "seniorLoss": "25850692176"
+      },
+      "lossBps": 2414,
+      "pool": {
+        "assets": "223198850761",
+        "juniorAssets": "28088456343",
+        "juniorSupply": "51509171580",
+        "seniorAssets": "195110394418",
+        "seniorSupply": "159801801071"
+      },
+      "protection": {
+        "collateral": "17308607755",
+        "reserved": "16306347332"
+      },
+      "protectionAfter": {
+        "collateral": "14557381187",
+        "reserved": "4909385574"
+      },
+      "rates": {
+        "feeBps": 2766,
+        "seniorBps": 381,
+        "yieldBps": 240
+      },
+      "settlements": [
+        {
+          "contract": 1,
+          "error": "LossBelowTrigger"
+        },
+        {
+          "contract": 2,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "payout": "2751226568"
+        },
+        {
+          "contract": 4,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 3,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 4,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "12415785698",
+        "seniorAssets": "0",
+        "seniorSupply": "40073554903"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "4600157",
+          "lossIndexFrom": 0,
+          "notional": "7",
+          "triggerBps": 1967
+        },
+        {
+          "expiryModelTime": "7126869",
+          "lossIndexFrom": 0,
+          "notional": "667212225",
+          "triggerBps": 1130
+        },
+        {
+          "expiryModelTime": "6821022",
+          "lossIndexFrom": 0,
+          "notional": "10",
+          "triggerBps": 176
+        }
+      ],
+      "dtModel": "950400",
+      "event": {
+        "amount": "50414003413",
+        "index": 0,
+        "juniorLoss": "1976442834",
+        "modelTime": "2894400",
+        "seniorLoss": "48437560579"
+      },
+      "lossBps": 10000,
+      "pool": {
+        "assets": "50231101195",
+        "juniorAssets": "1860159991",
+        "juniorSupply": "12415785698",
+        "seniorAssets": "48370941204",
+        "seniorSupply": "40073554903"
+      },
+      "protection": {
+        "collateral": "1493810720",
+        "reserved": "667212242"
+      },
+      "protectionAfter": {
+        "collateral": "826598478",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 546,
+        "seniorBps": 457,
+        "yieldBps": 1278
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "7"
+        },
+        {
+          "contract": 1,
+          "payout": "667212225"
+        },
+        {
+          "contract": 2,
+          "payout": "10"
+        },
+        {
+          "contract": 2,
+          "error": "ContractNotActive"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "3232191672",
+        "juniorAssets": "0",
+        "juniorSupply": "76465278627",
+        "seniorAssets": "3232191672",
+        "seniorSupply": "76336237389"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "8623826",
+          "lossIndexFrom": 0,
+          "notional": "29573870229",
+          "triggerBps": 1299
+        },
+        {
+          "expiryModelTime": "8430354",
+          "lossIndexFrom": 0,
+          "notional": "259827052",
+          "triggerBps": 1776
+        },
+        {
+          "expiryModelTime": "3442209",
+          "lossIndexFrom": 0,
+          "notional": "4269283340",
+          "triggerBps": 1375
+        },
+        {
+          "expiryModelTime": "11805012",
+          "lossIndexFrom": 0,
+          "notional": "6864749774",
+          "triggerBps": 658
+        }
+      ],
+      "dtModel": "1987200",
+      "event": {
+        "amount": "150681697442",
+        "index": 0,
+        "juniorLoss": "63257079462",
+        "modelTime": "4665600",
+        "seniorLoss": "87424617980"
+      },
+      "lossBps": 9790,
+      "pool": {
+        "assets": "153320688740",
+        "juniorAssets": "63257079462",
+        "juniorSupply": "76465278627",
+        "seniorAssets": "90063609278",
+        "seniorSupply": "76336237389"
+      },
+      "protection": {
+        "collateral": "45997714531",
+        "reserved": "40967730395"
+      },
+      "protectionAfter": {
+        "collateral": "10069934866",
+        "reserved": "4269283340"
+      },
+      "rates": {
+        "feeBps": 1846,
+        "seniorBps": 1336,
+        "yieldBps": 753
+      },
+      "settlements": [
+        {
+          "contract": 3,
+          "payout": "6720590028"
+        },
+        {
+          "contract": 2,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "payout": "28952818954"
+        },
+        {
+          "contract": 1,
+          "payout": "254370683"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "0",
+        "seniorSupply": "34845722559"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "2845974",
+          "lossIndexFrom": 0,
+          "notional": "2720793534",
+          "triggerBps": 2208
+        }
+      ],
+      "dtModel": "1857600",
+      "event": {
+        "amount": "41074593827",
+        "index": 0,
+        "juniorLoss": "0",
+        "modelTime": "2073600",
+        "seniorLoss": "41074593827"
+      },
+      "lossBps": 10000,
+      "pool": {
+        "assets": "41065349738",
+        "juniorAssets": "0",
+        "juniorSupply": "0",
+        "seniorAssets": "41065349738",
+        "seniorSupply": "34845722559"
+      },
+      "protection": {
+        "collateral": "3758986229",
+        "reserved": "2720793534"
+      },
+      "protectionAfter": {
+        "collateral": "1038192695",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 901,
+        "seniorBps": 970,
+        "yieldBps": 42
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "2720793534"
+        },
+        {
+          "contract": 0,
+          "error": "ContractNotActive"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "94222807616",
+        "juniorAssets": "0",
+        "juniorSupply": "60767877961",
+        "seniorAssets": "94222807616",
+        "seniorSupply": "88507487260"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "9493099",
+          "lossIndexFrom": 0,
+          "notional": "9954932490",
+          "triggerBps": 2590
+        },
+        {
+          "expiryModelTime": "6388290",
+          "lossIndexFrom": 0,
+          "notional": "12962724349",
+          "triggerBps": 1594
+        },
+        {
+          "expiryModelTime": "10465579",
+          "lossIndexFrom": 0,
+          "notional": "5",
+          "triggerBps": 1488
+        },
+        {
+          "expiryModelTime": "5094501",
+          "lossIndexFrom": 0,
+          "notional": "21760906357",
+          "triggerBps": 306
+        },
+        {
+          "expiryModelTime": "3773071",
+          "lossIndexFrom": 1,
+          "notional": "2695622941",
+          "triggerBps": 2769
+        }
+      ],
+      "dtModel": "1512000",
+      "event": {
+        "amount": "92987221423",
+        "index": 0,
+        "juniorLoss": "90552653417",
+        "modelTime": "2678400",
+        "seniorLoss": "2434568006"
+      },
+      "lossBps": 4967,
+      "pool": {
+        "assets": "186481569888",
+        "juniorAssets": "89907076348",
+        "juniorSupply": "60767877961",
+        "seniorAssets": "96574493540",
+        "seniorSupply": "88507487260"
+      },
+      "protection": {
+        "collateral": "49621989014",
+        "reserved": "47374186142"
+      },
+      "protectionAfter": {
+        "collateral": "27430146674",
+        "reserved": "2695622941"
+      },
+      "rates": {
+        "feeBps": 1557,
+        "seniorBps": 179,
+        "yieldBps": 965
+      },
+      "settlements": [
+        {
+          "contract": 3,
+          "payout": "10808642187"
+        },
+        {
+          "contract": 1,
+          "payout": "6438585184"
+        },
+        {
+          "contract": 4,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 2,
+          "payout": "2"
+        },
+        {
+          "contract": 0,
+          "payout": "4944614967"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "0",
+        "juniorAssets": "0",
+        "juniorSupply": "36904706396",
+        "seniorAssets": "0",
+        "seniorSupply": "43765379686"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "9602033",
+          "lossIndexFrom": 0,
+          "notional": "53296362531",
+          "triggerBps": 16
+        },
+        {
+          "expiryModelTime": "3926989",
+          "lossIndexFrom": 0,
+          "notional": "600896384",
+          "triggerBps": 1839
+        },
+        {
+          "expiryModelTime": "10435307",
+          "lossIndexFrom": 0,
+          "notional": "1325564383",
+          "triggerBps": 2157
+        },
+        {
+          "expiryModelTime": "3942973",
+          "lossIndexFrom": 0,
+          "notional": "652780016",
+          "triggerBps": 2988
+        },
+        {
+          "expiryModelTime": "12977836",
+          "lossIndexFrom": 1,
+          "notional": "1034738017",
+          "triggerBps": 2855
+        }
+      ],
+      "dtModel": "1166400",
+      "event": {
+        "amount": "64767724758",
+        "index": 0,
+        "juniorLoss": "13165854545",
+        "modelTime": "3715200",
+        "seniorLoss": "51601870213"
+      },
+      "lossBps": 10000,
+      "pool": {
+        "assets": "64527279313",
+        "juniorAssets": "13129009615",
+        "juniorSupply": "36904706396",
+        "seniorAssets": "51398269698",
+        "seniorSupply": "43765379686"
+      },
+      "protection": {
+        "collateral": "57234093853",
+        "reserved": "56910341331"
+      },
+      "protectionAfter": {
+        "collateral": "1358490539",
+        "reserved": "1034738017"
+      },
+      "rates": {
+        "feeBps": 2274,
+        "seniorBps": 1071,
+        "yieldBps": 1304
+      },
+      "settlements": [
+        {
+          "contract": 3,
+          "payout": "652780016"
+        },
+        {
+          "contract": 2,
+          "payout": "1325564383"
+        },
+        {
+          "contract": 1,
+          "payout": "600896384"
+        },
+        {
+          "contract": 4,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "payout": "53296362531"
+        },
+        {
+          "contract": 4,
+          "error": "LossOutsideTerm"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "67876142620",
+        "juniorAssets": "0",
+        "juniorSupply": "57908221299",
+        "seniorAssets": "67876142620",
+        "seniorSupply": "166145597517"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "4945176",
+          "lossIndexFrom": 0,
+          "notional": "6355551187",
+          "triggerBps": 1051
+        },
+        {
+          "expiryModelTime": "9651185",
+          "lossIndexFrom": 0,
+          "notional": "2959500005",
+          "triggerBps": 1337
+        },
+        {
+          "expiryModelTime": "9044277",
+          "lossIndexFrom": 0,
+          "notional": "2579761086",
+          "triggerBps": 1385
+        },
+        {
+          "expiryModelTime": "6992869",
+          "lossIndexFrom": 0,
+          "notional": "391122714",
+          "triggerBps": 905
+        }
+      ],
+      "dtModel": "604800",
+      "event": {
+        "amount": "166908162531",
+        "index": 0,
+        "juniorLoss": "55058944075",
+        "modelTime": "3153600",
+        "seniorLoss": "111849218456"
+      },
+      "lossBps": 7109,
+      "pool": {
+        "assets": "234339380442",
+        "juniorAssets": "55053441833",
+        "juniorSupply": "57908221299",
+        "seniorAssets": "179285938609",
+        "seniorSupply": "166145597517"
+      },
+      "protection": {
+        "collateral": "13526747681",
+        "reserved": "12285934992"
+      },
+      "protectionAfter": {
+        "collateral": "4792676497",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 198,
+        "seniorBps": 1278,
+        "yieldBps": 1010
+      },
+      "settlements": [
+        {
+          "contract": 2,
+          "payout": "1833952156"
+        },
+        {
+          "contract": 0,
+          "payout": "4518161338"
+        },
+        {
+          "contract": 3,
+          "payout": "278049137"
+        },
+        {
+          "contract": 1,
+          "payout": "2103908553"
+        },
+        {
+          "contract": 2,
+          "error": "ContractNotActive"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "67320039938",
+        "juniorAssets": "15413335163",
+        "juniorSupply": "79070515565",
+        "seniorAssets": "51906704775",
+        "seniorSupply": "49445814466"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "6284221",
+          "lossIndexFrom": 0,
+          "notional": "3",
+          "triggerBps": 2548
+        },
+        {
+          "expiryModelTime": "11441767",
+          "lossIndexFrom": 0,
+          "notional": "5166932031",
+          "triggerBps": 1936
+        }
+      ],
+      "dtModel": "2376000",
+      "event": {
+        "amount": "58113237381",
+        "index": 0,
+        "juniorLoss": "58113237381",
+        "modelTime": "3801600",
+        "seniorLoss": "0"
+      },
+      "lossBps": 4633,
+      "pool": {
+        "assets": "124663109653",
+        "juniorAssets": "72766961834",
+        "juniorSupply": "79070515565",
+        "seniorAssets": "51896147819",
+        "seniorSupply": "49445814466"
+      },
+      "protection": {
+        "collateral": "31961107524",
+        "reserved": "5166932034"
+      },
+      "protectionAfter": {
+        "collateral": "29567267914",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 296,
+        "seniorBps": 27,
+        "yieldBps": 845
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "1"
+        },
+        {
+          "contract": 1,
+          "payout": "2393839609"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "72624553921",
+        "juniorAssets": "0",
+        "juniorSupply": "11953155374",
+        "seniorAssets": "72624553921",
+        "seniorSupply": "84681773425"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "3571788",
+          "lossIndexFrom": 0,
+          "notional": "6939252542",
+          "triggerBps": 558
+        },
+        {
+          "expiryModelTime": "9987890",
+          "lossIndexFrom": 0,
+          "notional": "4",
+          "triggerBps": 1092
+        },
+        {
+          "expiryModelTime": "8223854",
+          "lossIndexFrom": 0,
+          "notional": "19882924556",
+          "triggerBps": 2394
+        },
+        {
+          "expiryModelTime": "7912378",
+          "lossIndexFrom": 0,
+          "notional": "11710577171",
+          "triggerBps": 1054
+        },
+        {
+          "expiryModelTime": "8736437",
+          "lossIndexFrom": 1,
+          "notional": "2699759795",
+          "triggerBps": 2814
+        }
+      ],
+      "dtModel": "3024000",
+      "event": {
+        "amount": "45272449197",
+        "index": 0,
+        "juniorLoss": "19551532163",
+        "modelTime": "6091200",
+        "seniorLoss": "25720917034"
+      },
+      "lossBps": 3840,
+      "pool": {
+        "assets": "116335650716",
+        "juniorAssets": "18106977690",
+        "juniorSupply": "11953155374",
+        "seniorAssets": "98228673026",
+        "seniorSupply": "84681773425"
+      },
+      "protection": {
+        "collateral": "47981716186",
+        "reserved": "41232514068"
+      },
+      "protectionAfter": {
+        "collateral": "35849811523",
+        "reserved": "9639012337"
+      },
+      "rates": {
+        "feeBps": 2335,
+        "seniorBps": 124,
+        "yieldBps": 1826
+      },
+      "settlements": [
+        {
+          "contract": 3,
+          "payout": "4496861633"
+        },
+        {
+          "contract": 4,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 0,
+          "error": "LossOutsideTerm"
+        },
+        {
+          "contract": 1,
+          "payout": "1"
+        },
+        {
+          "contract": 2,
+          "payout": "7635043029"
+        }
+      ]
+    },
+    {
+      "after": {
+        "assets": "2702552682",
+        "juniorAssets": "581438509",
+        "juniorSupply": "1825655705",
+        "seniorAssets": "2121114173",
+        "seniorSupply": "1835851913"
+      },
+      "contracts": [
+        {
+          "expiryModelTime": "5031434",
+          "lossIndexFrom": 0,
+          "notional": "18470468407",
+          "triggerBps": 596
+        },
+        {
+          "expiryModelTime": "9717611",
+          "lossIndexFrom": 0,
+          "notional": "9",
+          "triggerBps": 2940
+        }
+      ],
+      "dtModel": "2419200",
+      "event": {
+        "amount": "1652188989",
+        "index": 0,
+        "juniorLoss": "1652188989",
+        "modelTime": "3844800",
+        "seniorLoss": "0"
+      },
+      "lossBps": 3794,
+      "pool": {
+        "assets": "4303353336",
+        "juniorAssets": "2187870404",
+        "juniorSupply": "1825655705",
+        "seniorAssets": "2115482932",
+        "seniorSupply": "1835851913"
+      },
+      "protection": {
+        "collateral": "31576331335",
+        "reserved": "18470468416"
+      },
+      "protectionAfter": {
+        "collateral": "24568635619",
+        "reserved": "0"
+      },
+      "rates": {
+        "feeBps": 2150,
+        "seniorBps": 347,
+        "yieldBps": 1983
+      },
+      "settlements": [
+        {
+          "contract": 0,
+          "payout": "7007695713"
+        },
+        {
+          "contract": 1,
+          "payout": "3"
+        },
+        {
+          "contract": 1,
+          "error": "ContractNotActive"
+        }
+      ]
     }
   ],
   "subordination": [

@@ -17,8 +17,16 @@ export function Notice({ children }: { children: ReactNode }) {
 
 // Один вхід для всіх аркушів за `/pool/:id`: читає пул і віддає його дитині, а стани
 // «читаю» / «RPC error» / «пулу немає» показує сам — інакше кожен аркуш дублював би їх.
-export function PoolGate({ children }: { children: (pool: PoolView) => ReactNode }) {
-  const { id } = useParams()
+// `/me` lives outside `/pool/:id` and names its pool explicitly.
+export function PoolGate({
+  id: fixed,
+  children,
+}: {
+  id?: string
+  children: (pool: PoolView) => ReactNode
+}) {
+  const params = useParams()
+  const id = fixed ?? params.id
   const { defaultPool, chain } = useAppConfig()
   const cluster = chain.replace('solana:', '')
   const poolId = parsePoolId(id)

@@ -161,22 +161,21 @@ function memcmp(offset: bigint, bytes: Uint8Array) {
 // Nonces come from one pool-wide counter, so a buyer's contracts are scattered over
 // `0..contracts`; one `getProgramAccounts` filtered by pool and buyer finds them without
 // deriving and fetching every nonce. Contracts are never closed, so a settled or expired
-// one is still here with its status.
+// one is still here with its status. Without a buyer — every contract in the pool: a
+// seller's collateral answers for all of them.
 export async function readContracts(
   rpc: ReadRpc,
   pool: Address,
-  buyer: Address,
+  buyer?: Address,
 ): Promise<ContractView[]> {
+  const filters = [
+    { dataSize: BigInt(getProtectionContractSize()) },
+    memcmp(0n, new Uint8Array(PROTECTION_CONTRACT_DISCRIMINATOR)),
+    memcmp(CONTRACT_POOL_OFFSET, addressBytes(pool)),
+  ]
+  if (buyer) filters.push(memcmp(CONTRACT_BUYER_OFFSET, addressBytes(buyer)))
   const accounts = await rpc
-    .getProgramAccounts(WASHAPP_PROGRAM_ADDRESS, {
-      encoding: 'base64',
-      filters: [
-        { dataSize: BigInt(getProtectionContractSize()) },
-        memcmp(0n, new Uint8Array(PROTECTION_CONTRACT_DISCRIMINATOR)),
-        memcmp(CONTRACT_POOL_OFFSET, addressBytes(pool)),
-        memcmp(CONTRACT_BUYER_OFFSET, addressBytes(buyer)),
-      ],
-    })
+    .getProgramAccounts(WASHAPP_PROGRAM_ADDRESS, { encoding: 'base64', filters })
     .send()
   return accounts
     .map(({ pubkey, account }) => {

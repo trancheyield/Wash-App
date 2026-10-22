@@ -143,6 +143,15 @@ describe('readContracts', () => {
     const other = address('11111111111111111111111111111112')
     expect(await readContracts(fakeRpc(), other, fixture.buyer)).toEqual([])
   })
+
+  it('without a buyer, finds every contract in the pool', async () => {
+    const contracts = await readContracts(fakeRpc(), m0Fixture.accounts.pool.address)
+    expect(contracts.map((c) => [c.nonce, c.buyer])).toEqual([
+      [0n, fixture.buyer],
+      [1n, fixture.buyer],
+      [2n, fixture.seller],
+    ])
+  })
 })
 
 describe('readWallet with protection', () => {
